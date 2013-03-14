@@ -1,0 +1,6 @@
+let
+  var s := "OK"
+in
+  print (s);
+  print ("\n")	
+end

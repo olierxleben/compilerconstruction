@@ -1,0 +1,51 @@
+let 
+  type stringArray = array of string
+  var cnt := 0
+  
+  function getString2(): string =
+    let var c := getchar()
+    in 
+      if c = "\n" then 
+        ""
+      else 
+        concat(c, getString2())
+    end
+
+  function getString(strnm: string): string =
+    ( /* nur ein Ausdruck in Funktionen */
+      print(strnm);
+      getString2()
+    )
+    
+  function getStrings() : stringArray = 
+    let var strings := stringArray[cnt] of ""
+        var i := 0
+    in
+      for i := 0 to cnt-1 do
+        strings[i] := getString("String eingeben: ");
+      strings
+   end
+      
+  function getStringArray(): stringArray = 
+    (
+      cnt := ord(getString("Bitte Anzahl der Strings eingeben:\n")) - ord("0");
+      getStrings()     
+    )
+    
+  function printStringArray(sa: stringArray) =
+    let var i := 0
+    in
+      for i := 0 to cnt-1 do
+        print(sa[i])
+    end
+    
+  function strcmp(s1: string, s2: string) : int
+    let var status := 0
+    in
+      
+    end
+    
+in
+  print(getString("Bitte Text eingeben:\n"));
+  printStringArray(getStringArray())
+end
