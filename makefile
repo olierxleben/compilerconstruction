@@ -9,15 +9,11 @@ TIGER = ./bin/tiger.exe
 #RUNTIME = c:/gnu/tiger/runtime.s 
 RUNTIME =./runtime.s
 
-# path to output files
-OUT = out/
-
 # take input file, compile with tiger, 
 # cat with tiger runtime and 
-# put output to 'out/' subfolder
 %.s : %.tig
 	$(TIGER) $<
-	cat $(RUNTIME) $<.s > $(OUT)$@
+	cat $(RUNTIME) $<.s > $@
 	
 #	@$(TIGER) $<	
 #	@type ./runtime.s $<.s > $@
