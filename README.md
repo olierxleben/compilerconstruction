@@ -7,4 +7,4 @@ usage-example for makefile (tiger compiler)
 ===========================================
 make.exe src/test/test.s
 
-will produce test.tig.s and test.s in the same folder
+will produce test.tig.s and test.s in the same folder. Tested with Windows (8) and Powershell. 

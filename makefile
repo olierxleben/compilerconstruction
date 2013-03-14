@@ -11,9 +11,10 @@ RUNTIME =./runtime.s
 
 # take input file, compile with tiger, 
 # cat with tiger runtime and 
+
 %.s : %.tig
-	$(TIGER) $<
-	cat $(RUNTIME) $<.s > $@
-	
+$(TIGER) $<
+cat $(RUNTIME) $<.s > $@
+
 #	@$(TIGER) $<	
 #	@type ./runtime.s $<.s > $@
