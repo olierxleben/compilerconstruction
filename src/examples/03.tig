@@ -1,0 +1,8 @@
+/* function declaration, function call */
+
+let function digit (c : int) : string =
+    chr (c + ord ("0"))
+in
+    for c := 0 to 2 do
+	print (concat (concat ("Roar #", digit (c)), "\n"))
+end

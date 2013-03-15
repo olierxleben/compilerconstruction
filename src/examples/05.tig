@@ -1,0 +1,9 @@
+/* procedure declaration, procedure call, sequencing */
+
+let function newline () = 
+    print ("\n")
+in
+   print ("foo"); 
+   print ("bar"); 
+   newline ()
+end

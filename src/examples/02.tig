@@ -1,0 +1,7 @@
+/* standard library:
+ * conversion int <-> string, string concatenation 
+ */
+
+for c := 0 to 2 do
+	print (concat (concat ("Roar #", chr (c + ord ("0"))), "\n"))
+

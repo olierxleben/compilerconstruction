@@ -1,0 +1,11 @@
+/* nested scopes */
+
+let function digit (c : int) : string = 
+    let var zero := ord ("0")
+    in
+        chr (c + zero)
+    end
+in
+    for c := 0 to 2 do
+	print (concat (concat ("Roar #", digit (c)), "\n"))
+end
