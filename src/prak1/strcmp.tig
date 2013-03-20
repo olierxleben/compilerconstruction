@@ -1,6 +1,7 @@
 let 
   type stringArray = array of string
   var cnt := 0
+
   
   function getString2(): string =
     let var c := getchar()
@@ -36,16 +37,73 @@ let
     let var i := 0
     in
       for i := 0 to cnt-1 do
-        print(sa[i])
+        print(concat(sa[i], "\n"))
     end
     
-  function strcmp(s1: string, s2: string) : int
+  function strcmp(s1: string, s2: string) : int =
     let var status := 0
+        var mySize := 0
+        var i := 0
+        var charS1 := ""
+        var charS2 := ""
     in
+      if size(s1) < size(s2) then mySize := size(s1)
+      else mySize := size(s2);
       
+      for i:= 0 to mySize-1 do
+        (
+          charS1 := substring(s1, i, 1);
+          charS2 := substring(s2, i, 1);
+           if ord(charS1) > ord(charS2) then 
+            (
+             
+              status := 1;
+              break
+            )
+           else if ord(charS1) < ord(charS2) then 
+           (
+            
+              status := -1;
+              break
+            )
+        );
+        
+        if (status = 0) & size(s1) < size(s2) then status := -1
+        else if (status = 0) & size(s1) > size(s2) then status := 1;
+        
+        status
+    end
+    
+  function sortStringArray(sa: stringArray) =
+    let var i := 0
+        var n := cnt
+        var tmp := ""
+        var k := 0
+    in
+       print("unsoertiert:\n");
+       printStringArray(sa);
+    
+      while k = 0 do
+        (
+          k := 1;
+          
+          for i:= 0 to n-2 do
+          (
+            if strcmp(sa[i], sa[i+1] ) = 1 then 
+                (
+                  tmp := sa[i];
+                  sa[i] := sa[i+1];
+                  sa[i+1] := tmp;
+                  k := 0
+                )
+          );
+          n := n-1
+        );
+        print("\nsortiert:\n");
+        printStringArray(sa)
     end
     
 in
-  print(getString("Bitte Text eingeben:\n"));
-  printStringArray(getStringArray())
+  sortStringArray(getStringArray())
+  
 end
