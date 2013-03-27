@@ -1,3 +1,4 @@
+#include "util.h"
 
 typedef struct table *Table_;
 
