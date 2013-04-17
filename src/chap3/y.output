@@ -1,0 +1,4409 @@
+Grammatik
+
+    0 $accept: program $end
+
+    1 program: expression
+
+    2 expression: INT
+    3           | STRING
+    4           | BREAK
+    5           | NIL
+    6           | lvalue
+    7           | assignment
+    8           | selection
+    9           | iteration
+   10           | function_call
+   11           | arithmetic_expression
+   12           | comparison
+   13           | boolean_expression
+   14           | MINUS expression
+   15           | ID LBRACE field_assignments RBRACE
+   16           | ID LBRACK expression RBRACK OF expression
+   17           | LPAREN RPAREN
+   18           | LPAREN expression_sequence RPAREN
+   19           | LET declaration_sequence IN END
+   20           | LET declaration_sequence IN expression_sequence END
+
+   21 lvalue: ID lvalue_extension
+
+   22 lvalue_extension: /* leer */
+   23                 | DOT ID lvalue_extension
+   24                 | LBRACK expression RBRACK lvalue_extension
+
+   25 assignment: lvalue ASSIGN expression
+
+   26 function_call: ID LPAREN RPAREN
+   27              | ID LPAREN expression_list RPAREN
+
+   28 arithmetic_expression: expression PLUS expression
+   29                      | expression MINUS expression
+   30                      | expression TIMES expression
+   31                      | expression DIVIDE expression
+
+   32 comparison: expression EQ expression
+   33           | expression NEQ expression
+   34           | expression GT expression
+   35           | expression LT expression
+   36           | expression GE expression
+   37           | expression LE expression
+
+   38 boolean_expression: expression AND expression
+   39                   | expression OR expression
+
+   40 field_assignments: /* leer */
+   41                  | field_assignment_list
+
+   42 field_assignment_list: field_assignment
+   43                      | field_assignment_list COMMA field_assignment
+
+   44 field_assignment: ID EQ expression
+
+   45 declaration_sequence: /* leer */
+   46                     | declaration declaration_sequence
+
+   47 declaration: type_declaration
+   48            | variable_declaration
+   49            | function_declaration
+
+   50 type_declaration: TYPE ID EQ type
+
+   51 type: ID
+   52     | LBRACE type_fields RBRACE
+   53     | ARRAY OF ID
+
+   54 type_fields: /* leer */
+   55            | type_field_list
+
+   56 type_field_list: ID COLON ID
+   57                | type_field_list COMMA ID COLON ID
+
+   58 variable_declaration: VAR ID ASSIGN expression
+   59                     | VAR ID COLON ID ASSIGN expression
+
+   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   61                     | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+
+   62 selection: IF expression THEN expression ELSE expression
+   63          | IF expression THEN expression
+
+   64 iteration: WHILE expression DO expression
+   65          | FOR ID ASSIGN expression TO expression DO expression
+
+   66 expression_sequence: expression
+   67                    | expression_sequence SEMICOLON expression
+
+   68 expression_list: expression
+   69                | expression_list COMMA expression
+
+   70 expression: LPAREN error RPAREN
+
+   71 expression_sequence: expression error
+
+
+Terminale und die Regeln, in denen sie verwendet werden
+
+$end (0) 0
+error (256) 70 71
+ID (258) 15 16 21 23 26 27 44 50 51 53 56 57 58 59 60 61 65
+STRING (259) 3
+INT (260) 2
+COMMA (261) 43 57 69
+COLON (262) 56 57 59 61
+SEMICOLON (263) 67
+LPAREN (264) 17 18 26 27 60 61 70
+RPAREN (265) 17 18 26 27 60 61 70
+LBRACK (266) 16 24
+RBRACK (267) 16 24
+LBRACE (268) 15 52
+RBRACE (269) 15 52
+DOT (270) 23
+PLUS (271) 28
+MINUS (272) 14 29
+TIMES (273) 30
+DIVIDE (274) 31
+EQ (275) 32 44 50 60 61
+NEQ (276) 33
+LT (277) 35
+LE (278) 37
+GT (279) 34
+GE (280) 36
+AND (281) 38
+OR (282) 39
+ASSIGN (283) 25 58 59 65
+ARRAY (284) 53
+IF (285) 62 63
+THEN (286) 62 63
+ELSE (287) 62
+WHILE (288) 64
+FOR (289) 65
+TO (290) 65
+DO (291) 64 65
+LET (292) 19 20
+IN (293) 19 20
+END (294) 19 20
+OF (295) 16 53
+BREAK (296) 4
+NIL (297) 5
+FUNCTION (298) 60 61
+VAR (299) 58 59
+TYPE (300) 50
+UMINUS (301)
+
+
+Nicht-Terminal und die Regeln, in denen sie verwendet werden
+
+$accept (47)
+    auf der linken Seite: 0
+program (48)
+    auf der linken Seite: 1, auf der rechten Seite: 0
+expression (49)
+    auf der linken Seite: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
+    19 20 70, auf der rechten Seite: 1 14 16 24 25 28 29 30 31 32 33
+    34 35 36 37 38 39 44 58 59 60 61 62 63 64 65 66 67 68 69 71
+lvalue (50)
+    auf der linken Seite: 21, auf der rechten Seite: 6 25
+lvalue_extension (51)
+    auf der linken Seite: 22 23 24, auf der rechten Seite: 21 23 24
+assignment (52)
+    auf der linken Seite: 25, auf der rechten Seite: 7
+function_call (53)
+    auf der linken Seite: 26 27, auf der rechten Seite: 10
+arithmetic_expression (54)
+    auf der linken Seite: 28 29 30 31, auf der rechten Seite: 11
+comparison (55)
+    auf der linken Seite: 32 33 34 35 36 37, auf der rechten Seite:
+    12
+boolean_expression (56)
+    auf der linken Seite: 38 39, auf der rechten Seite: 13
+field_assignments (57)
+    auf der linken Seite: 40 41, auf der rechten Seite: 15
+field_assignment_list (58)
+    auf der linken Seite: 42 43, auf der rechten Seite: 41 43
+field_assignment (59)
+    auf der linken Seite: 44, auf der rechten Seite: 42 43
+declaration_sequence (60)
+    auf der linken Seite: 45 46, auf der rechten Seite: 19 20 46
+declaration (61)
+    auf der linken Seite: 47 48 49, auf der rechten Seite: 46
+type_declaration (62)
+    auf der linken Seite: 50, auf der rechten Seite: 47
+type (63)
+    auf der linken Seite: 51 52 53, auf der rechten Seite: 50
+type_fields (64)
+    auf der linken Seite: 54 55, auf der rechten Seite: 52 60 61
+type_field_list (65)
+    auf der linken Seite: 56 57, auf der rechten Seite: 55 57
+variable_declaration (66)
+    auf der linken Seite: 58 59, auf der rechten Seite: 48
+function_declaration (67)
+    auf der linken Seite: 60 61, auf der rechten Seite: 49
+selection (68)
+    auf der linken Seite: 62 63, auf der rechten Seite: 8
+iteration (69)
+    auf der linken Seite: 64 65, auf der rechten Seite: 9
+expression_sequence (70)
+    auf der linken Seite: 66 67 71, auf der rechten Seite: 18 20 67
+expression_list (71)
+    auf der linken Seite: 68 69, auf der rechten Seite: 27 69
+
+
+Zustand 0
+
+    0 $accept: . program $end
+    1 program: . expression
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    program                gehe zu Zustand 12 über
+    expression             gehe zu Zustand 13 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 1
+
+   15 expression: ID . LBRACE field_assignments RBRACE
+   16           | ID . LBRACK expression RBRACK OF expression
+   21 lvalue: ID . lvalue_extension
+   22 lvalue_extension: .
+   23                 | . DOT ID lvalue_extension
+   24                 | . LBRACK expression RBRACK lvalue_extension
+   26 function_call: ID . LPAREN RPAREN
+   27              | ID . LPAREN expression_list RPAREN
+
+    LPAREN  schiebe und gehe zu Zustand 22 über
+    LBRACK  schiebe und gehe zu Zustand 23 über
+    LBRACE  schiebe und gehe zu Zustand 24 über
+    DOT     schiebe und gehe zu Zustand 25 über
+
+    $default  reduziere mit Regel 22 (lvalue_extension)
+
+    lvalue_extension  gehe zu Zustand 26 über
+
+
+Zustand 2
+
+    3 expression: STRING .
+
+    $default  reduziere mit Regel 3 (expression)
+
+
+Zustand 3
+
+    2 expression: INT .
+
+    $default  reduziere mit Regel 2 (expression)
+
+
+Zustand 4
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   17           | LPAREN . RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   18           | LPAREN . expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   66 expression_sequence: . expression
+   67                    | . expression_sequence SEMICOLON expression
+   70 expression: . LPAREN error RPAREN
+   70           | LPAREN . error RPAREN
+   71 expression_sequence: . expression error
+
+    error   schiebe und gehe zu Zustand 27 über
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    RPAREN  schiebe und gehe zu Zustand 28 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 29 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+    expression_sequence    gehe zu Zustand 30 über
+
+
+Zustand 5
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   14           | MINUS . expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 31 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 6
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   62          | IF . expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   63          | IF . expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 32 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 7
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   64          | WHILE . expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 33 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 8
+
+   65 iteration: FOR . ID ASSIGN expression TO expression DO expression
+
+    ID  schiebe und gehe zu Zustand 34 über
+
+
+Zustand 9
+
+   19 expression: LET . declaration_sequence IN END
+   20           | LET . declaration_sequence IN expression_sequence END
+   45 declaration_sequence: .
+   46                     | . declaration declaration_sequence
+   47 declaration: . type_declaration
+   48            | . variable_declaration
+   49            | . function_declaration
+   50 type_declaration: . TYPE ID EQ type
+   58 variable_declaration: . VAR ID ASSIGN expression
+   59                     | . VAR ID COLON ID ASSIGN expression
+   60 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   61                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+
+    FUNCTION  schiebe und gehe zu Zustand 35 über
+    VAR       schiebe und gehe zu Zustand 36 über
+    TYPE      schiebe und gehe zu Zustand 37 über
+
+    $default  reduziere mit Regel 45 (declaration_sequence)
+
+    declaration_sequence  gehe zu Zustand 38 über
+    declaration           gehe zu Zustand 39 über
+    type_declaration      gehe zu Zustand 40 über
+    variable_declaration  gehe zu Zustand 41 über
+    function_declaration  gehe zu Zustand 42 über
+
+
+Zustand 10
+
+    4 expression: BREAK .
+
+    $default  reduziere mit Regel 4 (expression)
+
+
+Zustand 11
+
+    5 expression: NIL .
+
+    $default  reduziere mit Regel 5 (expression)
+
+
+Zustand 12
+
+    0 $accept: program . $end
+
+    $end  schiebe und gehe zu Zustand 43 über
+
+
+Zustand 13
+
+    1 program: expression .
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 1 (program)
+
+
+Zustand 14
+
+    6 expression: lvalue .
+   25 assignment: lvalue . ASSIGN expression
+
+    ASSIGN  schiebe und gehe zu Zustand 56 über
+
+    $default  reduziere mit Regel 6 (expression)
+
+
+Zustand 15
+
+    7 expression: assignment .
+
+    $default  reduziere mit Regel 7 (expression)
+
+
+Zustand 16
+
+   10 expression: function_call .
+
+    $default  reduziere mit Regel 10 (expression)
+
+
+Zustand 17
+
+   11 expression: arithmetic_expression .
+
+    $default  reduziere mit Regel 11 (expression)
+
+
+Zustand 18
+
+   12 expression: comparison .
+
+    $default  reduziere mit Regel 12 (expression)
+
+
+Zustand 19
+
+   13 expression: boolean_expression .
+
+    $default  reduziere mit Regel 13 (expression)
+
+
+Zustand 20
+
+    8 expression: selection .
+
+    $default  reduziere mit Regel 8 (expression)
+
+
+Zustand 21
+
+    9 expression: iteration .
+
+    $default  reduziere mit Regel 9 (expression)
+
+
+Zustand 22
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   26              | ID LPAREN . RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   27              | ID LPAREN . expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   68 expression_list: . expression
+   69                | . expression_list COMMA expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    RPAREN  schiebe und gehe zu Zustand 57 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 58 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+    expression_list        gehe zu Zustand 59 über
+
+
+Zustand 23
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   16           | ID LBRACK . expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   24 lvalue_extension: LBRACK . expression RBRACK lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 60 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 24
+
+   15 expression: ID LBRACE . field_assignments RBRACE
+   40 field_assignments: .
+   41                  | . field_assignment_list
+   42 field_assignment_list: . field_assignment
+   43                      | . field_assignment_list COMMA field_assignment
+   44 field_assignment: . ID EQ expression
+
+    ID  schiebe und gehe zu Zustand 61 über
+
+    $default  reduziere mit Regel 40 (field_assignments)
+
+    field_assignments      gehe zu Zustand 62 über
+    field_assignment_list  gehe zu Zustand 63 über
+    field_assignment       gehe zu Zustand 64 über
+
+
+Zustand 25
+
+   23 lvalue_extension: DOT . ID lvalue_extension
+
+    ID  schiebe und gehe zu Zustand 65 über
+
+
+Zustand 26
+
+   21 lvalue: ID lvalue_extension .
+
+    $default  reduziere mit Regel 21 (lvalue)
+
+
+Zustand 27
+
+   70 expression: LPAREN error . RPAREN
+
+    RPAREN  schiebe und gehe zu Zustand 66 über
+
+
+Zustand 28
+
+   17 expression: LPAREN RPAREN .
+
+    $default  reduziere mit Regel 17 (expression)
+
+
+Zustand 29
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   66 expression_sequence: expression .
+   71                    | expression . error
+
+    error   schiebe und gehe zu Zustand 67 über
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    SEMICOLON  reduziere mit Regel 66 (expression_sequence)
+    RPAREN     reduziere mit Regel 66 (expression_sequence)
+    END        reduziere mit Regel 66 (expression_sequence)
+
+
+Zustand 30
+
+   18 expression: LPAREN expression_sequence . RPAREN
+   67 expression_sequence: expression_sequence . SEMICOLON expression
+
+    SEMICOLON  schiebe und gehe zu Zustand 68 über
+    RPAREN     schiebe und gehe zu Zustand 69 über
+
+
+Zustand 31
+
+   14 expression: MINUS expression .
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    $default  reduziere mit Regel 14 (expression)
+
+
+Zustand 32
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   62 selection: IF expression . THEN expression ELSE expression
+   63          | IF expression . THEN expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+    THEN    schiebe und gehe zu Zustand 70 über
+
+
+Zustand 33
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   64 iteration: WHILE expression . DO expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+    DO      schiebe und gehe zu Zustand 71 über
+
+
+Zustand 34
+
+   65 iteration: FOR ID . ASSIGN expression TO expression DO expression
+
+    ASSIGN  schiebe und gehe zu Zustand 72 über
+
+
+Zustand 35
+
+   60 function_declaration: FUNCTION . ID LPAREN type_fields RPAREN EQ expression
+   61                     | FUNCTION . ID LPAREN type_fields RPAREN COLON ID EQ expression
+
+    ID  schiebe und gehe zu Zustand 73 über
+
+
+Zustand 36
+
+   58 variable_declaration: VAR . ID ASSIGN expression
+   59                     | VAR . ID COLON ID ASSIGN expression
+
+    ID  schiebe und gehe zu Zustand 74 über
+
+
+Zustand 37
+
+   50 type_declaration: TYPE . ID EQ type
+
+    ID  schiebe und gehe zu Zustand 75 über
+
+
+Zustand 38
+
+   19 expression: LET declaration_sequence . IN END
+   20           | LET declaration_sequence . IN expression_sequence END
+
+    IN  schiebe und gehe zu Zustand 76 über
+
+
+Zustand 39
+
+   45 declaration_sequence: .
+   46                     | . declaration declaration_sequence
+   46                     | declaration . declaration_sequence
+   47 declaration: . type_declaration
+   48            | . variable_declaration
+   49            | . function_declaration
+   50 type_declaration: . TYPE ID EQ type
+   58 variable_declaration: . VAR ID ASSIGN expression
+   59                     | . VAR ID COLON ID ASSIGN expression
+   60 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   61                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+
+    FUNCTION  schiebe und gehe zu Zustand 35 über
+    VAR       schiebe und gehe zu Zustand 36 über
+    TYPE      schiebe und gehe zu Zustand 37 über
+
+    $default  reduziere mit Regel 45 (declaration_sequence)
+
+    declaration_sequence  gehe zu Zustand 77 über
+    declaration           gehe zu Zustand 39 über
+    type_declaration      gehe zu Zustand 40 über
+    variable_declaration  gehe zu Zustand 41 über
+    function_declaration  gehe zu Zustand 42 über
+
+
+Zustand 40
+
+   47 declaration: type_declaration .
+
+    $default  reduziere mit Regel 47 (declaration)
+
+
+Zustand 41
+
+   48 declaration: variable_declaration .
+
+    $default  reduziere mit Regel 48 (declaration)
+
+
+Zustand 42
+
+   49 declaration: function_declaration .
+
+    $default  reduziere mit Regel 49 (declaration)
+
+
+Zustand 43
+
+    0 $accept: program $end .
+
+    $default  annehmen
+
+
+Zustand 44
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   28                      | expression PLUS . expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 78 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 45
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   29                      | expression MINUS . expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 79 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 46
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   30                      | expression TIMES . expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 80 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 47
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   31                      | expression DIVIDE . expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 81 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 48
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   32           | expression EQ . expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 82 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 49
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   33           | expression NEQ . expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 83 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 50
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   35           | expression LT . expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 84 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 51
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   37           | expression LE . expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 85 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 52
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   34           | expression GT . expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 86 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 53
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   36           | expression GE . expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 87 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 54
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   38                   | expression AND . expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 88 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 55
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   39                   | expression OR . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 89 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 56
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   25           | lvalue ASSIGN . expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 90 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 57
+
+   26 function_call: ID LPAREN RPAREN .
+
+    $default  reduziere mit Regel 26 (function_call)
+
+
+Zustand 58
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   68 expression_list: expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 68 (expression_list)
+
+
+Zustand 59
+
+   27 function_call: ID LPAREN expression_list . RPAREN
+   69 expression_list: expression_list . COMMA expression
+
+    COMMA   schiebe und gehe zu Zustand 91 über
+    RPAREN  schiebe und gehe zu Zustand 92 über
+
+
+Zustand 60
+
+   16 expression: ID LBRACK expression . RBRACK OF expression
+   24 lvalue_extension: LBRACK expression . RBRACK lvalue_extension
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    RBRACK  schiebe und gehe zu Zustand 93 über
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+
+Zustand 61
+
+   44 field_assignment: ID . EQ expression
+
+    EQ  schiebe und gehe zu Zustand 94 über
+
+
+Zustand 62
+
+   15 expression: ID LBRACE field_assignments . RBRACE
+
+    RBRACE  schiebe und gehe zu Zustand 95 über
+
+
+Zustand 63
+
+   41 field_assignments: field_assignment_list .
+   43 field_assignment_list: field_assignment_list . COMMA field_assignment
+
+    COMMA  schiebe und gehe zu Zustand 96 über
+
+    $default  reduziere mit Regel 41 (field_assignments)
+
+
+Zustand 64
+
+   42 field_assignment_list: field_assignment .
+
+    $default  reduziere mit Regel 42 (field_assignment_list)
+
+
+Zustand 65
+
+   22 lvalue_extension: .
+   23                 | . DOT ID lvalue_extension
+   23                 | DOT ID . lvalue_extension
+   24                 | . LBRACK expression RBRACK lvalue_extension
+
+    LBRACK  schiebe und gehe zu Zustand 97 über
+    DOT     schiebe und gehe zu Zustand 25 über
+
+    $default  reduziere mit Regel 22 (lvalue_extension)
+
+    lvalue_extension  gehe zu Zustand 98 über
+
+
+Zustand 66
+
+   70 expression: LPAREN error RPAREN .
+
+    $default  reduziere mit Regel 70 (expression)
+
+
+Zustand 67
+
+   71 expression_sequence: expression error .
+
+    $default  reduziere mit Regel 71 (expression_sequence)
+
+
+Zustand 68
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   67 expression_sequence: expression_sequence SEMICOLON . expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 99 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 69
+
+   18 expression: LPAREN expression_sequence RPAREN .
+
+    $default  reduziere mit Regel 18 (expression)
+
+
+Zustand 70
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   62          | IF expression THEN . expression ELSE expression
+   63          | . IF expression THEN expression
+   63          | IF expression THEN . expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 100 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 71
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   64          | WHILE expression DO . expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 101 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 72
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   65          | FOR ID ASSIGN . expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 102 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 73
+
+   60 function_declaration: FUNCTION ID . LPAREN type_fields RPAREN EQ expression
+   61                     | FUNCTION ID . LPAREN type_fields RPAREN COLON ID EQ expression
+
+    LPAREN  schiebe und gehe zu Zustand 103 über
+
+
+Zustand 74
+
+   58 variable_declaration: VAR ID . ASSIGN expression
+   59                     | VAR ID . COLON ID ASSIGN expression
+
+    COLON   schiebe und gehe zu Zustand 104 über
+    ASSIGN  schiebe und gehe zu Zustand 105 über
+
+
+Zustand 75
+
+   50 type_declaration: TYPE ID . EQ type
+
+    EQ  schiebe und gehe zu Zustand 106 über
+
+
+Zustand 76
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   19           | LET declaration_sequence IN . END
+   20           | . LET declaration_sequence IN expression_sequence END
+   20           | LET declaration_sequence IN . expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   66 expression_sequence: . expression
+   67                    | . expression_sequence SEMICOLON expression
+   70 expression: . LPAREN error RPAREN
+   71 expression_sequence: . expression error
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    END     schiebe und gehe zu Zustand 107 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 29 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+    expression_sequence    gehe zu Zustand 108 über
+
+
+Zustand 77
+
+   46 declaration_sequence: declaration declaration_sequence .
+
+    $default  reduziere mit Regel 46 (declaration_sequence)
+
+
+Zustand 78
+
+   28 arithmetic_expression: expression . PLUS expression
+   28                      | expression PLUS expression .
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    $default  reduziere mit Regel 28 (arithmetic_expression)
+
+
+Zustand 79
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   29                      | expression MINUS expression .
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    $default  reduziere mit Regel 29 (arithmetic_expression)
+
+
+Zustand 80
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   30                      | expression TIMES expression .
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    $default  reduziere mit Regel 30 (arithmetic_expression)
+
+
+Zustand 81
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   31                      | expression DIVIDE expression .
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    $default  reduziere mit Regel 31 (arithmetic_expression)
+
+
+Zustand 82
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   32           | expression EQ expression .
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 32 (comparison)
+
+
+Zustand 83
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   33           | expression NEQ expression .
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 33 (comparison)
+
+
+Zustand 84
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   35           | expression LT expression .
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 35 (comparison)
+
+
+Zustand 85
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   37           | expression LE expression .
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 37 (comparison)
+
+
+Zustand 86
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   34           | expression GT expression .
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 34 (comparison)
+
+
+Zustand 87
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   36           | expression GE expression .
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+
+    EQ   Fehler (nicht assoziativ)
+    NEQ  Fehler (nicht assoziativ)
+    LT   Fehler (nicht assoziativ)
+    LE   Fehler (nicht assoziativ)
+    GT   Fehler (nicht assoziativ)
+    GE   Fehler (nicht assoziativ)
+
+    $default  reduziere mit Regel 36 (comparison)
+
+
+Zustand 88
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   38                   | expression AND expression .
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+
+    $default  reduziere mit Regel 38 (boolean_expression)
+
+
+Zustand 89
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   39                   | expression OR expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+
+    $default  reduziere mit Regel 39 (boolean_expression)
+
+
+Zustand 90
+
+   25 assignment: lvalue ASSIGN expression .
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 25 (assignment)
+
+
+Zustand 91
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   69 expression_list: expression_list COMMA . expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 109 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 92
+
+   27 function_call: ID LPAREN expression_list RPAREN .
+
+    $default  reduziere mit Regel 27 (function_call)
+
+
+Zustand 93
+
+   16 expression: ID LBRACK expression RBRACK . OF expression
+   22 lvalue_extension: .
+   23                 | . DOT ID lvalue_extension
+   24                 | . LBRACK expression RBRACK lvalue_extension
+   24                 | LBRACK expression RBRACK . lvalue_extension
+
+    LBRACK  schiebe und gehe zu Zustand 97 über
+    DOT     schiebe und gehe zu Zustand 25 über
+    OF      schiebe und gehe zu Zustand 110 über
+
+    $default  reduziere mit Regel 22 (lvalue_extension)
+
+    lvalue_extension  gehe zu Zustand 111 über
+
+
+Zustand 94
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   44 field_assignment: ID EQ . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 112 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 95
+
+   15 expression: ID LBRACE field_assignments RBRACE .
+
+    $default  reduziere mit Regel 15 (expression)
+
+
+Zustand 96
+
+   43 field_assignment_list: field_assignment_list COMMA . field_assignment
+   44 field_assignment: . ID EQ expression
+
+    ID  schiebe und gehe zu Zustand 61 über
+
+    field_assignment  gehe zu Zustand 113 über
+
+
+Zustand 97
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   24 lvalue_extension: LBRACK . expression RBRACK lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 114 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 98
+
+   23 lvalue_extension: DOT ID lvalue_extension .
+
+    $default  reduziere mit Regel 23 (lvalue_extension)
+
+
+Zustand 99
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   67 expression_sequence: expression_sequence SEMICOLON expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 67 (expression_sequence)
+
+
+Zustand 100
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   62 selection: IF expression THEN expression . ELSE expression
+   63          | IF expression THEN expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+    ELSE    schiebe und gehe zu Zustand 115 über
+
+    $default  reduziere mit Regel 63 (selection)
+
+
+Zustand 101
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   64 iteration: WHILE expression DO expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 64 (iteration)
+
+
+Zustand 102
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   65 iteration: FOR ID ASSIGN expression . TO expression DO expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+    TO      schiebe und gehe zu Zustand 116 über
+
+
+Zustand 103
+
+   54 type_fields: .
+   55            | . type_field_list
+   56 type_field_list: . ID COLON ID
+   57                | . type_field_list COMMA ID COLON ID
+   60 function_declaration: FUNCTION ID LPAREN . type_fields RPAREN EQ expression
+   61                     | FUNCTION ID LPAREN . type_fields RPAREN COLON ID EQ expression
+
+    ID  schiebe und gehe zu Zustand 117 über
+
+    $default  reduziere mit Regel 54 (type_fields)
+
+    type_fields      gehe zu Zustand 118 über
+    type_field_list  gehe zu Zustand 119 über
+
+
+Zustand 104
+
+   59 variable_declaration: VAR ID COLON . ID ASSIGN expression
+
+    ID  schiebe und gehe zu Zustand 120 über
+
+
+Zustand 105
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   58 variable_declaration: VAR ID ASSIGN . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 121 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 106
+
+   50 type_declaration: TYPE ID EQ . type
+   51 type: . ID
+   52     | . LBRACE type_fields RBRACE
+   53     | . ARRAY OF ID
+
+    ID      schiebe und gehe zu Zustand 122 über
+    LBRACE  schiebe und gehe zu Zustand 123 über
+    ARRAY   schiebe und gehe zu Zustand 124 über
+
+    type  gehe zu Zustand 125 über
+
+
+Zustand 107
+
+   19 expression: LET declaration_sequence IN END .
+
+    $default  reduziere mit Regel 19 (expression)
+
+
+Zustand 108
+
+   20 expression: LET declaration_sequence IN expression_sequence . END
+   67 expression_sequence: expression_sequence . SEMICOLON expression
+
+    SEMICOLON  schiebe und gehe zu Zustand 68 über
+    END        schiebe und gehe zu Zustand 126 über
+
+
+Zustand 109
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   69 expression_list: expression_list COMMA expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 69 (expression_list)
+
+
+Zustand 110
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   16           | ID LBRACK expression RBRACK OF . expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 127 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 111
+
+   24 lvalue_extension: LBRACK expression RBRACK lvalue_extension .
+
+    $default  reduziere mit Regel 24 (lvalue_extension)
+
+
+Zustand 112
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   44 field_assignment: ID EQ expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 44 (field_assignment)
+
+
+Zustand 113
+
+   43 field_assignment_list: field_assignment_list COMMA field_assignment .
+
+    $default  reduziere mit Regel 43 (field_assignment_list)
+
+
+Zustand 114
+
+   24 lvalue_extension: LBRACK expression . RBRACK lvalue_extension
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    RBRACK  schiebe und gehe zu Zustand 128 über
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+
+Zustand 115
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   62          | IF expression THEN expression ELSE . expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 129 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 116
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   65          | FOR ID ASSIGN expression TO . expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 130 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 117
+
+   56 type_field_list: ID . COLON ID
+
+    COLON  schiebe und gehe zu Zustand 131 über
+
+
+Zustand 118
+
+   60 function_declaration: FUNCTION ID LPAREN type_fields . RPAREN EQ expression
+   61                     | FUNCTION ID LPAREN type_fields . RPAREN COLON ID EQ expression
+
+    RPAREN  schiebe und gehe zu Zustand 132 über
+
+
+Zustand 119
+
+   55 type_fields: type_field_list .
+   57 type_field_list: type_field_list . COMMA ID COLON ID
+
+    COMMA  schiebe und gehe zu Zustand 133 über
+
+    $default  reduziere mit Regel 55 (type_fields)
+
+
+Zustand 120
+
+   59 variable_declaration: VAR ID COLON ID . ASSIGN expression
+
+    ASSIGN  schiebe und gehe zu Zustand 134 über
+
+
+Zustand 121
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   58 variable_declaration: VAR ID ASSIGN expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 58 (variable_declaration)
+
+
+Zustand 122
+
+   51 type: ID .
+
+    $default  reduziere mit Regel 51 (type)
+
+
+Zustand 123
+
+   52 type: LBRACE . type_fields RBRACE
+   54 type_fields: .
+   55            | . type_field_list
+   56 type_field_list: . ID COLON ID
+   57                | . type_field_list COMMA ID COLON ID
+
+    ID  schiebe und gehe zu Zustand 117 über
+
+    $default  reduziere mit Regel 54 (type_fields)
+
+    type_fields      gehe zu Zustand 135 über
+    type_field_list  gehe zu Zustand 119 über
+
+
+Zustand 124
+
+   53 type: ARRAY . OF ID
+
+    OF  schiebe und gehe zu Zustand 136 über
+
+
+Zustand 125
+
+   50 type_declaration: TYPE ID EQ type .
+
+    $default  reduziere mit Regel 50 (type_declaration)
+
+
+Zustand 126
+
+   20 expression: LET declaration_sequence IN expression_sequence END .
+
+    $default  reduziere mit Regel 20 (expression)
+
+
+Zustand 127
+
+   16 expression: ID LBRACK expression RBRACK OF expression .
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 16 (expression)
+
+
+Zustand 128
+
+   22 lvalue_extension: .
+   23                 | . DOT ID lvalue_extension
+   24                 | . LBRACK expression RBRACK lvalue_extension
+   24                 | LBRACK expression RBRACK . lvalue_extension
+
+    LBRACK  schiebe und gehe zu Zustand 97 über
+    DOT     schiebe und gehe zu Zustand 25 über
+
+    $default  reduziere mit Regel 22 (lvalue_extension)
+
+    lvalue_extension  gehe zu Zustand 111 über
+
+
+Zustand 129
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   62 selection: IF expression THEN expression ELSE expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 62 (selection)
+
+
+Zustand 130
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   65 iteration: FOR ID ASSIGN expression TO expression . DO expression
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+    DO      schiebe und gehe zu Zustand 137 über
+
+
+Zustand 131
+
+   56 type_field_list: ID COLON . ID
+
+    ID  schiebe und gehe zu Zustand 138 über
+
+
+Zustand 132
+
+   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN . EQ expression
+   61                     | FUNCTION ID LPAREN type_fields RPAREN . COLON ID EQ expression
+
+    COLON  schiebe und gehe zu Zustand 139 über
+    EQ     schiebe und gehe zu Zustand 140 über
+
+
+Zustand 133
+
+   57 type_field_list: type_field_list COMMA . ID COLON ID
+
+    ID  schiebe und gehe zu Zustand 141 über
+
+
+Zustand 134
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   59 variable_declaration: VAR ID COLON ID ASSIGN . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 142 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 135
+
+   52 type: LBRACE type_fields . RBRACE
+
+    RBRACE  schiebe und gehe zu Zustand 143 über
+
+
+Zustand 136
+
+   53 type: ARRAY OF . ID
+
+    ID  schiebe und gehe zu Zustand 144 über
+
+
+Zustand 137
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   65          | FOR ID ASSIGN expression TO expression DO . expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 145 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 138
+
+   56 type_field_list: ID COLON ID .
+
+    $default  reduziere mit Regel 56 (type_field_list)
+
+
+Zustand 139
+
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON . ID EQ expression
+
+    ID  schiebe und gehe zu Zustand 146 über
+
+
+Zustand 140
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 147 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 141
+
+   57 type_field_list: type_field_list COMMA ID . COLON ID
+
+    COLON  schiebe und gehe zu Zustand 148 über
+
+
+Zustand 142
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   59 variable_declaration: VAR ID COLON ID ASSIGN expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 59 (variable_declaration)
+
+
+Zustand 143
+
+   52 type: LBRACE type_fields RBRACE .
+
+    $default  reduziere mit Regel 52 (type)
+
+
+Zustand 144
+
+   53 type: ARRAY OF ID .
+
+    $default  reduziere mit Regel 53 (type)
+
+
+Zustand 145
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   65 iteration: FOR ID ASSIGN expression TO expression DO expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 65 (iteration)
+
+
+Zustand 146
+
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID . EQ expression
+
+    EQ  schiebe und gehe zu Zustand 149 über
+
+
+Zustand 147
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 60 (function_declaration)
+
+
+Zustand 148
+
+   57 type_field_list: type_field_list COMMA ID COLON . ID
+
+    ID  schiebe und gehe zu Zustand 150 über
+
+
+Zustand 149
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ . expression
+   62 selection: . IF expression THEN expression ELSE expression
+   63          | . IF expression THEN expression
+   64 iteration: . WHILE expression DO expression
+   65          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression: . LPAREN error RPAREN
+
+    ID      schiebe und gehe zu Zustand 1 über
+    STRING  schiebe und gehe zu Zustand 2 über
+    INT     schiebe und gehe zu Zustand 3 über
+    LPAREN  schiebe und gehe zu Zustand 4 über
+    MINUS   schiebe und gehe zu Zustand 5 über
+    IF      schiebe und gehe zu Zustand 6 über
+    WHILE   schiebe und gehe zu Zustand 7 über
+    FOR     schiebe und gehe zu Zustand 8 über
+    LET     schiebe und gehe zu Zustand 9 über
+    BREAK   schiebe und gehe zu Zustand 10 über
+    NIL     schiebe und gehe zu Zustand 11 über
+
+    expression             gehe zu Zustand 151 über
+    lvalue                 gehe zu Zustand 14 über
+    assignment             gehe zu Zustand 15 über
+    function_call          gehe zu Zustand 16 über
+    arithmetic_expression  gehe zu Zustand 17 über
+    comparison             gehe zu Zustand 18 über
+    boolean_expression     gehe zu Zustand 19 über
+    selection              gehe zu Zustand 20 über
+    iteration              gehe zu Zustand 21 über
+
+
+Zustand 150
+
+   57 type_field_list: type_field_list COMMA ID COLON ID .
+
+    $default  reduziere mit Regel 57 (type_field_list)
+
+
+Zustand 151
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression .
+
+    PLUS    schiebe und gehe zu Zustand 44 über
+    MINUS   schiebe und gehe zu Zustand 45 über
+    TIMES   schiebe und gehe zu Zustand 46 über
+    DIVIDE  schiebe und gehe zu Zustand 47 über
+    EQ      schiebe und gehe zu Zustand 48 über
+    NEQ     schiebe und gehe zu Zustand 49 über
+    LT      schiebe und gehe zu Zustand 50 über
+    LE      schiebe und gehe zu Zustand 51 über
+    GT      schiebe und gehe zu Zustand 52 über
+    GE      schiebe und gehe zu Zustand 53 über
+    AND     schiebe und gehe zu Zustand 54 über
+    OR      schiebe und gehe zu Zustand 55 über
+
+    $default  reduziere mit Regel 61 (function_declaration)
