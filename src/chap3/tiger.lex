@@ -1,8 +1,8 @@
  /**
- * TODO: \f___f\ negative literals -32 
+ * TODO: \f___f\ negative literals -32
  **/
 %{
-#include <assert.h> 
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include "util.h"
@@ -11,8 +11,10 @@
 
 int charPos=1;
 int commentNesting = 0; // comment nested counter
-int quotationMark = 0; 
-int forfeed = 0; 
+int forfeed = 0;
+int modus = 0;
+
+char buffer[256];
 
 int yywrap(void)
 {
@@ -31,12 +33,13 @@ void adjust(void)
 
 %x COMMENT
 %x _STRING
+%x FORFEED
 
 %% /* initial */
 
 \r\n {adjust(); EM_newline(); continue;}
 [ \r\t] {adjust(); continue;}
-\n  {adjust(); EM_newline(); continue;}
+\n {adjust(); EM_newline(); continue;}
 "," { adjust(); return COMMA;}
 ":" { adjust(); return COLON;}
 ";" { adjust(); return SEMICOLON;}
@@ -84,17 +87,17 @@ type { adjust(); return TYPE ;}
 [0-9]+ { adjust(); yylval.ival=atoi(yytext); return INT;}
 
 \" {
-    quotationMark++;
     adjust();
-    yylval.sval=yytext;
+    buffer[0] = '\0';
     BEGIN(_STRING);
 }
 
 "/*" {
-       adjust();
-       commentNesting++;
-	   yylval.sval=yytext;
-       BEGIN(COMMENT);
+      adjust();
+      commentNesting++;
+      yylval.sval=yytext;
+      modus = 2;
+      BEGIN(COMMENT);
      }
 
 "*/" {
@@ -103,85 +106,105 @@ type { adjust(); return TYPE ;}
        yyterminate();
      }
 
+<<EOF>> {
+    if(modus == 1){
+      EM_error(EM_tokPos, "oops! Didn't close forefeed.");
+    } else if(modus == 2) {
+      EM_error(EM_tokPos, "oops! Didn't close Comment.");
+    }
+    yyterminate();
+}
+     
   /* all the rest */
 . { EM_error(EM_tokPos,"illegal token");}
 
-<_STRING>{
-    
-    \\f {
-        forfeed = 1;
-        continue;
-    }
-    
+<FORFEED>{
     f\\ {
-        forfeed = 0;
-        adjust();
+      modus = 0;
+      BEGIN(_STRING);      
+    }
+
+    . {continue;}
+}
+
+<_STRING>{
+    \\f {
+        modus = 1;
+        BEGIN(FORFEED);
     }
     
     \\n {
         adjust();
-        yylval.sval="\n";
+        strcat(buffer, "\n");
     }
     
     \\t {
         adjust();
-        yylval.sval="\t";
+        strcat(buffer, "\t");
     }
     
-    \\ddd {
-        adjust();
-        yylval.sval="\\o";
+    \\[0-9][0-9][0-9] {
+      adjust();
+      char ch[2];
+      ch[0]= (char) atoi(yytext+1);
+      ch[1] = '\0';
+      strcat(buffer, ch);
     }
     
     \\\\ {
+
         adjust();
-        yylval.sval="\\";
+        strcat(buffer, "\\");
     }
     
     \\\" {
-        quotationMark++;
         adjust();
-        yylval.sval="\"";
+        strcat(buffer, "\"");
     }
     
     \" {
-        quotationMark++;
         BEGIN(INITIAL);
-        return STRING; 
+        strcat(buffer, "\0");
+        yylval.sval = buffer;
+        return STRING;
     }
     
-    .$ {
-        if(quotationMark%2!=0){
-            EM_error(EM_tokPos, "oops! Missing \"");
-	        yyterminate();
-        }
+    .$ { 
+        if(*(yytext)=='\"'){
+          BEGIN(INITIAL);
+          strcat(buffer, "\0");
+          yylval.sval = buffer;
+          return STRING;
+          }
+        EM_error(EM_tokPos, "oops! Missing \"");
+        yyterminate();
     }
-    . {adjust();}
+    . {
+        adjust();
+        strcat(buffer, yytext);
+      }
 }
 
   /* Nested Rulesets for comments */
 <COMMENT>{
-	
-	/* increment nesting if another comment opened */
-	"/*"	{
-		adjust();
-		commentNesting++;
-		//continue;
-	};
+ /* increment nesting if another comment opened */
+"/*" {
+adjust();
+commentNesting++;
+//continue;
+};
 
-	/* decrement nesting and exit the ruleset back to the initial */
-	"*/"	{
-		adjust();
-		commentNesting--;
-		if (commentNesting == 0) {
-			yylval.sval=yytext;
-            BEGIN(INITIAL);
-		}
-	};
-	<<EOF>> {
-	        EM_error(EM_tokPos, "oops! EOF in comments.");
-	        yyterminate();
-    }
-	/* something in the comment, should make sense to the reader ;) */
-	. { adjust(); }	
+ /* decrement nesting and exit the ruleset back to the initial */
+"*/" {
+adjust();
+commentNesting--;
+if (commentNesting == 0) {
+    yylval.sval=yytext;
+    modus = 0;
+    BEGIN(INITIAL);
+}
+};
+
+ /* something in the comment, should make sense to the reader ;) */
+. { adjust(); }
 }
