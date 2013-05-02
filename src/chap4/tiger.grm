@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include "util.h"
 #include "errormsg.h"
+#include "symbol.h"
+#include "absyn.h"
 #include "y.tab.h"
-//#include "parse.h" // added to compile
-//#include "absyn.h"
+#include "parse.h"
 
  /* function prototypes */
 int yylex(void);
@@ -13,6 +14,9 @@ void yyerror(char *s)
 {
  EM_error(EM_tokPos, "%s", s);
 }
+
+A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
+
 %}
 
 
@@ -20,10 +24,14 @@ void yyerror(char *s)
 	int pos;
 	int ival;
 	string sval;
-	}
+  A_exp exp;
+  // TODO: extend types (page 96 ;D)
+};
 
 %token <sval> ID STRING
 %token <ival> INT
+
+%type <exp> expression program arithmetic_expression // extend types here
 
 %token 
   COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK 
@@ -47,13 +55,14 @@ void yyerror(char *s)
 %left PLUS MINUS
 %left TIMES DIVIDE
 %left UMINUS
-
 %%
 
-program: expression
+
+
+program: expression {$$=absyn_root=$1;} // take off 
 
 expression
-        : INT
+        : INT {$$=A_IntExp(EM_tokPos, $1);} // like page 98
         | STRING
         | BREAK
         | NIL
@@ -62,7 +71,7 @@ expression
         | selection
         | iteration
         | function_call
-        | arithmetic_expression
+        | arithmetic_expression 
         | comparison
         | boolean_expression
         | MINUS expression %prec UMINUS
@@ -89,7 +98,7 @@ function_call
         | ID LPAREN expression_list RPAREN
 
 arithmetic_expression
-        : expression PLUS expression
+        : expression PLUS expression {$$=A_OpExp(EM_tokPos, A_plusOp,$1,$3);}
         | expression MINUS expression
         | expression TIMES expression
         | expression DIVIDE expression
