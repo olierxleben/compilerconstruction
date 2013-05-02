@@ -1,5 +1,5 @@
 a.out: parsetest.o y.tab.o lex.yy.o errormsg.o util.o
-	cc -g parsetest.o y.tab.o lex.yy.o errormsg.o util.o
+	cc -w -g parsetest.o y.tab.o lex.yy.o errormsg.o util.o
 
 parsetest.o: parsetest.c errormsg.h util.h
 	cc -g -c parsetest.c
@@ -19,8 +19,8 @@ errormsg.o: errormsg.c errormsg.h util.h
 lex.yy.o: lex.yy.c y.tab.h errormsg.h util.h
 	cc -g -c lex.yy.c
 
-#lex.yy.c: tiger.lex
-#	flex tiger.lex
+lex.yy.c: tiger.lex
+	flex tiger.lex
 
 util.o: util.c util.h
 	cc -g -c util.c

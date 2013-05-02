@@ -1,7 +1,7 @@
 a.out: parse.o y.tab.o lex.yy.o errormsg.o util.o absyn.o symbol.o prabsyn.o table.o
 	cc -o parser -g absyn.o parse.o y.tab.o lex.yy.o errormsg.o util.o symbol.o prabsyn.o table.o
 
-parse.o: parse.c errormsg.h util.h
+parse.o: parse.c errormsg.h util.h absyn.h
 	cc -g -c parse.c
 	
 absyn.o: absyn.c errormsg.h util.h absyn.h
@@ -31,11 +31,12 @@ errormsg.o: errormsg.c errormsg.h util.h
 lex.yy.o: lex.yy.c y.tab.h errormsg.h util.h
 	cc -g -c lex.yy.c
 
-# lex.yy.c: tiger.lex
-# 	flex tiger.lex
+ lex.yy.c: tiger.lex
+	flex tiger.lex
 
 util.o: util.c util.h
 	cc -g -c util.c
 
-clean: 
+clean:
+	#rm -f a.out symbol.o table.o prabsyn.o  absyn.o util.o parse.o errormsg.o y.tab.c y.tab.h y.tab.o  lex.yy.o parser.exe y.output  
 	rm -f lex.yy.c a.out symbol.o table.o prabsyn.o  absyn.o util.o parse.o errormsg.o y.tab.c y.tab.h y.tab.o  lex.yy.o parser.exe y.output 
