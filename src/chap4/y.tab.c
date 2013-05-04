@@ -167,9 +167,10 @@
 #include <stdio.h>
 #include "util.h"
 #include "errormsg.h"
+#include "symbol.h"
+#include "absyn.h"
 #include "y.tab.h"
-//#include "parse.h" // added to compile
-//#include "absyn.h"
+#include "parse.h"
 
  /* function prototypes */
 int yylex(void);
@@ -178,6 +179,9 @@ void yyerror(char *s)
 {
  EM_error(EM_tokPos, "%s", s);
 }
+
+A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
+
 
 
 /* Enabling traces.  */
@@ -200,14 +204,16 @@ void yyerror(char *s)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 19 "tiger.grm"
+#line 23 "tiger.grm"
 {
 	int pos;
 	int ival;
 	string sval;
-	}
+  A_exp exp;
+  // TODO: extend types (page 96 ;D)
+}
 /* Line 193 of yacc.c.  */
-#line 211 "y.tab.c"
+#line 217 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -220,7 +226,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 224 "y.tab.c"
+#line 230 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -538,14 +544,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    56,    57,    58,    59,    60,    61,    62,
-      63,    64,    65,    66,    67,    68,    69,    70,    71,    72,
-      73,    74,    77,    79,    81,    82,    85,    88,    89,    92,
-      93,    94,    95,    98,    99,   100,   101,   102,   103,   106,
-     107,   109,   111,   114,   115,   118,   120,   122,   125,   126,
-     127,   130,   133,   134,   135,   137,   139,   142,   143,   146,
-     147,   150,   151,   154,   155,   158,   159,   162,   163,   166,
-     167
+       0,    62,    62,    65,    66,    67,    68,    69,    70,    71,
+      72,    73,    74,    75,    76,    77,    78,    79,    80,    81,
+      82,    83,    86,    88,    90,    91,    94,    97,    98,   101,
+     102,   103,   104,   107,   108,   109,   110,   111,   112,   115,
+     116,   118,   120,   123,   124,   127,   129,   131,   134,   135,
+     136,   139,   142,   143,   144,   146,   148,   151,   152,   155,
+     156,   159,   160,   163,   164,   167,   168,   171,   172,   175,
+     176
 };
 #endif
 
@@ -1584,9 +1590,39 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
+        case 2:
+#line 62 "tiger.grm"
+    {(yyval.exp)=absyn_root=(yyvsp[(1) - (1)].exp);;}
+    break;
+
+  case 3:
+#line 65 "tiger.grm"
+    {(yyval.exp)=A_IntExp(EM_tokPos, (yyvsp[(1) - (1)].ival));;}
+    break;
+
+  case 29:
+#line 101 "tiger.grm"
+    {(yyval.exp)=A_OpExp(EM_tokPos, A_plusOp,(yyvsp[(1) - (3)].exp),(yyvsp[(3) - (3)].exp));;}
+    break;
+
+  case 30:
+#line 102 "tiger.grm"
+    {(yyval.exp)=A_OpExp(EM_tokPos, A_minusOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
+    break;
+
+  case 31:
+#line 103 "tiger.grm"
+    {(yyval.exp)=A_OpExp(EM_tokPos, A_timesOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
+    break;
+
+  case 32:
+#line 104 "tiger.grm"
+    {(yyval.exp)=A_OpExp(EM_tokPos, A_divideOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
+    break;
+
+
 /* Line 1267 of yacc.c.  */
-#line 1590 "y.tab.c"
+#line 1626 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
