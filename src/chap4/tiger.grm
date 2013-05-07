@@ -24,14 +24,17 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	int pos;
 	int ival;
 	string sval;
-  A_exp exp;
+	A_exp exp;
+	A_var var;
   // TODO: extend types (page 96 ;D)
 };
 
 %token <sval> ID STRING
 %token <ival> INT
 
-%type <exp> expression program arithmetic_expression // extend types here
+%type // extend types here
+	<exp> expression arithmetic_expression expression_list expression_sequence
+	program assignment declaration type_declaration type
 
 %token 
   COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK 
@@ -62,11 +65,11 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 program: expression {$$=absyn_root=$1;} // take off 
 
 expression
-        : INT {$$=A_IntExp(EM_tokPos, $1);} // like page 98
-        | STRING
-        | BREAK
-        | NIL
-        | lvalue
+        : INT			{$$=A_IntExp(EM_tokPos, $1);} // like page 98
+        | STRING		{$$=A_StringExp(EM_tokPos,$1);}
+        | BREAK			{$$=A_BreakExp(EM_tokPos);}
+        | NIL			{$$=A_NilExp(EM_tokPos);}
+        | lvalue		
         | assignment
         | selection
         | iteration
@@ -77,13 +80,13 @@ expression
         | MINUS expression %prec UMINUS
         | ID LBRACE field_assignments RBRACE
         | ID LBRACK expression RBRACK OF expression
-        | LPAREN RPAREN
-        | LPAREN expression_sequence RPAREN
+        | LPAREN RPAREN // do we really need that?
+        | LPAREN expression_sequence RPAREN {$$=$2;} // assign left to second element here, then parsing goes to line 172
         | LET declaration_sequence IN END
         | LET declaration_sequence IN expression_sequence END
 
 lvalue
-        : ID lvalue_extension
+        : ID lvalue_extension 
 
 lvalue_extension
         : /* empty */
@@ -91,11 +94,11 @@ lvalue_extension
         | LBRACK expression RBRACK lvalue_extension
 
 assignment
-        : lvalue ASSIGN expression
+        : lvalue ASSIGN expression {$$=A_AssignExp(EM_tokPos, $2, $3);} // TODO: A_var should be set
 
 function_call
         : ID LPAREN RPAREN
-        | ID LPAREN expression_list RPAREN
+        | ID LPAREN expression_list RPAREN 
 
 arithmetic_expression
         : expression PLUS expression	{$$=A_OpExp(EM_tokPos, A_plusOp,$1,$3);}
@@ -140,7 +143,7 @@ type_declaration
 
 type
         : ID
-        | LBRACE type_fields RBRACE
+        | LBRACE type_fields RBRACE 
         | ARRAY OF ID
 
 type_fields
@@ -168,8 +171,8 @@ iteration
         | FOR ID ASSIGN expression TO expression DO expression
 
 expression_sequence
-        : expression
-        | expression_sequence SEMICOLON expression
+        : expression 
+        | expression_sequence SEMICOLON expression 
 
 expression_list
         : expression

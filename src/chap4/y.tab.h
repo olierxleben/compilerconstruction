@@ -141,11 +141,12 @@ typedef union YYSTYPE
 	int pos;
 	int ival;
 	string sval;
-  A_exp exp;
+	A_exp exp;
+	A_var var;
   // TODO: extend types (page 96 ;D)
 }
 /* Line 1529 of yacc.c.  */
-#line 149 "y.tab.h"
+#line 150 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
