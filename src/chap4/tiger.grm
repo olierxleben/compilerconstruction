@@ -26,6 +26,9 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	string sval;
 	A_exp exp;
 	A_var var;
+	A_dec dec;
+	A_decList decList;
+	A_expList expList;
   // TODO: extend types (page 96 ;D)
 };
 
@@ -33,8 +36,20 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 %token <ival> INT
 
 %type // extend types here
-	<exp> expression arithmetic_expression expression_list expression_sequence
-	program assignment declaration type_declaration type
+	<exp> expression arithmetic_expression expression_sequence
+	program assignment type_declaration type
+
+%type
+		<expList> expression_list
+		
+%type 
+	<var> lvalue
+
+%type
+	<decList> declaration_sequence
+				
+%type
+	<dec> declaration
 
 %token 
   COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK 
@@ -80,10 +95,10 @@ expression
         | MINUS expression %prec UMINUS
         | ID LBRACE field_assignments RBRACE
         | ID LBRACK expression RBRACK OF expression
-        | LPAREN RPAREN // do we really need that?
+        | LPAREN RPAREN {$$=A_NilExp(EM_tokPos);} 
         | LPAREN expression_sequence RPAREN {$$=$2;} // assign left to second element here, then parsing goes to line 172
-        | LET declaration_sequence IN END
-        | LET declaration_sequence IN expression_sequence END
+        | LET declaration_sequence IN END {$$=A_LetExp(EM_tokPos, $2, A_NilExp(EM_tokPos));}
+        | LET declaration_sequence IN expression_sequence END {$$=A_LetExp(EM_tokPos, $2, $4); }
 
 lvalue
         : ID lvalue_extension 
@@ -94,7 +109,7 @@ lvalue_extension
         | LBRACK expression RBRACK lvalue_extension
 
 assignment
-        : lvalue ASSIGN expression {$$=A_AssignExp(EM_tokPos, $2, $3);} // TODO: A_var should be set
+        : lvalue ASSIGN expression {$$=A_AssignExp(EM_tokPos, $1, $3);} // TODO: A_var should be set
 
 function_call
         : ID LPAREN RPAREN
@@ -130,8 +145,8 @@ field_assignment
         : ID EQ expression
 
 declaration_sequence
-        : /* empty */
-        | declaration declaration_sequence
+        : /* empty */ //{$$=A_decList( A_NilExp(EM_tokPos), A_NilExp(EM_tokPos));}
+        | declaration declaration_sequence {$$=A_DecList($1, $2);}
 
 declaration
         : type_declaration
@@ -139,7 +154,7 @@ declaration
         | function_declaration
 
 type_declaration
-        : TYPE ID EQ type
+        : TYPE ID EQ type 
 
 type
         : ID
@@ -155,7 +170,7 @@ type_field_list
         | type_field_list COMMA ID COLON ID
 
 variable_declaration
-        : VAR ID ASSIGN expression
+        : VAR ID ASSIGN expression //{$$=A_VarDec(EM_tokPos, $2, $3)} // TODO: Typ bestimmen?!
         | VAR ID COLON ID ASSIGN expression
 
 function_declaration
@@ -175,8 +190,8 @@ expression_sequence
         | expression_sequence SEMICOLON expression 
 
 expression_list
-        : expression
-        | expression_list COMMA expression
+        : expression {$$=A_ExpList($1, A_NilExp(EM_tokPos));}
+        | expression_list COMMA expression {$$=A_ExpList($3, $1);}
 
 
 /* ERROR RECOVERY RULES */

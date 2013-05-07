@@ -211,10 +211,13 @@ typedef union YYSTYPE
 	string sval;
 	A_exp exp;
 	A_var var;
+	A_dec dec;
+	A_decList decList;
+	A_expList expList;
   // TODO: extend types (page 96 ;D)
 }
 /* Line 193 of yacc.c.  */
-#line 218 "y.tab.c"
+#line 221 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -227,7 +230,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 231 "y.tab.c"
+#line 234 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -545,14 +548,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    65,    65,    68,    69,    70,    71,    72,    73,    74,
-      75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
-      85,    86,    89,    91,    93,    94,    97,   100,   101,   104,
-     105,   106,   107,   110,   111,   112,   113,   114,   115,   118,
-     119,   121,   123,   126,   127,   130,   132,   134,   137,   138,
-     139,   142,   145,   146,   147,   149,   151,   154,   155,   158,
-     159,   162,   163,   166,   167,   170,   171,   174,   175,   178,
-     179
+       0,    80,    80,    83,    84,    85,    86,    87,    88,    89,
+      90,    91,    92,    93,    94,    95,    96,    97,    98,    99,
+     100,   101,   104,   106,   108,   109,   112,   115,   116,   119,
+     120,   121,   122,   125,   126,   127,   128,   129,   130,   133,
+     134,   136,   138,   141,   142,   145,   147,   149,   152,   153,
+     154,   157,   160,   161,   162,   164,   166,   169,   170,   173,
+     174,   177,   178,   181,   182,   185,   186,   189,   190,   193,
+     194
 };
 #endif
 
@@ -1592,63 +1595,93 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 65 "tiger.grm"
+#line 80 "tiger.grm"
     {(yyval.exp)=absyn_root=(yyvsp[(1) - (1)].exp);;}
     break;
 
   case 3:
-#line 68 "tiger.grm"
+#line 83 "tiger.grm"
     {(yyval.exp)=A_IntExp(EM_tokPos, (yyvsp[(1) - (1)].ival));;}
     break;
 
   case 4:
-#line 69 "tiger.grm"
+#line 84 "tiger.grm"
     {(yyval.exp)=A_StringExp(EM_tokPos,(yyvsp[(1) - (1)].sval));;}
     break;
 
   case 5:
-#line 70 "tiger.grm"
+#line 85 "tiger.grm"
     {(yyval.exp)=A_BreakExp(EM_tokPos);;}
     break;
 
   case 6:
-#line 71 "tiger.grm"
+#line 86 "tiger.grm"
+    {(yyval.exp)=A_NilExp(EM_tokPos);;}
+    break;
+
+  case 18:
+#line 98 "tiger.grm"
     {(yyval.exp)=A_NilExp(EM_tokPos);;}
     break;
 
   case 19:
-#line 84 "tiger.grm"
+#line 99 "tiger.grm"
     {(yyval.exp)=(yyvsp[(2) - (3)].exp);;}
     break;
 
+  case 20:
+#line 100 "tiger.grm"
+    {(yyval.exp)=A_LetExp(EM_tokPos, (yyvsp[(2) - (4)].decList), A_NilExp(EM_tokPos));;}
+    break;
+
+  case 21:
+#line 101 "tiger.grm"
+    {(yyval.exp)=A_LetExp(EM_tokPos, (yyvsp[(2) - (5)].decList), (yyvsp[(4) - (5)].exp)); ;}
+    break;
+
   case 26:
-#line 97 "tiger.grm"
-    {(yyval.exp)=A_AssignExp(EM_tokPos, NULL, (yyvsp[(3) - (3)].exp));;}
+#line 112 "tiger.grm"
+    {(yyval.exp)=A_AssignExp(EM_tokPos, (yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].exp));;}
     break;
 
   case 29:
-#line 104 "tiger.grm"
+#line 119 "tiger.grm"
     {(yyval.exp)=A_OpExp(EM_tokPos, A_plusOp,(yyvsp[(1) - (3)].exp),(yyvsp[(3) - (3)].exp));;}
     break;
 
   case 30:
-#line 105 "tiger.grm"
+#line 120 "tiger.grm"
     {(yyval.exp)=A_OpExp(EM_tokPos, A_minusOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
     break;
 
   case 31:
-#line 106 "tiger.grm"
+#line 121 "tiger.grm"
     {(yyval.exp)=A_OpExp(EM_tokPos, A_timesOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
     break;
 
   case 32:
-#line 107 "tiger.grm"
+#line 122 "tiger.grm"
     {(yyval.exp)=A_OpExp(EM_tokPos, A_divideOp, (yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].exp));;}
+    break;
+
+  case 47:
+#line 149 "tiger.grm"
+    {(yyval.decList)=A_DecList((yyvsp[(1) - (2)].dec), (yyvsp[(2) - (2)].decList));;}
+    break;
+
+  case 69:
+#line 193 "tiger.grm"
+    {(yyval.expList)=A_ExpList((yyvsp[(1) - (1)].exp), A_NilExp(EM_tokPos));;}
+    break;
+
+  case 70:
+#line 194 "tiger.grm"
+    {(yyval.expList)=A_ExpList((yyvsp[(3) - (3)].exp), (yyvsp[(1) - (3)].expList));;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1652 "y.tab.c"
+#line 1685 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
