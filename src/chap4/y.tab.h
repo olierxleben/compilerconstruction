@@ -146,10 +146,14 @@ typedef union YYSTYPE
 	A_dec dec;
 	A_decList decList;
 	A_expList expList;
+	A_fundec funDec;
+	A_field field;
+	A_fieldList fieldList;
+	A_nametyList nametyList;
   // TODO: extend types (page 96 ;D)
 }
 /* Line 1529 of yacc.c.  */
-#line 153 "y.tab.h"
+#line 157 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -29,6 +29,10 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	A_dec dec;
 	A_decList decList;
 	A_expList expList;
+	A_fundec funDec;
+	A_field field;
+	A_fieldList fieldList;
+	A_nametyList nametyList;
   // TODO: extend types (page 96 ;D)
 };
 
@@ -37,7 +41,7 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 
 %type // extend types here
 	<exp> expression arithmetic_expression expression_sequence
-	program assignment type_declaration type
+	program assignment type_declaration iteration selection function_call
 
 %type
 		<expList> expression_list
@@ -49,8 +53,20 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	<decList> declaration_sequence
 				
 %type
-	<dec> declaration
+	<dec> declaration variable_declaration
 
+%type
+	<funDec> function_declaration
+
+%type
+	<nametyList> type // TODO: correct?
+
+%type
+	<fieldList> type_fields type_field_list
+
+%type
+	<field> field_assignment
+	
 %token 
   COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK 
   LBRACE RBRACE DOT 
@@ -112,24 +128,24 @@ assignment
         : lvalue ASSIGN expression {$$=A_AssignExp(EM_tokPos, $1, $3);} // TODO: A_var should be set
 
 function_call
-        : ID LPAREN RPAREN
-        | ID LPAREN expression_list RPAREN 
+        : ID LPAREN RPAREN {$$=A_CallExp(EM_tokPos, S_Symbol($1), A_ExpList(A_NilExp(EM_tokPos), A_NilExp(EM_tokPos) ) );} // TODO: Kill the nil
+        | ID LPAREN expression_list RPAREN {$$=A_CallExp(EM_tokPos, S_Symbol($1), $3);}
 
 arithmetic_expression
-        : expression PLUS expression	{$$=A_OpExp(EM_tokPos, A_plusOp,$1,$3);}
+        : expression PLUS expression	{$$=A_OpExp(EM_tokPos, A_plusOp, $1,$3);}
         | expression MINUS expression	{$$=A_OpExp(EM_tokPos, A_minusOp, $1, $3);}
         | expression TIMES expression	{$$=A_OpExp(EM_tokPos, A_timesOp, $1, $3);}
         | expression DIVIDE expression	{$$=A_OpExp(EM_tokPos, A_divideOp, $1, $3);}
 
 comparison
-        : expression EQ expression
-        | expression NEQ expression
-        | expression GT expression
-        | expression LT expression 
-        | expression GE expression 
-        | expression LE expression 
+        : expression EQ expression 		{$$=A_OpExp(EM_tokPos, A_eqOp, $1, $3);}
+        | expression NEQ expression		{$$=A_OpExp(EM_tokPos, A_neqOp, $1, $3);}
+        | expression GT expression		{$$=A_OpExp(EM_tokPos, A_gtOp, $1, $3);}
+        | expression LT expression 		{$$=A_OpExp(EM_tokPos, A_ltOp, $1, $3);}
+        | expression GE expression 		{$$=A_OpExp(EM_tokPos, A_geOp, $1, $3);}
+        | expression LE expression 		{$$=A_OpExp(EM_tokPos, A_leOp, $1, $3);}
 
-boolean_expression
+boolean_expression // TODO: No Operation in absyn.h / symbol.h ... dafuq?!
         : expression AND expression
         | expression OR expression
 
@@ -142,7 +158,7 @@ field_assignment_list
         | field_assignment_list COMMA field_assignment
 
 field_assignment
-        : ID EQ expression
+        : ID EQ expression {$$=A_Field(EM_tokPos, S_Symbol($1), $3);} // TODO: Not sure about A_Field
 
 declaration_sequence
         : /* empty */ //{$$=A_decList( A_NilExp(EM_tokPos), A_NilExp(EM_tokPos));}
@@ -154,40 +170,40 @@ declaration
         | function_declaration
 
 type_declaration
-        : TYPE ID EQ type 
+        : TYPE ID EQ type {$$=A_TypeDec(EM_tokPos, $4);} // TODO: 
 
-type
-        : ID
+type // TODO: tree implementation
+        : ID 
         | LBRACE type_fields RBRACE 
         | ARRAY OF ID
 
 type_fields
         : /* empty */
-        | type_field_list
+        | type_field_list // no need to parse here all in type_field_list
 
 type_field_list
-        : ID COLON ID
-        | type_field_list COMMA ID COLON ID
+        : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos,S_Symbol($1), S_Symbol($3)), A_NilExp(EM_tokPos));}
+        | type_field_list COMMA ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($3), S_Symbol($5)), $1);}
 
 variable_declaration
-        : VAR ID ASSIGN expression //{$$=A_VarDec(EM_tokPos, $2, $3)} // TODO: Typ bestimmen?!
+        : VAR ID ASSIGN expression //{$$=A_VarDec(EM_tokPos, A_VarExp(EM_tokPos, $2), $4);} // TODO: Typ bestimmen: automatisch als Int usw. WTF?
         | VAR ID COLON ID ASSIGN expression
 
 function_declaration
-        : FUNCTION ID LPAREN type_fields RPAREN EQ expression
-        | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+        : FUNCTION ID LPAREN type_fields RPAREN EQ expression {$$=A_Fundec(EM_tokPos, S_Symbol($2), $4, S_Symbol(""), $7);} // void return functions 
+        | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression {$$=A_Fundec(EM_tokPos, S_Symbol($2), $4, S_Symbol($7), $9)} // with sth. in return
 
 selection
-        : IF expression THEN expression ELSE expression
-        | IF expression THEN expression
+        : IF expression THEN expression ELSE expression {$$=A_IfExp(EM_tokPos, $2, $4, $6);} 
+        | IF expression THEN expression {$$=A_IfExp(EM_tokPos, $2, $4, A_NilExp(EM_tokPos));}
 
 iteration
-        : WHILE expression DO expression
-        | FOR ID ASSIGN expression TO expression DO expression
+        : WHILE expression DO expression {$$=A_WhileExp(EM_tokPos, $2, $4);}
+        | FOR ID ASSIGN expression TO expression DO expression {$$=A_ForExp(EM_tokPos, S_Symbol($2), $4, $6, $8);} // TODO: A_Symbol erwartet
 
 expression_sequence
-        : expression 
-        | expression_sequence SEMICOLON expression 
+        : expression {$$=$1}
+        | expression_sequence SEMICOLON expression {$$=A_SeqExp(EM_tokPos, A_ExpList($3, $1) );} // TODO: Warnings?!
 
 expression_list
         : expression {$$=A_ExpList($1, A_NilExp(EM_tokPos));}
