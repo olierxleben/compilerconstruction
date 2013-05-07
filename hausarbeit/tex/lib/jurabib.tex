@@ -1,0 +1,89 @@
+\renewcommand*{\jbauthorfont}{\textsc}
+\renewcommand*{\bibfnfont}{\normalfont}
+\renewcommand*{\biblnfont}{\textsc}
+%\renewcommand*{\samepageibidemname}{Ebd.}
+\renewcommand*{\bibbtsep}{In: }
+\renewcommand*{\bibjtsep}{In: }
+\renewcommand*{\bibpldelim}{(}
+\renewcommand*{\biburlprefix}{}
+\renewcommand*{\biburlsuffix}{}
+
+\makeatletter
+\renewcommand*{\jbshorttitlefont}{%
+\ifthenelse{%
+\equal{\jb@@type}{article}%
+\or
+\equal{\jb@@type}{periodical}%
+\or
+\equal{\jb@@type}{incollection}%
+}{%
+\upshape%
+}{%
+\textit%
+}%
+}
+\makeatother
+
+\renewcommand*{\bibprdelim}{)}
+\renewcommand*{\ajtsep}{}
+\renewcommand*{\bpubaddr} { :}
+\renewcommand*{\jbbtasep} { ; }
+\renewcommand*{\jbbfsasep} { ; }
+\renewcommand*{\jbbstasep} { ; }
+\renewcommand*{\bibbtasep} { ; }
+\renewcommand*{\bibbfsasep} { ; }
+\renewcommand*{\bibbstasep} { ; } %between second and third author sep
+\renewcommand*{\jbbtesep} { ; } %between two editors sep
+\renewcommand*{\jbbfsesep} { ; } %between first and second editor sep
+\renewcommand*{\jbbstesep} { ; } %between second and third editor sep
+\renewcommand*{\bibbtesep} { ; } %between two editors sep
+\renewcommand*{\bibbfsesep} { ; } %between first and second editor sep
+\renewcommand*{\bibbstesep} { ; } %between second and third editor sep
+\AddTo\bibsgerman{\def\editorsname{(Hrsg.)}}
+\AddTo\bibsgerman{\def\editorname{(Hrsg.)}}
+%\jurabibsetup{super, citefull=first,ibidem}
+%\jurabibsetup{ibidem}
+%\jurabibsetup{authorformat=citationreversed}
+%\jurabibsetup{authorformat=reducedifibidem}
+\jurabibsetup{biblikecite}
+%\jurabibsetup{bibformat=ibidem}
+%\jurabibsetup{pages=always}
+\jbfirstcitepageranges
+\AddTo\bibsgerman{\def\herename{hier}}
+\jbuseidemhrule
+
+\jurabibsetup{
+  authorformat={smallcaps,year,and,citationreversed},
+  titleformat={colonsep,all,italic},
+  commabeforerest,
+  see,
+  dotafter=bibentry,
+  ibidem=strict,
+  biblikecite
+}
+
+\renewcommand*{\bibbtasep}{ und } %
+\renewcommand*{\bibbfsasep}{, }   %
+\renewcommand*{\bibbstasep}{ und }
+\renewcommand*{\jbtitlefont}{}
+\renewcommand*{\bibtfont}{}
+\renewcommand*{\bibbtfont}{}
+\renewcommand*{\bibjtfont}{}
+\renewcommand*{\bibapifont}{}
+\renewcommand*{\jbshorttitlefont}{}
+
+
+
+	%
+	% CITATIONS
+	%
+\newcommand{\book}[2]{\footnote{\cite[Vgl.][#2]{#1}}}
+\newcommand{\bookwf}[2]{\cite[Vgl.][#2]{#1}}
+\newcommand{\bookdir}[2]{\footnote{\cite[][#2]{#1}}}
+\newcommand{\inetwf}[1]{\cite[Vgl.][\citefield{url}{#1}]{#1}}
+\newcommand{\inetwfdir}[1]{\cite[][\citefield{url}{#1}]{#1}}
+\newcommand{\inet}[1]{\footnote{\inetwf{#1}}}
+\newcommand{\inetdir}[1]{\footnote{\cite[][\citefield{url}{#1}]{#1}}}
+\newcommand{\innerref}[1]{\footnote{Vgl. auch Kapitel \ref{#1} dieser Arbeit, S. \pageref{#1}}}
+\newcommand{\vgl}[2]{\cite[Vgl.][#2]{#1}}
+\newcommand{\citeauthoryear}[1]{\citeauthor{#1} (\citeyear{#1})}

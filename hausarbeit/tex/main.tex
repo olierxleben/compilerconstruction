@@ -1,0 +1,114 @@
+%
+%
+\documentclass[11pt]{scrartcl}
+
+% own geometry
+%\usepackage[a4paper, left=3cm, right=3cm]{geometry}
+
+\usepackage[ngerman]{babel} 
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{jurabib}
+\usepackage{hyperref}
+
+\include{lib/jurabib}
+\bibliographystyle{jurabib}
+
+% setup of source code listings
+\usepackage{listings}
+%\usepackage{courier}
+\usepackage{caption}
+\lstset{
+	basicstyle=\footnotesize\ttfamily,	% default font
+	numbers=left,						% line numbers placement
+	numberstyle=\tiny,					% line numbers style
+	%stepnumber=2,						% line number padding
+	numbersep=5pt,						% padding between line numbers and code
+	tabsize=2,							% 
+	extendedchars=true,         
+	breaklines=true,						% line breaks 
+	keywordstyle=\color{red},
+	frame=b,
+	stringstyle=\color{gray}\ttfamily,	% color of strings in code
+	showspaces=false,					% visualize spaces
+    showtabs=false,						% visualize tabs
+    xleftmargin=17pt,
+	framexleftmargin=17pt,
+	framexrightmargin=5pt,
+	framexbottommargin=4pt,
+	showstringspaces=false				% visualize spaces in strings        
+ }
+ 
+ \lstloadlanguages{% Check docs for further languages ...
+         C,
+         C++,
+         bash
+ }
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}\medskipamount
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+% layout the caption ontop of code
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+% Headings
+\usepackage{fancyhdr}
+%\fancyhead[R]{\colorbox{blue!20}{ Oliver Erxleben}}
+\fancyfoot{}
+
+% Document begins now
+\begin{document}
+
+\author{%
+	Oliver Erxleben \small(\href{mailto:oliver.erxleben@hs-osnabrueck.de}{oliver.erxleben@hs-osnabrueck.de})\\%
+	Sergej Hert \small(\href{mailto:sergej.hert@hs-osnabrueck.de}{sergej.hert@hs-osnabrueck.de})\\%
+	Jörn Voßgröne \small(\href{mailto:joern.vossgroene@hs-osnabrueck.de}{joern.vossgroene@hs-osnabrueck.de})\\
+	\\%
+	Hochschule Osnabr"uck \\%
+	Ingenieurswissenschaften und Informatik \\%
+	Informatik - Mobile und Verteilte Anwendungen\\
+	Compilerbau - Sommersemester 2013 }
+
+\title{\includegraphics[scale=0.75,keepaspectratio]{img/hs_os.png}\linebreak \linebreak Optimierung von CSS-Dateien}
+
+\maketitle
+%\thispagestyle{empty}
+\tableofcontents
+\listoffigures
+
+\lstlistoflistings
+\thispagestyle{empty}
+\pagebreak
+\thispagestyle{empty}
+\begin{abstract}
+\textbf{Zusammenfassung:}\\ 	
+
+\end{abstract}
+
+\pagebreak
+% set new page style
+
+\pagestyle{fancy}
+\setcounter{page}{1} 
+
+\fancyhead[R]{}
+
+\thispagestyle{empty}
+
+\renewcommand*{\biburlprefix}{(URL: }
+\renewcommand*{\biburlsuffix}{)}
+
+\pagebreak
+\addcontentsline{toc}{section}{Literaturverzeichnis} % Eintrag ins Inhaltsverzeichnis
+\bibliography{bib/bib}
+
+\appendix
+
+\end{document}
