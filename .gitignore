@@ -15,3 +15,10 @@
 *.exe
 *.out
 *.app
+hausarbeit/tex/.texpadtmp/main.aux
+hausarbeit/tex/.texpadtmp/main.lof
+hausarbeit/tex/.texpadtmp/main.log
+hausarbeit/tex/.texpadtmp/main.lol
+hausarbeit/tex/.texpadtmp/main.synctex.gz
+hausarbeit/tex/.texpadtmp/main.toc
+hausarbeit/tex/.texpadtmp/main.url
