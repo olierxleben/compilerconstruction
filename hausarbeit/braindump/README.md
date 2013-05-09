@@ -2,6 +2,10 @@
 
 Alle Ideen, Notizen, (Un-)wichtiges für die Hausarbeit
 
+## Titel:
+
+Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Dateien im Webstack
+
 ## Features
 
 * CSS optimieren nach diversen Regeln
