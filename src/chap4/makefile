@@ -31,7 +31,7 @@ errormsg.o: errormsg.c errormsg.h util.h
 lex.yy.o: lex.yy.c y.tab.h errormsg.h util.h
 	cc -g -c lex.yy.c
 
- lex.yy.c: tiger.lex
+lex.yy.c: tiger.lex
 	flex tiger.lex
 
 util.o: util.c util.h
