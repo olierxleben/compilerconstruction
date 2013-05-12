@@ -35,7 +35,6 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	A_nametyList nametyList;
 	A_efieldList efieldlist;
 	A_ty aty;
-  // TODO: extend types (page 96 ;D)
 };
 
 %token <sval> ID STRING
@@ -175,20 +174,21 @@ declaration
         | function_declaration
 
 type_declaration
-        : TYPE ID EQ type {$$=A_TypeDec(EM_tokPos, A_NametyList(A_Namety(S_Symbol($2), $4), NULL));} // TODO: check 
+        : TYPE ID EQ type {$$=A_TypeDec(EM_tokPos, A_NametyList(A_Namety(S_Symbol($2), $4), NULL));}
 
-type // TODO: tree implementation
+type
         : ID {$$=A_NameTy(EM_tokPos, S_Symbol($1));}
         | LBRACE type_fields RBRACE {$$=A_RecordTy(EM_tokPos, $2);}
         | ARRAY OF ID {$$=A_ArrayTy(EM_tokPos, S_Symbol($3));}
-			//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // TODO: dafuq?
+		//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // TODO: dafuq?
 
 type_fields
-        : /* empty */ {$$=NULL;}
+        : {$$=NULL;} /* empty */ 
         | type_field_list // no need to parse here all in type_field_list
 
 type_field_list
-        : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} 
+        : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);}
+        | ID EQ ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} // TODO: check (oli)
         | type_field_list COMMA ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($3), S_Symbol($5)), $1);}
 
 variable_declaration
