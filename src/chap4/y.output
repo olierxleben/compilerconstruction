@@ -1,4 +1,4 @@
-Grammatik
+Grammar
 
     0 $accept: program $end
 
@@ -26,7 +26,7 @@ Grammatik
 
    21 lvalue: ID lvalue_extension
 
-   22 lvalue_extension: /* leer */
+   22 lvalue_extension: /* empty */
    23                 | DOT ID lvalue_extension
    24                 | LBRACK expression RBRACK lvalue_extension
 
@@ -50,7 +50,7 @@ Grammatik
    38 boolean_expression: expression AND expression
    39                   | expression OR expression
 
-   40 field_assignments: /* leer */
+   40 field_assignments: /* empty */
    41                  | field_assignment_list
 
    42 field_assignment_list: field_assignment
@@ -58,7 +58,7 @@ Grammatik
 
    44 field_assignment: ID EQ type
 
-   45 declaration_sequence: /* leer */
+   45 declaration_sequence: /* empty */
    46                     | declaration declaration_sequence
 
    47 declaration: type_declaration
@@ -71,43 +71,44 @@ Grammatik
    52     | LBRACE type_fields RBRACE
    53     | ARRAY OF ID
 
-   54 type_fields: /* leer */
+   54 type_fields: /* empty */
    55            | type_field_list
 
    56 type_field_list: ID COLON ID
-   57                | type_field_list COMMA ID COLON ID
+   57                | ID EQ ID
+   58                | type_field_list COMMA ID COLON ID
 
-   58 variable_declaration: VAR ID ASSIGN expression
-   59                     | VAR ID COLON ID ASSIGN expression
+   59 variable_declaration: VAR ID ASSIGN expression
+   60                     | VAR ID COLON ID ASSIGN expression
 
-   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression
-   61                     | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   62                     | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
 
-   62 selection: IF expression THEN expression ELSE expression
-   63          | IF expression THEN expression
+   63 selection: IF expression THEN expression ELSE expression
+   64          | IF expression THEN expression
 
-   64 iteration: WHILE expression DO expression
-   65          | FOR ID ASSIGN expression TO expression DO expression
+   65 iteration: WHILE expression DO expression
+   66          | FOR ID ASSIGN expression TO expression DO expression
 
-   66 expression_sequence: expression
-   67                    | expression_sequence SEMICOLON expression
+   67 expression_sequence: expression
+   68                    | expression_sequence SEMICOLON expression
 
-   68 expression_list: expression
-   69                | expression_list COMMA expression
+   69 expression_list: expression
+   70                | expression_list COMMA expression
 
 
-Terminale und die Regeln, in denen sie verwendet werden
+Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ID (258) 15 16 21 23 26 27 44 50 51 53 56 57 58 59 60 61 65
+ID (258) 15 16 21 23 26 27 44 50 51 53 56 57 58 59 60 61 62 66
 STRING (259) 3
 INT (260) 2
-COMMA (261) 43 57 69
-COLON (262) 56 57 59 61
-SEMICOLON (263) 67
-LPAREN (264) 17 18 26 27 60 61
-RPAREN (265) 17 18 26 27 60 61
+COMMA (261) 43 58 70
+COLON (262) 56 58 60 62
+SEMICOLON (263) 68
+LPAREN (264) 17 18 26 27 61 62
+RPAREN (265) 17 18 26 27 61 62
 LBRACK (266) 16 24
 RBRACK (267) 16 24
 LBRACE (268) 15 52
@@ -117,7 +118,7 @@ PLUS (271) 28
 MINUS (272) 14 29
 TIMES (273) 30
 DIVIDE (274) 31
-EQ (275) 32 44 50 60 61
+EQ (275) 32 44 50 57 61 62
 NEQ (276) 33
 LT (277) 35
 LE (278) 37
@@ -125,85 +126,84 @@ GT (279) 34
 GE (280) 36
 AND (281) 38
 OR (282) 39
-ASSIGN (283) 25 58 59 65
+ASSIGN (283) 25 59 60 66
 ARRAY (284) 53
-IF (285) 62 63
-THEN (286) 62 63
-ELSE (287) 62
-WHILE (288) 64
-FOR (289) 65
-TO (290) 65
-DO (291) 64 65
+IF (285) 63 64
+THEN (286) 63 64
+ELSE (287) 63
+WHILE (288) 65
+FOR (289) 66
+TO (290) 66
+DO (291) 65 66
 LET (292) 19 20
 IN (293) 19 20
 END (294) 19 20
 OF (295) 16 53
 BREAK (296) 4
 NIL (297) 5
-FUNCTION (298) 60 61
-VAR (299) 58 59
+FUNCTION (298) 61 62
+VAR (299) 59 60
 TYPE (300) 50
 UMINUS (301)
 
 
-Nicht-Terminal und die Regeln, in denen sie verwendet werden
+Nonterminals, with rules where they appear
 
 $accept (47)
-    auf der linken Seite: 0
+    on left: 0
 program (48)
-    auf der linken Seite: 1, auf der rechten Seite: 0
+    on left: 1, on right: 0
 expression (49)
-    auf der linken Seite: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
-    19 20, auf der rechten Seite: 1 14 16 24 25 28 29 30 31 32 33 34
-    35 36 37 38 39 58 59 60 61 62 63 64 65 66 67 68 69
+    on left: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20,
+    on right: 1 14 16 24 25 28 29 30 31 32 33 34 35 36 37 38 39 59
+    60 61 62 63 64 65 66 67 68 69 70
 lvalue (50)
-    auf der linken Seite: 21, auf der rechten Seite: 6 25
+    on left: 21, on right: 6 25
 lvalue_extension (51)
-    auf der linken Seite: 22 23 24, auf der rechten Seite: 21 23 24
+    on left: 22 23 24, on right: 21 23 24
 assignment (52)
-    auf der linken Seite: 25, auf der rechten Seite: 7
+    on left: 25, on right: 7
 function_call (53)
-    auf der linken Seite: 26 27, auf der rechten Seite: 10
+    on left: 26 27, on right: 10
 arithmetic_expression (54)
-    auf der linken Seite: 28 29 30 31, auf der rechten Seite: 11
+    on left: 28 29 30 31, on right: 11
 comparison (55)
-    auf der linken Seite: 32 33 34 35 36 37, auf der rechten Seite:
-    12
+    on left: 32 33 34 35 36 37, on right: 12
 boolean_expression (56)
-    auf der linken Seite: 38 39, auf der rechten Seite: 13
+    on left: 38 39, on right: 13
 field_assignments (57)
-    auf der linken Seite: 40 41, auf der rechten Seite: 15
+    on left: 40 41, on right: 15
 field_assignment_list (58)
-    auf der linken Seite: 42 43, auf der rechten Seite: 41 43
+    on left: 42 43, on right: 41 43
 field_assignment (59)
-    auf der linken Seite: 44, auf der rechten Seite: 42 43
+    on left: 44, on right: 42 43
 declaration_sequence (60)
-    auf der linken Seite: 45 46, auf der rechten Seite: 19 20 46
+    on left: 45 46, on right: 19 20 46
 declaration (61)
-    auf der linken Seite: 47 48 49, auf der rechten Seite: 46
+    on left: 47 48 49, on right: 46
 type_declaration (62)
-    auf der linken Seite: 50, auf der rechten Seite: 47
+    on left: 50, on right: 47
 type (63)
-    auf der linken Seite: 51 52 53, auf der rechten Seite: 44 50
+    on left: 51 52 53, on right: 44 50
 type_fields (64)
-    auf der linken Seite: 54 55, auf der rechten Seite: 52 60 61
+    on left: 54 55, on right: 52 61 62
 type_field_list (65)
-    auf der linken Seite: 56 57, auf der rechten Seite: 55 57
+    on left: 56 57 58, on right: 55 58
 variable_declaration (66)
-    auf der linken Seite: 58 59, auf der rechten Seite: 48
+    on left: 59 60, on right: 48
 function_declaration (67)
-    auf der linken Seite: 60 61, auf der rechten Seite: 49
+    on left: 61 62, on right: 49
 selection (68)
-    auf der linken Seite: 62 63, auf der rechten Seite: 8
+    on left: 63 64, on right: 8
 iteration (69)
-    auf der linken Seite: 64 65, auf der rechten Seite: 9
+    on left: 65 66, on right: 9
 expression_sequence (70)
-    auf der linken Seite: 66 67, auf der rechten Seite: 18 20 67
+    on left: 67 68, on right: 18 20 68
 expression_list (71)
-    auf der linken Seite: 68 69, auf der rechten Seite: 27 69
+    on left: 69 70, on right: 27 70
 
 
-Zustand 0
+state 0
 
     0 $accept: . program $end
     1 program: . expression
@@ -242,36 +242,36 @@ Zustand 0
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    program                gehe zu Zustand 12 über
-    expression             gehe zu Zustand 13 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    program                go to state 12
+    expression             go to state 13
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 1
+state 1
 
    15 expression: ID . LBRACE field_assignments RBRACE
    16           | ID . LBRACK expression RBRACK OF expression
@@ -282,31 +282,31 @@ Zustand 1
    26 function_call: ID . LPAREN RPAREN
    27              | ID . LPAREN expression_list RPAREN
 
-    LPAREN  schiebe und gehe zu Zustand 22 über
-    LBRACK  schiebe und gehe zu Zustand 23 über
-    LBRACE  schiebe und gehe zu Zustand 24 über
-    DOT     schiebe und gehe zu Zustand 25 über
+    LPAREN  shift, and go to state 22
+    LBRACK  shift, and go to state 23
+    LBRACE  shift, and go to state 24
+    DOT     shift, and go to state 25
 
-    $default  reduziere mit Regel 22 (lvalue_extension)
+    $default  reduce using rule 22 (lvalue_extension)
 
-    lvalue_extension  gehe zu Zustand 26 über
+    lvalue_extension  go to state 26
 
 
-Zustand 2
+state 2
 
     3 expression: STRING .
 
-    $default  reduziere mit Regel 3 (expression)
+    $default  reduce using rule 3 (expression)
 
 
-Zustand 3
+state 3
 
     2 expression: INT .
 
-    $default  reduziere mit Regel 2 (expression)
+    $default  reduce using rule 2 (expression)
 
 
-Zustand 4
+state 4
 
     2 expression: . INT
     3           | . STRING
@@ -345,39 +345,39 @@ Zustand 4
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   66 expression_sequence: . expression
-   67                    | . expression_sequence SEMICOLON expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   67 expression_sequence: . expression
+   68                    | . expression_sequence SEMICOLON expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    RPAREN  schiebe und gehe zu Zustand 27 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    RPAREN  shift, and go to state 27
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 28 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-    expression_sequence    gehe zu Zustand 29 über
+    expression             go to state 28
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+    expression_sequence    go to state 29
 
 
-Zustand 5
+state 5
 
     2 expression: . INT
     3           | . STRING
@@ -415,102 +415,35 @@ Zustand 5
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 30 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 6
-
-    2 expression: . INT
-    3           | . STRING
-    4           | . BREAK
-    5           | . NIL
-    6           | . lvalue
-    7           | . assignment
-    8           | . selection
-    9           | . iteration
-   10           | . function_call
-   11           | . arithmetic_expression
-   12           | . comparison
-   13           | . boolean_expression
-   14           | . MINUS expression
-   15           | . ID LBRACE field_assignments RBRACE
-   16           | . ID LBRACK expression RBRACK OF expression
-   17           | . LPAREN RPAREN
-   18           | . LPAREN expression_sequence RPAREN
-   19           | . LET declaration_sequence IN END
-   20           | . LET declaration_sequence IN expression_sequence END
-   21 lvalue: . ID lvalue_extension
-   25 assignment: . lvalue ASSIGN expression
-   26 function_call: . ID LPAREN RPAREN
-   27              | . ID LPAREN expression_list RPAREN
-   28 arithmetic_expression: . expression PLUS expression
-   29                      | . expression MINUS expression
-   30                      | . expression TIMES expression
-   31                      | . expression DIVIDE expression
-   32 comparison: . expression EQ expression
-   33           | . expression NEQ expression
-   34           | . expression GT expression
-   35           | . expression LT expression
-   36           | . expression GE expression
-   37           | . expression LE expression
-   38 boolean_expression: . expression AND expression
-   39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   62          | IF . expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   63          | IF . expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
-
-    expression             gehe zu Zustand 31 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 30
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 7
+state 6
 
     2 expression: . INT
     3           | . STRING
@@ -547,43 +480,110 @@ Zustand 7
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   64          | WHILE . expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   63          | IF . expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   64          | IF . expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 32 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 8
-
-   65 iteration: FOR . ID ASSIGN expression TO expression DO expression
-
-    ID  schiebe und gehe zu Zustand 33 über
+    expression             go to state 31
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 9
+state 7
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   65          | WHILE . expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    expression             go to state 32
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+
+
+state 8
+
+   66 iteration: FOR . ID ASSIGN expression TO expression DO expression
+
+    ID  shift, and go to state 33
+
+
+state 9
 
    19 expression: LET . declaration_sequence IN END
    20           | LET . declaration_sequence IN expression_sequence END
@@ -593,46 +593,46 @@ Zustand 9
    48            | . variable_declaration
    49            | . function_declaration
    50 type_declaration: . TYPE ID EQ type
-   58 variable_declaration: . VAR ID ASSIGN expression
-   59                     | . VAR ID COLON ID ASSIGN expression
-   60 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
-   61                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+   59 variable_declaration: . VAR ID ASSIGN expression
+   60                     | . VAR ID COLON ID ASSIGN expression
+   61 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   62                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
 
-    FUNCTION  schiebe und gehe zu Zustand 34 über
-    VAR       schiebe und gehe zu Zustand 35 über
-    TYPE      schiebe und gehe zu Zustand 36 über
+    FUNCTION  shift, and go to state 34
+    VAR       shift, and go to state 35
+    TYPE      shift, and go to state 36
 
-    $default  reduziere mit Regel 45 (declaration_sequence)
+    $default  reduce using rule 45 (declaration_sequence)
 
-    declaration_sequence  gehe zu Zustand 37 über
-    declaration           gehe zu Zustand 38 über
-    type_declaration      gehe zu Zustand 39 über
-    variable_declaration  gehe zu Zustand 40 über
-    function_declaration  gehe zu Zustand 41 über
+    declaration_sequence  go to state 37
+    declaration           go to state 38
+    type_declaration      go to state 39
+    variable_declaration  go to state 40
+    function_declaration  go to state 41
 
 
-Zustand 10
+state 10
 
     4 expression: BREAK .
 
-    $default  reduziere mit Regel 4 (expression)
+    $default  reduce using rule 4 (expression)
 
 
-Zustand 11
+state 11
 
     5 expression: NIL .
 
-    $default  reduziere mit Regel 5 (expression)
+    $default  reduce using rule 5 (expression)
 
 
-Zustand 12
+state 12
 
     0 $accept: program . $end
 
-    $end  schiebe und gehe zu Zustand 42 über
+    $end  shift, and go to state 42
 
 
-Zustand 13
+state 13
 
     1 program: expression .
    28 arithmetic_expression: expression . PLUS expression
@@ -648,82 +648,82 @@ Zustand 13
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 1 (program)
+    $default  reduce using rule 1 (program)
 
 
-Zustand 14
+state 14
 
     6 expression: lvalue .
    25 assignment: lvalue . ASSIGN expression
 
-    ASSIGN  schiebe und gehe zu Zustand 55 über
+    ASSIGN  shift, and go to state 55
 
-    $default  reduziere mit Regel 6 (expression)
+    $default  reduce using rule 6 (expression)
 
 
-Zustand 15
+state 15
 
     7 expression: assignment .
 
-    $default  reduziere mit Regel 7 (expression)
+    $default  reduce using rule 7 (expression)
 
 
-Zustand 16
+state 16
 
    10 expression: function_call .
 
-    $default  reduziere mit Regel 10 (expression)
+    $default  reduce using rule 10 (expression)
 
 
-Zustand 17
+state 17
 
    11 expression: arithmetic_expression .
 
-    $default  reduziere mit Regel 11 (expression)
+    $default  reduce using rule 11 (expression)
 
 
-Zustand 18
+state 18
 
    12 expression: comparison .
 
-    $default  reduziere mit Regel 12 (expression)
+    $default  reduce using rule 12 (expression)
 
 
-Zustand 19
+state 19
 
    13 expression: boolean_expression .
 
-    $default  reduziere mit Regel 13 (expression)
+    $default  reduce using rule 13 (expression)
 
 
-Zustand 20
+state 20
 
     8 expression: selection .
 
-    $default  reduziere mit Regel 8 (expression)
+    $default  reduce using rule 8 (expression)
 
 
-Zustand 21
+state 21
 
     9 expression: iteration .
 
-    $default  reduziere mit Regel 9 (expression)
+    $default  reduce using rule 9 (expression)
 
 
-Zustand 22
+state 22
 
     2 expression: . INT
     3           | . STRING
@@ -762,39 +762,39 @@ Zustand 22
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   68 expression_list: . expression
-   69                | . expression_list COMMA expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   69 expression_list: . expression
+   70                | . expression_list COMMA expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    RPAREN  schiebe und gehe zu Zustand 56 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    RPAREN  shift, and go to state 56
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 57 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-    expression_list        gehe zu Zustand 58 über
+    expression             go to state 57
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+    expression_list        go to state 58
 
 
-Zustand 23
+state 23
 
     2 expression: . INT
     3           | . STRING
@@ -833,35 +833,35 @@ Zustand 23
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 59 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 59
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 24
+state 24
 
    15 expression: ID LBRACE . field_assignments RBRACE
    40 field_assignments: .
@@ -870,37 +870,37 @@ Zustand 24
    43                      | . field_assignment COMMA field_assignment_list
    44 field_assignment: . ID EQ type
 
-    ID  schiebe und gehe zu Zustand 60 über
+    ID  shift, and go to state 60
 
-    $default  reduziere mit Regel 40 (field_assignments)
+    $default  reduce using rule 40 (field_assignments)
 
-    field_assignments      gehe zu Zustand 61 über
-    field_assignment_list  gehe zu Zustand 62 über
-    field_assignment       gehe zu Zustand 63 über
+    field_assignments      go to state 61
+    field_assignment_list  go to state 62
+    field_assignment       go to state 63
 
 
-Zustand 25
+state 25
 
    23 lvalue_extension: DOT . ID lvalue_extension
 
-    ID  schiebe und gehe zu Zustand 64 über
+    ID  shift, and go to state 64
 
 
-Zustand 26
+state 26
 
    21 lvalue: ID lvalue_extension .
 
-    $default  reduziere mit Regel 21 (lvalue)
+    $default  reduce using rule 21 (lvalue)
 
 
-Zustand 27
+state 27
 
    17 expression: LPAREN RPAREN .
 
-    $default  reduziere mit Regel 17 (expression)
+    $default  reduce using rule 17 (expression)
 
 
-Zustand 28
+state 28
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -914,34 +914,34 @@ Zustand 28
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   66 expression_sequence: expression .
+   67 expression_sequence: expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 66 (expression_sequence)
+    $default  reduce using rule 67 (expression_sequence)
 
 
-Zustand 29
+state 29
 
    18 expression: LPAREN expression_sequence . RPAREN
-   67 expression_sequence: expression_sequence . SEMICOLON expression
+   68 expression_sequence: expression_sequence . SEMICOLON expression
 
-    SEMICOLON  schiebe und gehe zu Zustand 65 über
-    RPAREN     schiebe und gehe zu Zustand 66 über
+    SEMICOLON  shift, and go to state 65
+    RPAREN     shift, and go to state 66
 
 
-Zustand 30
+state 30
 
    14 expression: MINUS expression .
    28 arithmetic_expression: expression . PLUS expression
@@ -957,42 +957,10 @@ Zustand 30
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    $default  reduziere mit Regel 14 (expression)
+    $default  reduce using rule 14 (expression)
 
 
-Zustand 31
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   62 selection: IF expression . THEN expression ELSE expression
-   63          | IF expression . THEN expression
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-    THEN    schiebe und gehe zu Zustand 67 über
-
-
-Zustand 32
+state 31
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -1006,62 +974,94 @@ Zustand 32
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   64 iteration: WHILE expression . DO expression
+   63 selection: IF expression . THEN expression ELSE expression
+   64          | IF expression . THEN expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-    DO      schiebe und gehe zu Zustand 68 über
-
-
-Zustand 33
-
-   65 iteration: FOR ID . ASSIGN expression TO expression DO expression
-
-    ASSIGN  schiebe und gehe zu Zustand 69 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+    THEN    shift, and go to state 67
 
 
-Zustand 34
+state 32
 
-   60 function_declaration: FUNCTION . ID LPAREN type_fields RPAREN EQ expression
-   61                     | FUNCTION . ID LPAREN type_fields RPAREN COLON ID EQ expression
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   65 iteration: WHILE expression . DO expression
 
-    ID  schiebe und gehe zu Zustand 70 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+    DO      shift, and go to state 68
 
 
-Zustand 35
+state 33
 
-   58 variable_declaration: VAR . ID ASSIGN expression
-   59                     | VAR . ID COLON ID ASSIGN expression
+   66 iteration: FOR ID . ASSIGN expression TO expression DO expression
 
-    ID  schiebe und gehe zu Zustand 71 über
+    ASSIGN  shift, and go to state 69
 
 
-Zustand 36
+state 34
+
+   61 function_declaration: FUNCTION . ID LPAREN type_fields RPAREN EQ expression
+   62                     | FUNCTION . ID LPAREN type_fields RPAREN COLON ID EQ expression
+
+    ID  shift, and go to state 70
+
+
+state 35
+
+   59 variable_declaration: VAR . ID ASSIGN expression
+   60                     | VAR . ID COLON ID ASSIGN expression
+
+    ID  shift, and go to state 71
+
+
+state 36
 
    50 type_declaration: TYPE . ID EQ type
 
-    ID  schiebe und gehe zu Zustand 72 über
+    ID  shift, and go to state 72
 
 
-Zustand 37
+state 37
 
    19 expression: LET declaration_sequence . IN END
    20           | LET declaration_sequence . IN expression_sequence END
 
-    IN  schiebe und gehe zu Zustand 73 über
+    IN  shift, and go to state 73
 
 
-Zustand 38
+state 38
 
    45 declaration_sequence: .
    46                     | . declaration declaration_sequence
@@ -1070,53 +1070,53 @@ Zustand 38
    48            | . variable_declaration
    49            | . function_declaration
    50 type_declaration: . TYPE ID EQ type
-   58 variable_declaration: . VAR ID ASSIGN expression
-   59                     | . VAR ID COLON ID ASSIGN expression
-   60 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
-   61                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
+   59 variable_declaration: . VAR ID ASSIGN expression
+   60                     | . VAR ID COLON ID ASSIGN expression
+   61 function_declaration: . FUNCTION ID LPAREN type_fields RPAREN EQ expression
+   62                     | . FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression
 
-    FUNCTION  schiebe und gehe zu Zustand 34 über
-    VAR       schiebe und gehe zu Zustand 35 über
-    TYPE      schiebe und gehe zu Zustand 36 über
+    FUNCTION  shift, and go to state 34
+    VAR       shift, and go to state 35
+    TYPE      shift, and go to state 36
 
-    $default  reduziere mit Regel 45 (declaration_sequence)
+    $default  reduce using rule 45 (declaration_sequence)
 
-    declaration_sequence  gehe zu Zustand 74 über
-    declaration           gehe zu Zustand 38 über
-    type_declaration      gehe zu Zustand 39 über
-    variable_declaration  gehe zu Zustand 40 über
-    function_declaration  gehe zu Zustand 41 über
+    declaration_sequence  go to state 74
+    declaration           go to state 38
+    type_declaration      go to state 39
+    variable_declaration  go to state 40
+    function_declaration  go to state 41
 
 
-Zustand 39
+state 39
 
    47 declaration: type_declaration .
 
-    $default  reduziere mit Regel 47 (declaration)
+    $default  reduce using rule 47 (declaration)
 
 
-Zustand 40
+state 40
 
    48 declaration: variable_declaration .
 
-    $default  reduziere mit Regel 48 (declaration)
+    $default  reduce using rule 48 (declaration)
 
 
-Zustand 41
+state 41
 
    49 declaration: function_declaration .
 
-    $default  reduziere mit Regel 49 (declaration)
+    $default  reduce using rule 49 (declaration)
 
 
-Zustand 42
+state 42
 
     0 $accept: program $end .
 
-    $default  annehmen
+    $default  accept
 
 
-Zustand 43
+state 43
 
     2 expression: . INT
     3           | . STRING
@@ -1154,35 +1154,35 @@ Zustand 43
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 75 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 75
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 44
+state 44
 
     2 expression: . INT
     3           | . STRING
@@ -1220,35 +1220,35 @@ Zustand 44
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 76 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 76
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 45
+state 45
 
     2 expression: . INT
     3           | . STRING
@@ -1286,35 +1286,35 @@ Zustand 45
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 77 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 77
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 46
+state 46
 
     2 expression: . INT
     3           | . STRING
@@ -1352,35 +1352,35 @@ Zustand 46
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 78 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 78
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 47
+state 47
 
     2 expression: . INT
     3           | . STRING
@@ -1418,35 +1418,35 @@ Zustand 47
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 79 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 79
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 48
+state 48
 
     2 expression: . INT
     3           | . STRING
@@ -1484,35 +1484,35 @@ Zustand 48
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 80 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 80
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 49
+state 49
 
     2 expression: . INT
     3           | . STRING
@@ -1550,35 +1550,35 @@ Zustand 49
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 81 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 81
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 50
+state 50
 
     2 expression: . INT
     3           | . STRING
@@ -1616,35 +1616,35 @@ Zustand 50
    37           | expression LE . expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 82 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 82
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 51
+state 51
 
     2 expression: . INT
     3           | . STRING
@@ -1682,35 +1682,35 @@ Zustand 51
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 83 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 83
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 52
+state 52
 
     2 expression: . INT
     3           | . STRING
@@ -1748,35 +1748,35 @@ Zustand 52
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 84 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 84
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 53
+state 53
 
     2 expression: . INT
     3           | . STRING
@@ -1814,35 +1814,35 @@ Zustand 53
    38 boolean_expression: . expression AND expression
    38                   | expression AND . expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 85 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 85
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 54
+state 54
 
     2 expression: . INT
     3           | . STRING
@@ -1880,35 +1880,35 @@ Zustand 54
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
    39                   | expression OR . expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 86 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 86
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 55
+state 55
 
     2 expression: . INT
     3           | . STRING
@@ -1946,42 +1946,42 @@ Zustand 55
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 87 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 87
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 56
+state 56
 
    26 function_call: ID LPAREN RPAREN .
 
-    $default  reduziere mit Regel 26 (function_call)
+    $default  reduce using rule 26 (function_call)
 
 
-Zustand 57
+state 57
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -1995,34 +1995,34 @@ Zustand 57
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   68 expression_list: expression .
+   69 expression_list: expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 68 (expression_list)
+    $default  reduce using rule 69 (expression_list)
 
 
-Zustand 58
+state 58
 
    27 function_call: ID LPAREN expression_list . RPAREN
-   69 expression_list: expression_list . COMMA expression
+   70 expression_list: expression_list . COMMA expression
 
-    COMMA   schiebe und gehe zu Zustand 88 über
-    RPAREN  schiebe und gehe zu Zustand 89 über
+    COMMA   shift, and go to state 88
+    RPAREN  shift, and go to state 89
 
 
-Zustand 59
+state 59
 
    16 expression: ID LBRACK expression . RBRACK OF expression
    24 lvalue_extension: LBRACK expression . RBRACK lvalue_extension
@@ -2039,68 +2039,68 @@ Zustand 59
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    RBRACK  schiebe und gehe zu Zustand 90 über
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    RBRACK  shift, and go to state 90
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
 
-Zustand 60
+state 60
 
    44 field_assignment: ID . EQ type
 
-    EQ  schiebe und gehe zu Zustand 91 über
+    EQ  shift, and go to state 91
 
 
-Zustand 61
+state 61
 
    15 expression: ID LBRACE field_assignments . RBRACE
 
-    RBRACE  schiebe und gehe zu Zustand 92 über
+    RBRACE  shift, and go to state 92
 
 
-Zustand 62
+state 62
 
    41 field_assignments: field_assignment_list .
 
-    $default  reduziere mit Regel 41 (field_assignments)
+    $default  reduce using rule 41 (field_assignments)
 
 
-Zustand 63
+state 63
 
    42 field_assignment_list: field_assignment .
    43                      | field_assignment . COMMA field_assignment_list
 
-    COMMA  schiebe und gehe zu Zustand 93 über
+    COMMA  shift, and go to state 93
 
-    $default  reduziere mit Regel 42 (field_assignment_list)
+    $default  reduce using rule 42 (field_assignment_list)
 
 
-Zustand 64
+state 64
 
    22 lvalue_extension: .
    23                 | . DOT ID lvalue_extension
    23                 | DOT ID . lvalue_extension
    24                 | . LBRACK expression RBRACK lvalue_extension
 
-    LBRACK  schiebe und gehe zu Zustand 94 über
-    DOT     schiebe und gehe zu Zustand 25 über
+    LBRACK  shift, and go to state 94
+    DOT     shift, and go to state 25
 
-    $default  reduziere mit Regel 22 (lvalue_extension)
+    $default  reduce using rule 22 (lvalue_extension)
 
-    lvalue_extension  gehe zu Zustand 95 über
+    lvalue_extension  go to state 95
 
 
-Zustand 65
+state 65
 
     2 expression: . INT
     3           | . STRING
@@ -2137,110 +2137,43 @@ Zustand 65
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   67 expression_sequence: expression_sequence SEMICOLON . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   68 expression_sequence: expression_sequence SEMICOLON . expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 96 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 96
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 66
+state 66
 
    18 expression: LPAREN expression_sequence RPAREN .
 
-    $default  reduziere mit Regel 18 (expression)
+    $default  reduce using rule 18 (expression)
 
 
-Zustand 67
-
-    2 expression: . INT
-    3           | . STRING
-    4           | . BREAK
-    5           | . NIL
-    6           | . lvalue
-    7           | . assignment
-    8           | . selection
-    9           | . iteration
-   10           | . function_call
-   11           | . arithmetic_expression
-   12           | . comparison
-   13           | . boolean_expression
-   14           | . MINUS expression
-   15           | . ID LBRACE field_assignments RBRACE
-   16           | . ID LBRACK expression RBRACK OF expression
-   17           | . LPAREN RPAREN
-   18           | . LPAREN expression_sequence RPAREN
-   19           | . LET declaration_sequence IN END
-   20           | . LET declaration_sequence IN expression_sequence END
-   21 lvalue: . ID lvalue_extension
-   25 assignment: . lvalue ASSIGN expression
-   26 function_call: . ID LPAREN RPAREN
-   27              | . ID LPAREN expression_list RPAREN
-   28 arithmetic_expression: . expression PLUS expression
-   29                      | . expression MINUS expression
-   30                      | . expression TIMES expression
-   31                      | . expression DIVIDE expression
-   32 comparison: . expression EQ expression
-   33           | . expression NEQ expression
-   34           | . expression GT expression
-   35           | . expression LT expression
-   36           | . expression GE expression
-   37           | . expression LE expression
-   38 boolean_expression: . expression AND expression
-   39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   62          | IF expression THEN . expression ELSE expression
-   63          | . IF expression THEN expression
-   63          | IF expression THEN . expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
-
-    expression             gehe zu Zustand 97 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 68
+state 67
 
     2 expression: . INT
     3           | . STRING
@@ -2277,36 +2210,37 @@ Zustand 68
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   64          | WHILE expression DO . expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   63          | IF expression THEN . expression ELSE expression
+   64          | . IF expression THEN expression
+   64          | IF expression THEN . expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 98 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 97
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 69
+state 68
 
     2 expression: . INT
     3           | . STRING
@@ -2343,60 +2277,126 @@ Zustand 69
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   65          | FOR ID ASSIGN . expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   65          | WHILE expression DO . expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 99 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 70
-
-   60 function_declaration: FUNCTION ID . LPAREN type_fields RPAREN EQ expression
-   61                     | FUNCTION ID . LPAREN type_fields RPAREN COLON ID EQ expression
-
-    LPAREN  schiebe und gehe zu Zustand 100 über
+    expression             go to state 98
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 71
+state 69
 
-   58 variable_declaration: VAR ID . ASSIGN expression
-   59                     | VAR ID . COLON ID ASSIGN expression
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   66          | FOR ID ASSIGN . expression TO expression DO expression
 
-    COLON   schiebe und gehe zu Zustand 101 über
-    ASSIGN  schiebe und gehe zu Zustand 102 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    expression             go to state 99
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 72
+state 70
+
+   61 function_declaration: FUNCTION ID . LPAREN type_fields RPAREN EQ expression
+   62                     | FUNCTION ID . LPAREN type_fields RPAREN COLON ID EQ expression
+
+    LPAREN  shift, and go to state 100
+
+
+state 71
+
+   59 variable_declaration: VAR ID . ASSIGN expression
+   60                     | VAR ID . COLON ID ASSIGN expression
+
+    COLON   shift, and go to state 101
+    ASSIGN  shift, and go to state 102
+
+
+state 72
 
    50 type_declaration: TYPE ID . EQ type
 
-    EQ  schiebe und gehe zu Zustand 103 über
+    EQ  shift, and go to state 103
 
 
-Zustand 73
+state 73
 
     2 expression: . INT
     3           | . STRING
@@ -2435,46 +2435,46 @@ Zustand 73
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   66 expression_sequence: . expression
-   67                    | . expression_sequence SEMICOLON expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   67 expression_sequence: . expression
+   68                    | . expression_sequence SEMICOLON expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    END     schiebe und gehe zu Zustand 104 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    END     shift, and go to state 104
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 28 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-    expression_sequence    gehe zu Zustand 105 über
+    expression             go to state 28
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+    expression_sequence    go to state 105
 
 
-Zustand 74
+state 74
 
    46 declaration_sequence: declaration declaration_sequence .
 
-    $default  reduziere mit Regel 46 (declaration_sequence)
+    $default  reduce using rule 46 (declaration_sequence)
 
 
-Zustand 75
+state 75
 
    28 arithmetic_expression: expression . PLUS expression
    28                      | expression PLUS expression .
@@ -2490,13 +2490,13 @@ Zustand 75
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    $default  reduziere mit Regel 28 (arithmetic_expression)
+    $default  reduce using rule 28 (arithmetic_expression)
 
 
-Zustand 76
+state 76
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2512,13 +2512,13 @@ Zustand 76
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    $default  reduziere mit Regel 29 (arithmetic_expression)
+    $default  reduce using rule 29 (arithmetic_expression)
 
 
-Zustand 77
+state 77
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2534,10 +2534,10 @@ Zustand 77
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    $default  reduziere mit Regel 30 (arithmetic_expression)
+    $default  reduce using rule 30 (arithmetic_expression)
 
 
-Zustand 78
+state 78
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2553,10 +2553,10 @@ Zustand 78
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    $default  reduziere mit Regel 31 (arithmetic_expression)
+    $default  reduce using rule 31 (arithmetic_expression)
 
 
-Zustand 79
+state 79
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2572,22 +2572,22 @@ Zustand 79
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 32 (comparison)
+    $default  reduce using rule 32 (comparison)
 
 
-Zustand 80
+state 80
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2603,22 +2603,22 @@ Zustand 80
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 33 (comparison)
+    $default  reduce using rule 33 (comparison)
 
 
-Zustand 81
+state 81
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2634,22 +2634,22 @@ Zustand 81
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 35 (comparison)
+    $default  reduce using rule 35 (comparison)
 
 
-Zustand 82
+state 82
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2665,22 +2665,22 @@ Zustand 82
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 37 (comparison)
+    $default  reduce using rule 37 (comparison)
 
 
-Zustand 83
+state 83
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2696,22 +2696,22 @@ Zustand 83
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 34 (comparison)
+    $default  reduce using rule 34 (comparison)
 
 
-Zustand 84
+state 84
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2727,22 +2727,22 @@ Zustand 84
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
 
-    EQ   Fehler (nicht assoziativ)
-    NEQ  Fehler (nicht assoziativ)
-    LT   Fehler (nicht assoziativ)
-    LE   Fehler (nicht assoziativ)
-    GT   Fehler (nicht assoziativ)
-    GE   Fehler (nicht assoziativ)
+    EQ   error (nonassociative)
+    NEQ  error (nonassociative)
+    LT   error (nonassociative)
+    LE   error (nonassociative)
+    GT   error (nonassociative)
+    GE   error (nonassociative)
 
-    $default  reduziere mit Regel 36 (comparison)
+    $default  reduce using rule 36 (comparison)
 
 
-Zustand 85
+state 85
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2758,21 +2758,21 @@ Zustand 85
    38                   | expression AND expression .
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
 
-    $default  reduziere mit Regel 38 (boolean_expression)
+    $default  reduce using rule 38 (boolean_expression)
 
 
-Zustand 86
+state 86
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -2788,22 +2788,22 @@ Zustand 86
    39                   | expression . OR expression
    39                   | expression OR expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
 
-    $default  reduziere mit Regel 39 (boolean_expression)
+    $default  reduce using rule 39 (boolean_expression)
 
 
-Zustand 87
+state 87
 
    25 assignment: lvalue ASSIGN expression .
    28 arithmetic_expression: expression . PLUS expression
@@ -2819,23 +2819,23 @@ Zustand 87
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 25 (assignment)
+    $default  reduce using rule 25 (assignment)
 
 
-Zustand 88
+state 88
 
     2 expression: . INT
     3           | . STRING
@@ -2872,43 +2872,43 @@ Zustand 88
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   69 expression_list: expression_list COMMA . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   70 expression_list: expression_list COMMA . expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 106 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 106
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 89
+state 89
 
    27 function_call: ID LPAREN expression_list RPAREN .
 
-    $default  reduziere mit Regel 27 (function_call)
+    $default  reduce using rule 27 (function_call)
 
 
-Zustand 90
+state 90
 
    16 expression: ID LBRACK expression RBRACK . OF expression
    22 lvalue_extension: .
@@ -2916,50 +2916,50 @@ Zustand 90
    24                 | . LBRACK expression RBRACK lvalue_extension
    24                 | LBRACK expression RBRACK . lvalue_extension
 
-    LBRACK  schiebe und gehe zu Zustand 94 über
-    DOT     schiebe und gehe zu Zustand 25 über
-    OF      schiebe und gehe zu Zustand 107 über
+    LBRACK  shift, and go to state 94
+    DOT     shift, and go to state 25
+    OF      shift, and go to state 107
 
-    $default  reduziere mit Regel 22 (lvalue_extension)
+    $default  reduce using rule 22 (lvalue_extension)
 
-    lvalue_extension  gehe zu Zustand 108 über
+    lvalue_extension  go to state 108
 
 
-Zustand 91
+state 91
 
    44 field_assignment: ID EQ . type
    51 type: . ID
    52     | . LBRACE type_fields RBRACE
    53     | . ARRAY OF ID
 
-    ID      schiebe und gehe zu Zustand 109 über
-    LBRACE  schiebe und gehe zu Zustand 110 über
-    ARRAY   schiebe und gehe zu Zustand 111 über
+    ID      shift, and go to state 109
+    LBRACE  shift, and go to state 110
+    ARRAY   shift, and go to state 111
 
-    type  gehe zu Zustand 112 über
+    type  go to state 112
 
 
-Zustand 92
+state 92
 
    15 expression: ID LBRACE field_assignments RBRACE .
 
-    $default  reduziere mit Regel 15 (expression)
+    $default  reduce using rule 15 (expression)
 
 
-Zustand 93
+state 93
 
    42 field_assignment_list: . field_assignment
    43                      | . field_assignment COMMA field_assignment_list
    43                      | field_assignment COMMA . field_assignment_list
    44 field_assignment: . ID EQ type
 
-    ID  schiebe und gehe zu Zustand 60 über
+    ID  shift, and go to state 60
 
-    field_assignment_list  gehe zu Zustand 113 über
-    field_assignment       gehe zu Zustand 63 über
+    field_assignment_list  go to state 113
+    field_assignment       go to state 63
 
 
-Zustand 94
+state 94
 
     2 expression: . INT
     3           | . STRING
@@ -2997,74 +2997,42 @@ Zustand 94
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 114 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 114
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 95
+state 95
 
    23 lvalue_extension: DOT ID lvalue_extension .
 
-    $default  reduziere mit Regel 23 (lvalue_extension)
+    $default  reduce using rule 23 (lvalue_extension)
 
 
-Zustand 96
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   67 expression_sequence: expression_sequence SEMICOLON expression .
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-
-    $default  reduziere mit Regel 67 (expression_sequence)
-
-
-Zustand 97
+state 96
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3078,27 +3046,25 @@ Zustand 97
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   62 selection: IF expression THEN expression . ELSE expression
-   63          | IF expression THEN expression .
+   68 expression_sequence: expression_sequence SEMICOLON expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-    ELSE    schiebe und gehe zu Zustand 115 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 63 (selection)
+    $default  reduce using rule 68 (expression_sequence)
 
 
-Zustand 98
+state 97
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3112,25 +3078,27 @@ Zustand 98
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   64 iteration: WHILE expression DO expression .
+   63 selection: IF expression THEN expression . ELSE expression
+   64          | IF expression THEN expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+    ELSE    shift, and go to state 115
 
-    $default  reduziere mit Regel 64 (iteration)
+    $default  reduce using rule 64 (selection)
 
 
-Zustand 99
+state 98
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3144,48 +3112,81 @@ Zustand 99
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   65 iteration: FOR ID ASSIGN expression . TO expression DO expression
+   65 iteration: WHILE expression DO expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-    TO      schiebe und gehe zu Zustand 116 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+
+    $default  reduce using rule 65 (iteration)
 
 
-Zustand 100
+state 99
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   66 iteration: FOR ID ASSIGN expression . TO expression DO expression
+
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+    TO      shift, and go to state 116
+
+
+state 100
 
    54 type_fields: .
    55            | . type_field_list
    56 type_field_list: . ID COLON ID
-   57                | . type_field_list COMMA ID COLON ID
-   60 function_declaration: FUNCTION ID LPAREN . type_fields RPAREN EQ expression
-   61                     | FUNCTION ID LPAREN . type_fields RPAREN COLON ID EQ expression
+   57                | . ID EQ ID
+   58                | . type_field_list COMMA ID COLON ID
+   61 function_declaration: FUNCTION ID LPAREN . type_fields RPAREN EQ expression
+   62                     | FUNCTION ID LPAREN . type_fields RPAREN COLON ID EQ expression
 
-    ID  schiebe und gehe zu Zustand 117 über
+    ID  shift, and go to state 117
 
-    $default  reduziere mit Regel 54 (type_fields)
+    $default  reduce using rule 54 (type_fields)
 
-    type_fields      gehe zu Zustand 118 über
-    type_field_list  gehe zu Zustand 119 über
-
-
-Zustand 101
-
-   59 variable_declaration: VAR ID COLON . ID ASSIGN expression
-
-    ID  schiebe und gehe zu Zustand 120 über
+    type_fields      go to state 118
+    type_field_list  go to state 119
 
 
-Zustand 102
+state 101
+
+   60 variable_declaration: VAR ID COLON . ID ASSIGN expression
+
+    ID  shift, and go to state 120
+
+
+state 102
 
     2 expression: . INT
     3           | . STRING
@@ -3222,66 +3223,66 @@ Zustand 102
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   58 variable_declaration: VAR ID ASSIGN . expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   59 variable_declaration: VAR ID ASSIGN . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 121 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 121
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 103
+state 103
 
    50 type_declaration: TYPE ID EQ . type
    51 type: . ID
    52     | . LBRACE type_fields RBRACE
    53     | . ARRAY OF ID
 
-    ID      schiebe und gehe zu Zustand 109 über
-    LBRACE  schiebe und gehe zu Zustand 110 über
-    ARRAY   schiebe und gehe zu Zustand 111 über
+    ID      shift, and go to state 109
+    LBRACE  shift, and go to state 110
+    ARRAY   shift, and go to state 111
 
-    type  gehe zu Zustand 122 über
+    type  go to state 122
 
 
-Zustand 104
+state 104
 
    19 expression: LET declaration_sequence IN END .
 
-    $default  reduziere mit Regel 19 (expression)
+    $default  reduce using rule 19 (expression)
 
 
-Zustand 105
+state 105
 
    20 expression: LET declaration_sequence IN expression_sequence . END
-   67 expression_sequence: expression_sequence . SEMICOLON expression
+   68 expression_sequence: expression_sequence . SEMICOLON expression
 
-    SEMICOLON  schiebe und gehe zu Zustand 65 über
-    END        schiebe und gehe zu Zustand 123 über
+    SEMICOLON  shift, and go to state 65
+    END        shift, and go to state 123
 
 
-Zustand 106
+state 106
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3295,25 +3296,25 @@ Zustand 106
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   69 expression_list: expression_list COMMA expression .
+   70 expression_list: expression_list COMMA expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 69 (expression_list)
+    $default  reduce using rule 70 (expression_list)
 
 
-Zustand 107
+state 107
 
     2 expression: . INT
     3           | . STRING
@@ -3351,86 +3352,87 @@ Zustand 107
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 124 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 124
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 108
+state 108
 
    24 lvalue_extension: LBRACK expression RBRACK lvalue_extension .
 
-    $default  reduziere mit Regel 24 (lvalue_extension)
+    $default  reduce using rule 24 (lvalue_extension)
 
 
-Zustand 109
+state 109
 
    51 type: ID .
 
-    $default  reduziere mit Regel 51 (type)
+    $default  reduce using rule 51 (type)
 
 
-Zustand 110
+state 110
 
    52 type: LBRACE . type_fields RBRACE
    54 type_fields: .
    55            | . type_field_list
    56 type_field_list: . ID COLON ID
-   57                | . type_field_list COMMA ID COLON ID
+   57                | . ID EQ ID
+   58                | . type_field_list COMMA ID COLON ID
 
-    ID  schiebe und gehe zu Zustand 117 über
+    ID  shift, and go to state 117
 
-    $default  reduziere mit Regel 54 (type_fields)
+    $default  reduce using rule 54 (type_fields)
 
-    type_fields      gehe zu Zustand 125 über
-    type_field_list  gehe zu Zustand 119 über
+    type_fields      go to state 125
+    type_field_list  go to state 119
 
 
-Zustand 111
+state 111
 
    53 type: ARRAY . OF ID
 
-    OF  schiebe und gehe zu Zustand 126 über
+    OF  shift, and go to state 126
 
 
-Zustand 112
+state 112
 
    44 field_assignment: ID EQ type .
 
-    $default  reduziere mit Regel 44 (field_assignment)
+    $default  reduce using rule 44 (field_assignment)
 
 
-Zustand 113
+state 113
 
    43 field_assignment_list: field_assignment COMMA field_assignment_list .
 
-    $default  reduziere mit Regel 43 (field_assignment_list)
+    $default  reduce using rule 43 (field_assignment_list)
 
 
-Zustand 114
+state 114
 
    24 lvalue_extension: LBRACK expression . RBRACK lvalue_extension
    28 arithmetic_expression: expression . PLUS expression
@@ -3446,88 +3448,22 @@ Zustand 114
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    RBRACK  schiebe und gehe zu Zustand 127 über
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    RBRACK  shift, and go to state 127
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
 
-Zustand 115
-
-    2 expression: . INT
-    3           | . STRING
-    4           | . BREAK
-    5           | . NIL
-    6           | . lvalue
-    7           | . assignment
-    8           | . selection
-    9           | . iteration
-   10           | . function_call
-   11           | . arithmetic_expression
-   12           | . comparison
-   13           | . boolean_expression
-   14           | . MINUS expression
-   15           | . ID LBRACE field_assignments RBRACE
-   16           | . ID LBRACK expression RBRACK OF expression
-   17           | . LPAREN RPAREN
-   18           | . LPAREN expression_sequence RPAREN
-   19           | . LET declaration_sequence IN END
-   20           | . LET declaration_sequence IN expression_sequence END
-   21 lvalue: . ID lvalue_extension
-   25 assignment: . lvalue ASSIGN expression
-   26 function_call: . ID LPAREN RPAREN
-   27              | . ID LPAREN expression_list RPAREN
-   28 arithmetic_expression: . expression PLUS expression
-   29                      | . expression MINUS expression
-   30                      | . expression TIMES expression
-   31                      | . expression DIVIDE expression
-   32 comparison: . expression EQ expression
-   33           | . expression NEQ expression
-   34           | . expression GT expression
-   35           | . expression LT expression
-   36           | . expression GE expression
-   37           | . expression LE expression
-   38 boolean_expression: . expression AND expression
-   39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   62          | IF expression THEN expression ELSE . expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
-
-    expression             gehe zu Zustand 128 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 116
+state 115
 
     2 expression: . INT
     3           | . STRING
@@ -3564,68 +3500,136 @@ Zustand 116
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   65          | FOR ID ASSIGN expression TO . expression DO expression
+   63 selection: . IF expression THEN expression ELSE expression
+   63          | IF expression THEN expression ELSE . expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 129 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 128
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 117
+state 116
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   66          | FOR ID ASSIGN expression TO . expression DO expression
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    expression             go to state 129
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+
+
+state 117
 
    56 type_field_list: ID . COLON ID
+   57                | ID . EQ ID
 
-    COLON  schiebe und gehe zu Zustand 130 über
-
-
-Zustand 118
-
-   60 function_declaration: FUNCTION ID LPAREN type_fields . RPAREN EQ expression
-   61                     | FUNCTION ID LPAREN type_fields . RPAREN COLON ID EQ expression
-
-    RPAREN  schiebe und gehe zu Zustand 131 über
+    COLON  shift, and go to state 130
+    EQ     shift, and go to state 131
 
 
-Zustand 119
+state 118
+
+   61 function_declaration: FUNCTION ID LPAREN type_fields . RPAREN EQ expression
+   62                     | FUNCTION ID LPAREN type_fields . RPAREN COLON ID EQ expression
+
+    RPAREN  shift, and go to state 132
+
+
+state 119
 
    55 type_fields: type_field_list .
-   57 type_field_list: type_field_list . COMMA ID COLON ID
+   58 type_field_list: type_field_list . COMMA ID COLON ID
 
-    COMMA  schiebe und gehe zu Zustand 132 über
+    COMMA  shift, and go to state 133
 
-    $default  reduziere mit Regel 55 (type_fields)
-
-
-Zustand 120
-
-   59 variable_declaration: VAR ID COLON ID . ASSIGN expression
-
-    ASSIGN  schiebe und gehe zu Zustand 133 über
+    $default  reduce using rule 55 (type_fields)
 
 
-Zustand 121
+state 120
+
+   60 variable_declaration: VAR ID COLON ID . ASSIGN expression
+
+    ASSIGN  shift, and go to state 134
+
+
+state 121
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3639,39 +3643,39 @@ Zustand 121
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   58 variable_declaration: VAR ID ASSIGN expression .
+   59 variable_declaration: VAR ID ASSIGN expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 58 (variable_declaration)
+    $default  reduce using rule 59 (variable_declaration)
 
 
-Zustand 122
+state 122
 
    50 type_declaration: TYPE ID EQ type .
 
-    $default  reduziere mit Regel 50 (type_declaration)
+    $default  reduce using rule 50 (type_declaration)
 
 
-Zustand 123
+state 123
 
    20 expression: LET declaration_sequence IN expression_sequence END .
 
-    $default  reduziere mit Regel 20 (expression)
+    $default  reduce using rule 20 (expression)
 
 
-Zustand 124
+state 124
 
    16 expression: ID LBRACK expression RBRACK OF expression .
    28 arithmetic_expression: expression . PLUS expression
@@ -3687,84 +3691,52 @@ Zustand 124
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 16 (expression)
+    $default  reduce using rule 16 (expression)
 
 
-Zustand 125
+state 125
 
    52 type: LBRACE type_fields . RBRACE
 
-    RBRACE  schiebe und gehe zu Zustand 134 über
+    RBRACE  shift, and go to state 135
 
 
-Zustand 126
+state 126
 
    53 type: ARRAY OF . ID
 
-    ID  schiebe und gehe zu Zustand 135 über
+    ID  shift, and go to state 136
 
 
-Zustand 127
+state 127
 
    22 lvalue_extension: .
    23                 | . DOT ID lvalue_extension
    24                 | . LBRACK expression RBRACK lvalue_extension
    24                 | LBRACK expression RBRACK . lvalue_extension
 
-    LBRACK  schiebe und gehe zu Zustand 94 über
-    DOT     schiebe und gehe zu Zustand 25 über
+    LBRACK  shift, and go to state 94
+    DOT     shift, and go to state 25
 
-    $default  reduziere mit Regel 22 (lvalue_extension)
+    $default  reduce using rule 22 (lvalue_extension)
 
-    lvalue_extension  gehe zu Zustand 108 über
-
-
-Zustand 128
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   62 selection: IF expression THEN expression ELSE expression .
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-
-    $default  reduziere mit Regel 62 (selection)
+    lvalue_extension  go to state 108
 
 
-Zustand 129
+state 128
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -3778,47 +3750,86 @@ Zustand 129
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   65 iteration: FOR ID ASSIGN expression TO expression . DO expression
+   63 selection: IF expression THEN expression ELSE expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-    DO      schiebe und gehe zu Zustand 136 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+
+    $default  reduce using rule 63 (selection)
 
 
-Zustand 130
+state 129
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   66 iteration: FOR ID ASSIGN expression TO expression . DO expression
+
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+    DO      shift, and go to state 137
+
+
+state 130
 
    56 type_field_list: ID COLON . ID
 
-    ID  schiebe und gehe zu Zustand 137 über
+    ID  shift, and go to state 138
 
 
-Zustand 131
+state 131
 
-   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN . EQ expression
-   61                     | FUNCTION ID LPAREN type_fields RPAREN . COLON ID EQ expression
+   57 type_field_list: ID EQ . ID
 
-    COLON  schiebe und gehe zu Zustand 138 über
-    EQ     schiebe und gehe zu Zustand 139 über
+    ID  shift, and go to state 139
 
 
-Zustand 132
+state 132
 
-   57 type_field_list: type_field_list COMMA . ID COLON ID
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN . EQ expression
+   62                     | FUNCTION ID LPAREN type_fields RPAREN . COLON ID EQ expression
 
-    ID  schiebe und gehe zu Zustand 140 über
+    COLON  shift, and go to state 140
+    EQ     shift, and go to state 141
 
 
-Zustand 133
+state 133
+
+   58 type_field_list: type_field_list COMMA . ID COLON ID
+
+    ID  shift, and go to state 142
+
+
+state 134
 
     2 expression: . INT
     3           | . STRING
@@ -3855,50 +3866,50 @@ Zustand 133
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   59 variable_declaration: VAR ID COLON ID ASSIGN . expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   60 variable_declaration: VAR ID COLON ID ASSIGN . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 141 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 143
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 134
+state 135
 
    52 type: LBRACE type_fields RBRACE .
 
-    $default  reduziere mit Regel 52 (type)
+    $default  reduce using rule 52 (type)
 
 
-Zustand 135
+state 136
 
    53 type: ARRAY OF ID .
 
-    $default  reduziere mit Regel 53 (type)
+    $default  reduce using rule 53 (type)
 
 
-Zustand 136
+state 137
 
     2 expression: . INT
     3           | . STRING
@@ -3935,233 +3946,57 @@ Zustand 136
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-   65          | FOR ID ASSIGN expression TO expression DO . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+   66          | FOR ID ASSIGN expression TO expression DO . expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 142 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    expression             go to state 144
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 137
+state 138
 
    56 type_field_list: ID COLON ID .
 
-    $default  reduziere mit Regel 56 (type_field_list)
+    $default  reduce using rule 56 (type_field_list)
 
 
-Zustand 138
+state 139
 
-   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON . ID EQ expression
+   57 type_field_list: ID EQ ID .
 
-    ID  schiebe und gehe zu Zustand 143 über
-
-
-Zustand 139
-
-    2 expression: . INT
-    3           | . STRING
-    4           | . BREAK
-    5           | . NIL
-    6           | . lvalue
-    7           | . assignment
-    8           | . selection
-    9           | . iteration
-   10           | . function_call
-   11           | . arithmetic_expression
-   12           | . comparison
-   13           | . boolean_expression
-   14           | . MINUS expression
-   15           | . ID LBRACE field_assignments RBRACE
-   16           | . ID LBRACK expression RBRACK OF expression
-   17           | . LPAREN RPAREN
-   18           | . LPAREN expression_sequence RPAREN
-   19           | . LET declaration_sequence IN END
-   20           | . LET declaration_sequence IN expression_sequence END
-   21 lvalue: . ID lvalue_extension
-   25 assignment: . lvalue ASSIGN expression
-   26 function_call: . ID LPAREN RPAREN
-   27              | . ID LPAREN expression_list RPAREN
-   28 arithmetic_expression: . expression PLUS expression
-   29                      | . expression MINUS expression
-   30                      | . expression TIMES expression
-   31                      | . expression DIVIDE expression
-   32 comparison: . expression EQ expression
-   33           | . expression NEQ expression
-   34           | . expression GT expression
-   35           | . expression LT expression
-   36           | . expression GE expression
-   37           | . expression LE expression
-   38 boolean_expression: . expression AND expression
-   39                   | . expression OR expression
-   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ . expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
-
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
-
-    expression             gehe zu Zustand 144 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
+    $default  reduce using rule 57 (type_field_list)
 
 
-Zustand 140
+state 140
 
-   57 type_field_list: type_field_list COMMA ID . COLON ID
+   62 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON . ID EQ expression
 
-    COLON  schiebe und gehe zu Zustand 145 über
-
-
-Zustand 141
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   59 variable_declaration: VAR ID COLON ID ASSIGN expression .
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-
-    $default  reduziere mit Regel 59 (variable_declaration)
+    ID  shift, and go to state 145
 
 
-Zustand 142
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   65 iteration: FOR ID ASSIGN expression TO expression DO expression .
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-
-    $default  reduziere mit Regel 65 (iteration)
-
-
-Zustand 143
-
-   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID . EQ expression
-
-    EQ  schiebe und gehe zu Zustand 146 über
-
-
-Zustand 144
-
-   28 arithmetic_expression: expression . PLUS expression
-   29                      | expression . MINUS expression
-   30                      | expression . TIMES expression
-   31                      | expression . DIVIDE expression
-   32 comparison: expression . EQ expression
-   33           | expression . NEQ expression
-   34           | expression . GT expression
-   35           | expression . LT expression
-   36           | expression . GE expression
-   37           | expression . LE expression
-   38 boolean_expression: expression . AND expression
-   39                   | expression . OR expression
-   60 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression .
-
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
-
-    $default  reduziere mit Regel 60 (function_declaration)
-
-
-Zustand 145
-
-   57 type_field_list: type_field_list COMMA ID COLON . ID
-
-    ID  schiebe und gehe zu Zustand 147 über
-
-
-Zustand 146
+state 141
 
     2 expression: . INT
     3           | . STRING
@@ -4198,43 +4033,43 @@ Zustand 146
    37           | . expression LE expression
    38 boolean_expression: . expression AND expression
    39                   | . expression OR expression
-   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ . expression
-   62 selection: . IF expression THEN expression ELSE expression
-   63          | . IF expression THEN expression
-   64 iteration: . WHILE expression DO expression
-   65          | . FOR ID ASSIGN expression TO expression DO expression
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
 
-    ID      schiebe und gehe zu Zustand 1 über
-    STRING  schiebe und gehe zu Zustand 2 über
-    INT     schiebe und gehe zu Zustand 3 über
-    LPAREN  schiebe und gehe zu Zustand 4 über
-    MINUS   schiebe und gehe zu Zustand 5 über
-    IF      schiebe und gehe zu Zustand 6 über
-    WHILE   schiebe und gehe zu Zustand 7 über
-    FOR     schiebe und gehe zu Zustand 8 über
-    LET     schiebe und gehe zu Zustand 9 über
-    BREAK   schiebe und gehe zu Zustand 10 über
-    NIL     schiebe und gehe zu Zustand 11 über
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
 
-    expression             gehe zu Zustand 148 über
-    lvalue                 gehe zu Zustand 14 über
-    assignment             gehe zu Zustand 15 über
-    function_call          gehe zu Zustand 16 über
-    arithmetic_expression  gehe zu Zustand 17 über
-    comparison             gehe zu Zustand 18 über
-    boolean_expression     gehe zu Zustand 19 über
-    selection              gehe zu Zustand 20 über
-    iteration              gehe zu Zustand 21 über
-
-
-Zustand 147
-
-   57 type_field_list: type_field_list COMMA ID COLON ID .
-
-    $default  reduziere mit Regel 57 (type_field_list)
+    expression             go to state 146
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
 
 
-Zustand 148
+state 142
+
+   58 type_field_list: type_field_list COMMA ID . COLON ID
+
+    COLON  shift, and go to state 147
+
+
+state 143
 
    28 arithmetic_expression: expression . PLUS expression
    29                      | expression . MINUS expression
@@ -4248,19 +4083,202 @@ Zustand 148
    37           | expression . LE expression
    38 boolean_expression: expression . AND expression
    39                   | expression . OR expression
-   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression .
+   60 variable_declaration: VAR ID COLON ID ASSIGN expression .
 
-    PLUS    schiebe und gehe zu Zustand 43 über
-    MINUS   schiebe und gehe zu Zustand 44 über
-    TIMES   schiebe und gehe zu Zustand 45 über
-    DIVIDE  schiebe und gehe zu Zustand 46 über
-    EQ      schiebe und gehe zu Zustand 47 über
-    NEQ     schiebe und gehe zu Zustand 48 über
-    LT      schiebe und gehe zu Zustand 49 über
-    LE      schiebe und gehe zu Zustand 50 über
-    GT      schiebe und gehe zu Zustand 51 über
-    GE      schiebe und gehe zu Zustand 52 über
-    AND     schiebe und gehe zu Zustand 53 über
-    OR      schiebe und gehe zu Zustand 54 über
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
 
-    $default  reduziere mit Regel 61 (function_declaration)
+    $default  reduce using rule 60 (variable_declaration)
+
+
+state 144
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   66 iteration: FOR ID ASSIGN expression TO expression DO expression .
+
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+
+    $default  reduce using rule 66 (iteration)
+
+
+state 145
+
+   62 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID . EQ expression
+
+    EQ  shift, and go to state 148
+
+
+state 146
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   61 function_declaration: FUNCTION ID LPAREN type_fields RPAREN EQ expression .
+
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+
+    $default  reduce using rule 61 (function_declaration)
+
+
+state 147
+
+   58 type_field_list: type_field_list COMMA ID COLON . ID
+
+    ID  shift, and go to state 149
+
+
+state 148
+
+    2 expression: . INT
+    3           | . STRING
+    4           | . BREAK
+    5           | . NIL
+    6           | . lvalue
+    7           | . assignment
+    8           | . selection
+    9           | . iteration
+   10           | . function_call
+   11           | . arithmetic_expression
+   12           | . comparison
+   13           | . boolean_expression
+   14           | . MINUS expression
+   15           | . ID LBRACE field_assignments RBRACE
+   16           | . ID LBRACK expression RBRACK OF expression
+   17           | . LPAREN RPAREN
+   18           | . LPAREN expression_sequence RPAREN
+   19           | . LET declaration_sequence IN END
+   20           | . LET declaration_sequence IN expression_sequence END
+   21 lvalue: . ID lvalue_extension
+   25 assignment: . lvalue ASSIGN expression
+   26 function_call: . ID LPAREN RPAREN
+   27              | . ID LPAREN expression_list RPAREN
+   28 arithmetic_expression: . expression PLUS expression
+   29                      | . expression MINUS expression
+   30                      | . expression TIMES expression
+   31                      | . expression DIVIDE expression
+   32 comparison: . expression EQ expression
+   33           | . expression NEQ expression
+   34           | . expression GT expression
+   35           | . expression LT expression
+   36           | . expression GE expression
+   37           | . expression LE expression
+   38 boolean_expression: . expression AND expression
+   39                   | . expression OR expression
+   62 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ . expression
+   63 selection: . IF expression THEN expression ELSE expression
+   64          | . IF expression THEN expression
+   65 iteration: . WHILE expression DO expression
+   66          | . FOR ID ASSIGN expression TO expression DO expression
+
+    ID      shift, and go to state 1
+    STRING  shift, and go to state 2
+    INT     shift, and go to state 3
+    LPAREN  shift, and go to state 4
+    MINUS   shift, and go to state 5
+    IF      shift, and go to state 6
+    WHILE   shift, and go to state 7
+    FOR     shift, and go to state 8
+    LET     shift, and go to state 9
+    BREAK   shift, and go to state 10
+    NIL     shift, and go to state 11
+
+    expression             go to state 150
+    lvalue                 go to state 14
+    assignment             go to state 15
+    function_call          go to state 16
+    arithmetic_expression  go to state 17
+    comparison             go to state 18
+    boolean_expression     go to state 19
+    selection              go to state 20
+    iteration              go to state 21
+
+
+state 149
+
+   58 type_field_list: type_field_list COMMA ID COLON ID .
+
+    $default  reduce using rule 58 (type_field_list)
+
+
+state 150
+
+   28 arithmetic_expression: expression . PLUS expression
+   29                      | expression . MINUS expression
+   30                      | expression . TIMES expression
+   31                      | expression . DIVIDE expression
+   32 comparison: expression . EQ expression
+   33           | expression . NEQ expression
+   34           | expression . GT expression
+   35           | expression . LT expression
+   36           | expression . GE expression
+   37           | expression . LE expression
+   38 boolean_expression: expression . AND expression
+   39                   | expression . OR expression
+   62 function_declaration: FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression .
+
+    PLUS    shift, and go to state 43
+    MINUS   shift, and go to state 44
+    TIMES   shift, and go to state 45
+    DIVIDE  shift, and go to state 46
+    EQ      shift, and go to state 47
+    NEQ     shift, and go to state 48
+    LT      shift, and go to state 49
+    LE      shift, and go to state 50
+    GT      shift, and go to state 51
+    GE      shift, and go to state 52
+    AND     shift, and go to state 53
+    OR      shift, and go to state 54
+
+    $default  reduce using rule 62 (function_declaration)

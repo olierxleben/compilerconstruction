@@ -19,7 +19,6 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 
 %}
 
-
 %union {
 	int pos;
 	int ival;
@@ -40,7 +39,7 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 %token <sval> ID STRING
 %token <ival> INT
 
-%type // extend types here
+%type
 	<exp> expression arithmetic_expression expression_sequence comparison
 	program assignment iteration selection function_call ARRAY boolean_expression 
 
@@ -180,7 +179,7 @@ type
         : ID {$$=A_NameTy(EM_tokPos, S_Symbol($1));}
         | LBRACE type_fields RBRACE {$$=A_RecordTy(EM_tokPos, $2);}
         | ARRAY OF ID {$$=A_ArrayTy(EM_tokPos, S_Symbol($3));}
-		//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // TODO: dafuq?
+		//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // dafuq?
 
 type_fields
         : {$$=NULL;} /* empty */ 
@@ -188,11 +187,14 @@ type_fields
 
 type_field_list
         : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);}
-        | ID EQ ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} // TODO: check (oli)
+        | ID EQ ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} // TODO: check (oli): named parameters, like {name="aname"}, see testcase 3
         | type_field_list COMMA ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($3), S_Symbol($5)), $1);}
 
 variable_declaration
-        : VAR ID ASSIGN expression {$$=A_VarDec(EM_tokPos, S_Symbol($2), S_Symbol(""), $4);} // TODO: Variablen-Typ bestimmen
+        : VAR ID ASSIGN expression {
+			printf("DEBUG: %i", $4->kind); // TODO if var type check here
+			$$=A_VarDec(EM_tokPos, S_Symbol($2), S_Symbol(""), $4);
+		} // 
         | VAR ID COLON ID ASSIGN expression	{$$=A_VarDec(EM_tokPos, S_Symbol($2), S_Symbol($4), $6);}
 
 function_declaration
