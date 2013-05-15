@@ -1,0 +1,20 @@
+/* Note: */
+
+let 
+	
+ 	type rectype1 = {plz:int, ort:string, strasse:string, nummer:string}
+	type arrtype1 = array of rectype1
+	var arr1 := "Foo"
+	var arr2 := arrtype1[10] of rectype1 {plz=10, ort="Konstanz", strasse="Universitaetsstrasse", nummer="10"}
+	var i := 0
+	var s := ""  
+	var rec1 := rectype1 {plz=arr1, ort="Konstanz", strasse="Universitaetsstrasse", nummer="10"} /* type mismatch */
+	
+in 
+	arr5[s]:=1; /* undefined variable */ /* Arrays must be indexed by Ints */ 
+	for i:="" to 9 do /* for-loops must iterate over Ints; type mismatch */
+	(
+		rec1.nummer:=i /* type mismatch */
+	)
+		
+end	

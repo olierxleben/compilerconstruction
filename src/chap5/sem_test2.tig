@@ -1,0 +1,17 @@
+/* Note: Dieses Tiger-File ist korrekt und sollte ohne Fehler die semantische Analyse beenden.*/
+let 
+ 	type rectype1 = {alles:rectype2,plz:arrtype2, ort:string, strasse:string, nummer:string}
+	type rectype2 = {name:string,adresse:rectype1,alter:int}
+	type arrtype1 = array of rectype1
+	type arrtype2 = array of int
+	type arrtype3 = array of arrtype2
+	var arr1:= arrtype2[100] of 0 
+	function func1(a:int, b:string, c:arrtype2) : int = (
+		if a=10 then 1 else func2(b)
+	)
+	function func2(a:string) : int = (
+        	if a="foo" then 1 else func1(10, a, arr1)	
+	)
+	
+in 
+end	

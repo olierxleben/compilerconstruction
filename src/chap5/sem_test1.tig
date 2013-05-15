@@ -1,0 +1,32 @@
+/* Note: */
+
+let 
+	
+ 	type rectype1 = {plz:int, ort:string, strasse:string, nummer:string}
+	type rectype2 = {name:string,adresse:rectype1,alter:int}
+	var arr1 := arrtype2[100] of 0 /* undefined type */
+	type arrtype1 = array of rectype1
+	type arrtype2 = array of int
+	type arrtype3 = array of arrtype2 
+	var arr2 := arrtype1[10] of rectype1 {plz=arr1, ort="Konstanz", strasse="Universitaetsstrasse", nummer="10"}
+	var arr3 := arrtype1[10] of rectype1 {plz=arr2, ort="Konstanz", strasse="Universitaetsstrasse", nummer="10"} /* type mismatch */
+  	var arr4 := arrtype1[10] of rectype1 {plz=arr1, strasse="Universitaetsstrasse", nummer="10"} /* field name mismatch */	
+	var arr5 := arrtype2[100] of 0 
+	var i := 0
+	var s :arrtype1 := "" /*  type mismatch */ 
+	var rec1 := rectype1 {plz=arr1, ort="Konstanz", strasse="Universitaetsstrasse", nummer="10"}
+	function func1(a:int, b:string, c:arrtype2) : arrtype2 = (
+		a:=21;
+		b:="foo";
+		c	
+	)
+	function func2() : int = (
+        	i
+	)
+	
+in 
+        rec1.ort := "Berlin"; 
+	rec1.stadt := "Hamburg"; /* field not present in record
+ */	
+	i:=func2(i) /*  to many parameters */ 
+end	
