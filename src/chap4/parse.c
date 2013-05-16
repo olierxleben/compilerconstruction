@@ -15,6 +15,8 @@
 extern int yyparse(void);
 extern A_exp absyn_root;
 
+extern int yydebug;
+
 /* parse source file fname; 
    return abstract syntax data structure */
 A_exp parse(string fname) 
@@ -27,6 +29,9 @@ A_exp parse(string fname)
 int main(int argc, char **argv) {
  FILE* outfile;
  A_exp ast;
+ 
+ yydebug = 1;
+ 
  if (argc!=3) {fprintf(stderr,"usage: parser tigfile outfile\n"); exit(1);}
  if (! (outfile=fopen(argv[2], "w"))) exit(1);
  EM_reset(argv[1]);
