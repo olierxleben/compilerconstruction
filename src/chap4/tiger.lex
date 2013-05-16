@@ -85,7 +85,7 @@ function { adjust(); return FUNCTION ;}
 var { adjust(); return VAR ;}
 type { adjust(); return TYPE ;}
 
-[a-zA-Z][_a-zA-Z0-9]* { adjust(); yylval.sval = yytext;	return ID;}
+[a-zA-Z][_a-zA-Z0-9]* { adjust(); yylval.sval = String(yytext); return ID;}
 
 [0-9]+ { adjust(); yylval.ival=atoi(yytext); return INT;}
 
