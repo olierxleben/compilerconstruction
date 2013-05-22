@@ -299,12 +299,21 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
   case A_nilExp: /* example for NIL given */
     ty = expTy(NULL, Ty_Nil()); break;
   case A_varExp:
+  	ty = transVar(env, tenv, e->u.var);
     break;
   case A_intExp:
+  	ty = expTy(NULL, Ty_Int());
     break;
  case A_stringExp:
+  	ty = expTy(NULL, Ty_String());
     break;
  case A_callExp: {
+ 	Tr_expList exps = NULL;
+ 	E_enventry x = S_look(env, e->u.call.func);
+ 	if(x && x->kind == E_funEntry){
+ 		exps = matchParams(env, tenv, x->u.fun.formals, e->u.call.args, e->pos);
+ 	} 
+ 	ty = exps;
     /* Hint: Find funEntry with "S_look" in env and match its formals with the
 	       function arguments using "matchParams". Set ty correctly.*/
     break;
