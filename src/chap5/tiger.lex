@@ -17,7 +17,7 @@ int commentNesting = 0; // comment nested counter
 int forfeed = 0;
 int modus = 0;
 
-char buffer[256];
+char *buffer;
 
 int yywrap(void)
 {
@@ -85,12 +85,13 @@ function { adjust(); return FUNCTION ;}
 var { adjust(); return VAR ;}
 type { adjust(); return TYPE ;}
 
-[a-zA-Z][_a-zA-Z0-9]* { adjust(); yylval.sval=yytext; return ID;}
+[a-zA-Z][_a-zA-Z0-9]* { adjust(); yylval.sval = String(yytext); return ID;}
 
 [0-9]+ { adjust(); yylval.ival=atoi(yytext); return INT;}
 
 \" {
     adjust();
+    buffer = (char*) malloc(256 * sizeof(char));
     buffer[0] = '\0';
     BEGIN(_STRING);
 }
