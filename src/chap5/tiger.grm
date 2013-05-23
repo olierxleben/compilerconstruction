@@ -1,4 +1,5 @@
 %{
+#define YYDEBUG 1
 #include <stdio.h>
 #include "util.h"
 #include "errormsg.h"
@@ -17,7 +18,23 @@ void yyerror(char *s)
 
 A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 
+A_decList combineDecs(A_dec dollar1, A_decList dollar2) { // TODO function combining, check if head is type of $1 AND tail is type of $1=> pointer
+    A_decList decList = A_DecList(dollar1, dollar2);
+    if(dollar2) {
+      if(dollar1->kind == A_typeDec && dollar2->head->kind == A_typeDec) {
+        decList->tail = dollar2->tail;
+        dollar1->u.type->tail = dollar2->head->u.type;
+      }
+      else if(dollar1->kind == A_functionDec && dollar2->head->kind == A_functionDec) {
+        decList->tail = dollar2->tail;
+        dollar1->u.function->tail = dollar2->head->u.function;
+      }
+    }
+    return decList;
+}
+
 %}
+
 
 %union {
 	int pos;
@@ -33,19 +50,19 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 	A_fieldList fieldList;
 	A_nametyList nametyList;
 	A_efieldList efieldlist;
+  A_efield efield;
 	A_ty aty;
+  // TODO: extend types (page 96 ;D)
 };
 
 %token <sval> ID STRING
 %token <ival> INT
 
-%type
+%type // extend types here
 	<exp> expression arithmetic_expression expression_sequence comparison
 	program assignment iteration selection function_call ARRAY boolean_expression 
 
-%type <var> lvalue lvalue_extension
-
-//%type <efieldlist> lvalue_extension
+%type <var> lvalue 
 
 %type
 	<expList> expression_list
@@ -67,6 +84,10 @@ A_exp absyn_root; // we "need" this, cause of extern declaration in parse.h
 
 %type	<field> field_assignment
 	
+%type <efieldlist> field_creation_list
+
+%type <efield> field_creation
+  
 %token 
   COMMA COLON SEMICOLON LPAREN RPAREN LBRACK RBRACK 
   LBRACE RBRACE DOT 
@@ -108,25 +129,24 @@ expression
         | arithmetic_expression 
         | comparison
         | boolean_expression
-        | MINUS expression %prec UMINUS {$$=A_OpExp(EM_tokPos, A_minusOp, 0, $2);} // check
+        | MINUS expression %prec UMINUS {$$=A_OpExp(EM_tokPos, A_minusOp, A_IntExp(EM_tokPos, 0), $2);} // check
         | ID LBRACE field_assignments RBRACE {}
-        | ID LBRACK expression RBRACK OF expression {$$=A_ArrayExp(EM_tokPos, S_Symbol($1), $3, $6);}
+        | lvalue LBRACK expression RBRACK OF expression {assert($1->kind==A_simpleVar); $$=A_ArrayExp(EM_tokPos, $1->u.simple, $3, $6);}
         | LPAREN RPAREN {$$=A_NilExp(EM_tokPos);} 
         | LPAREN expression_sequence RPAREN {$$=$2;} // assign left to second element here, then parsing goes to line 172
         | LET declaration_sequence IN END {$$=A_LetExp(EM_tokPos, $2, NULL);}
         | LET declaration_sequence IN expression_sequence END {$$=A_LetExp(EM_tokPos, $2, $4); }
+        | ID LBRACE field_creation_list RBRACE {$$=A_RecordExp(EM_tokPos, S_Symbol($1), $3);}
 
-lvalue
-        : ID lvalue_extension  {if ($2 == NULL) 
-        							$$=A_SimpleVar(EM_tokPos, S_Symbol($1));
-        						else 
-        							$$=$2;}
+field_creation_list : field_creation COMMA field_creation_list {$$=A_EfieldList($1, $3);}
+                    | field_creation {$$=A_EfieldList($1, NULL);}
 
-lvalue_extension
-        : /* empty */ {$$=NULL;}
-        | DOT ID lvalue_extension {$$=A_FieldVar(EM_tokPos, $3, S_Symbol($2));}
-        | LBRACK expression RBRACK lvalue_extension {$$=A_SubscriptVar(EM_tokPos, $4, $2);}
-
+field_creation : ID EQ expression {$$=A_Efield(S_Symbol($1), $3);}
+        
+lvalue : ID {$$=A_SimpleVar(EM_tokPos, S_Symbol($1));}
+        | lvalue DOT ID {$$=A_FieldVar(EM_tokPos, $1, S_Symbol($3));}
+        | lvalue LBRACK expression RBRACK {$$=A_SubscriptVar(EM_tokPos, $1, $3);}
+        
 assignment
         : lvalue ASSIGN expression {$$=A_AssignExp(EM_tokPos, $1, $3);} // TODO: A_var should be set
 
@@ -154,56 +174,52 @@ boolean_expression // TODO: check
 
 field_assignments
         : /* empty */ {$$=NULL;}
-        | field_assignment_list
+        | field_assignment_list {$$=$1;}
 
 field_assignment_list
         : field_assignment {$$=A_FieldList($1, NULL);}
         | field_assignment COMMA field_assignment_list {$$= A_FieldList($1, $3);}
 
 field_assignment
-        : ID EQ type {$$=A_Field(EM_tokPos, S_Symbol($1), S_Symbol("$3"));} // TODO: check Symbol $3
+        : ID COLON type {$$=A_Field(EM_tokPos, S_Symbol($1), ($3->kind == A_nameTy) ? $3->u.name : NULL);}
 
 declaration_sequence
         : /* empty */ {$$=NULL;}//{$$=A_decList( A_NilExp(EM_tokPos), A_NilExp(EM_tokPos));}
-        | declaration declaration_sequence {$$=A_DecList($1, $2);}
+        | declaration declaration_sequence {$$=combineDecs($1,$2);} // TODO function combining, check if head is type of $1 AND tail is type of $1=> pointer
 
 declaration
-        : type_declaration
-        | variable_declaration
-        | function_declaration
+        : type_declaration {$$=$1;}
+        | variable_declaration {$$=$1;}
+        | function_declaration {$$=$1;}
 
 type_declaration
-        : TYPE ID EQ type {$$=A_TypeDec(EM_tokPos, A_NametyList(A_Namety(S_Symbol($2), $4), NULL));}
+        : TYPE ID EQ type {$$=A_TypeDec(EM_tokPos, A_NametyList(A_Namety(S_Symbol($2), $4), NULL));} // TODO: check 
 
-type
-        : ID {$$=A_NameTy(EM_tokPos, S_Symbol($1));}
+type // TODO: tree implementation
+        : ID {printf("TYPE_ID\n"); $$=A_NameTy(EM_tokPos, S_Symbol($1));}
         | LBRACE type_fields RBRACE {$$=A_RecordTy(EM_tokPos, $2);}
-        | ARRAY OF ID {$$=A_ArrayTy(EM_tokPos, S_Symbol($3));}
-		//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // dafuq?
+        | ARRAY OF ID {printf("TYPE_ARRY_OF_ID\n"); $$=A_ArrayTy(EM_tokPos, S_Symbol($3));}
+			//{$$=A_ArrayExp(EM_tokPos, S_Symbol($3), A_IntExp(EM_tokPos, $1), A_IntExp(EM_tokPos, $3));} // TODO: dafuq?
 
 type_fields
-        : {$$=NULL;} /* empty */ 
-        | type_field_list // no need to parse here all in type_field_list
+        : /* empty */ {$$=NULL;}
+        | type_field_list {$$=$1;}// no need to parse here all in type_field_list
 
 type_field_list
-        : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);}
-        | ID EQ ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} // TODO: check (oli): named parameters, like {name="aname"}, see testcase 3
+        : ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($1), S_Symbol($3)), NULL);} 
         | type_field_list COMMA ID COLON ID {$$=A_FieldList(A_Field(EM_tokPos, S_Symbol($3), S_Symbol($5)), $1);}
 
 variable_declaration
-        : VAR ID ASSIGN expression {
-			printf("DEBUG: %i", $4->kind); // TODO if var type check here
-			$$=A_VarDec(EM_tokPos, S_Symbol($2), S_Symbol(""), $4);
-		} // 
+        : VAR ID ASSIGN expression {printf("VAR_DEC %s\n", $2); $$=A_VarDec(EM_tokPos, S_Symbol($2), ($4->kind == A_intExp) ? S_Symbol("int") : S_Symbol("string"), $4);} // TODO: Variablen-Typ bestimmen
         | VAR ID COLON ID ASSIGN expression	{$$=A_VarDec(EM_tokPos, S_Symbol($2), S_Symbol($4), $6);}
 
 function_declaration
-        : FUNCTION ID LPAREN type_fields RPAREN EQ expression {$$=A_FunctionDec(EM_tokPos, A_FundecList(A_Fundec(EM_tokPos, S_Symbol($2), $4, S_Symbol(""), $7), NULL));}
+        : FUNCTION ID LPAREN type_fields RPAREN EQ expression {$$=A_FunctionDec(EM_tokPos, A_FundecList(A_Fundec(EM_tokPos, S_Symbol($2), $4, S_Symbol("void"), $7), NULL));}
         | FUNCTION ID LPAREN type_fields RPAREN COLON ID EQ expression {$$=A_FunctionDec(EM_tokPos, A_FundecList(A_Fundec(EM_tokPos, S_Symbol($2), $4, S_Symbol($7), $9), NULL));}
        
 selection
         : IF expression THEN expression ELSE expression {$$=A_IfExp(EM_tokPos, $2, $4, $6);} 
-        | IF expression THEN expression {$$=A_IfExp(EM_tokPos, $2, $4, A_NilExp(EM_tokPos));}
+        | IF expression THEN expression {$$=A_IfExp(EM_tokPos, $2, $4, NULL);}
 
 iteration
         : WHILE expression DO expression {$$=A_WhileExp(EM_tokPos, $2, $4);}
