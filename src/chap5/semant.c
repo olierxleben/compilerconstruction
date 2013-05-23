@@ -319,6 +319,31 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
     break;
   }
  case A_opExp: {
+ // page 117 ff
+   A_oper oper = e->u.op.oper;
+   
+   struct expty left = transExp(env, tenv, e->u.op.left);
+   struct expty right = transExp(env, tenv e->u.op.right);
+   
+   switch(oper) {
+      case A_plusOp:
+      case A_minusOp:
+      case A_timesOp:
+      case A_divideOp:
+        if( left.ty->kind != Ty_int) {
+          EM_error(e->u.op.left->pos, "integer required");
+        }
+        if( right.ty->kind != Ty_int) {
+          EM_error(e->u.op.right->pos, "integer required");
+        }
+        
+        return expTy(NULL,Ty_Int());
+      break;
+      
+      
+      
+   }
+  //TODO:  ty = expTy(NULL, NULL);
     break;
   }
   case A_recordExp: {
