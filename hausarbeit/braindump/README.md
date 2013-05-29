@@ -8,29 +8,28 @@ Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Date
 
 ## Hintergrund / Motivation
 
-Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Master-Studiengang Informatik - Verteilte und Mobile Anwendungen an der Hochschule Osnabrück / University of Applied Sciences soll ein
+Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Master-Studiengang Informatik - Verteilte und Mobile Anwendungen an der Hochschule Osnabrück / University of Applied Sciences soll ein Werkzeug entwickelt werden mit dem sich Stylesheets optimieren lassen. Dazu soll ein Kommandozeilentool entwickelt werden, womit CSS-Optimierungen gesteuert und ausgegeben werden können. 
 
 ### Use Cases
 
+#### Allgemein
+
+Im Alltag eines Frontend-Entwicklers, bzw. eines Mitarbeiters an einem Web-Projekt kommt es nciht selten vor, dass die aufgrund von Zeitdruck, unterschiedlichen Entwicklern und durch nachträgliches Bugfixing des User Interfaces zu inkonsistenten Aufstellen von CSS-Regeln kommen kann. Regeln die garnicht mehr im DOM der Seite zu finden sind, sind noch in den CSS-Regeln vorhanden. Regeln werden u. U. überschrieben und es wird nicht auf Optimierung von Selektoren geachtet. Mit dem Ergebnis der Hausarbeit soll ein Tool geschaffen werden, womit im Nachhinein CSS-Dateien optimiert werden können. 
+
+Im Folgenden sollen Use Cases für das Tool aufgestellt werden.
+
 #### Google Page Ranking
+
+Seit 2010 berücksichtigt der Page Ranking Algorithmus von Google auch die Ladezeiten für Websites. Seiten die neben SEO ein gutes Page Ranking erhalten, werden demnach auch durch ihre Ladezeiten bestimmt. Die Optimierung von CSS-Regeln und die damit einhergehende verbesserte Ladezeit im Browser sind ein Use Case für den CSS-Optimierer. Die Ladezeiten spielen zwar im Vergleich mit SEO nur eine kleine Rolle, können aber zu einem besseren Ergebnis beitragen. <!-- TODO: Link von Google zur Statistik --> 
 
 #### Ladezeiten bei mobilen web-Anwendungen 
 
-#### FXML JavaFX
-
+Ladezeiten von mobilen Websites und Web-Anwendungen, bzw. Seiten die über mobile Internetverbindungen geladen werden, sollten schnell und nur wenig Daten Übertragen um ein konsistentes Benutzererlebnis zu gewährleisten. Statistiken zeigen, dass Benutzer auf Websites eher verbleiben wenn diese schnell geladen werden und der Benutzer schnell Informationen abrufen kann oder mit der Anwendung interagieren kann. CSS-Optimierung spielt dabei 
 
 ## Features
 
 * CSS optimieren nach diversen Regeln
 * Kommandozeilentool
-
-### Kommandozeilentool
-
-#### Funktionen
-
-* mehrere CSS Dateien zu einer Datei zusammenführen 
-* minifizierer
-* beautifier
 
 ### Optmierungsregeln
 
@@ -51,6 +50,8 @@ außerhalb von CSS-Dateien:
 
 * CSS Platzierung (in html)
 * Zusammenführung zu einer Datei
+* Minifizieren
+* Verschönerung
 
 ## Testdaten
 
@@ -58,11 +59,21 @@ außerhalb von CSS-Dateien:
 * im Vergleich werden identische Seite mit und ohne Optimierung getestet
 * Zu testende Daten: Ausgabeergebnis (immernoch korrekt?), Ladezeiten, Übertragungsgrößen
 
+### Kommandozeilentool
+
+Das Kommandozeilentool nimmt als Eingabe einen Ordner, führt die definierten CSS-Regeln an und gibt als Ausgabe eine optimierte CSS-Datei aus. 
+
+### Workflow
+
+
+
+### Beispiel
+
 
 ## Offene Punkte
 
-* Welche CSS Version?
 * welche Browser sollen unterstützt werden?
+
 
 ## Links
 
