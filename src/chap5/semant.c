@@ -324,24 +324,45 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
    
    struct expty left = transExp(env, tenv, e->u.op.left);
    struct expty right = transExp(env, tenv e->u.op.right);
-   
+   /* 
+	typedef enum {A_plusOp, A_minusOp, A_timesOp, A_divideOp,
+	     A_eqOp, A_neqOp, A_ltOp, A_leOp, A_gtOp, A_geOp} A_oper;
+*/
    switch(oper) {
-      case A_plusOp:
-      case A_minusOp:
-      case A_timesOp:
-      case A_divideOp:
-        if( left.ty->kind != Ty_int) {
+	case A_plusOp:
+	case A_minusOp:
+	case A_timesOp:
+	case A_divideOp:
+	case A_ltOp:
+	case A_leOp:
+	case A_gtOp:
+	case A_geOp:
+        
+	if( left.ty->kind != Ty_int) {
           EM_error(e->u.op.left->pos, "integer required");
         }
         if( right.ty->kind != Ty_int) {
           EM_error(e->u.op.right->pos, "integer required");
         }
         
-        return expTy(NULL,Ty_Int());
+        return expTy(NULL,Ty_Int());	
       break;
-      
-      
-      
+	case A_eqOp:
+	case A_neqOp:
+	
+	// wenn links und rechts das gleiche und dabei ent weder record oder array oder int 8-)
+	if( (left.ty->kind == Ty_record || left.ty->kind == Ty_array || left.ty->kind == Ty_int) && left.ty->kind == right.ty->kind) {
+		return expTy(NULL,Ty_Int());	
+	} else {
+		EM_error(e->pos, "type mismatch on expression (== !=)"); 
+	}		
+	
+	// String compare?
+
+	break;
+	default:
+		EM_error(e->pos, "You've entered hell!"); 
+        
    }
   //TODO:  ty = expTy(NULL, NULL);
     break;
@@ -349,18 +370,46 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
   case A_recordExp: {
     /* Hint: Find record type in tenv, get its actual type and match its field list
                   with the record expression's field list using "matchFieldlist". */
+	
     break;
   }
   case A_seqExp: {
+	
     break;
   }
   case A_assignExp: {
+	
     break;
   }
   case A_ifExp: {
+	if (e->u.iff.test->kind != Ty_int) {
+		EM_error(e->pos, "no valid if");	
+	}
+
+	// 'if then else'	
+	if (e->u.iff.elsee->kind != NULL) {
+		if (e->u.iff.then->kind != e->u.iff.elsee->kind) {
+			EM_error(e->pos, "if and else has different types!");		
+		}
+		
+		return expTy(NULL, e->u.iff.then->kind); // TODO: check	
+	
+	} else {
+	// just 'if then'
+		return expTy(NULL, NULL); // TODO: check	
+	}
+
     break;
   }
   case A_whileExp: {
+	if( e->u.whilee.test->kind != Ty_int) {
+          EM_error(e->u.op.left->pos, "integer required");
+        }
+
+	//if( e->u.whilee.body) "exp2 must not produce any value: page 524"
+
+	return expTy(Null, Ty_exp)
+
     break;
   }
   case A_breakExp: 
