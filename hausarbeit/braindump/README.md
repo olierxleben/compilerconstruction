@@ -6,6 +6,18 @@ Alle Ideen, Notizen, (Un-)wichtiges für die Hausarbeit
 
 Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Dateien im Webstack
 
+## Hintergrund / Motivation
+
+### Use Cases
+
+#### Google Page Ranking
+
+#### Ladezeiten bei mobilen web-Anwendungen 
+
+#### FXML JavaFX
+
+
+
 ## Features
 
 * CSS optimieren nach diversen Regeln
