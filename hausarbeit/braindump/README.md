@@ -8,6 +8,8 @@ Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Date
 
 ## Hintergrund / Motivation
 
+Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Master-Studiengang Informatik - Verteilte und Mobile Anwendungen an der Hochschule Osnabrück / University of Applied Sciences soll ein
+
 ### Use Cases
 
 #### Google Page Ranking
@@ -15,7 +17,6 @@ Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Date
 #### Ladezeiten bei mobilen web-Anwendungen 
 
 #### FXML JavaFX
-
 
 
 ## Features
