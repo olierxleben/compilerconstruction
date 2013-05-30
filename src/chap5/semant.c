@@ -313,7 +313,7 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
  	if(x && x->kind == E_funEntry){
  		exps = matchParams(env, tenv, x->u.fun.formals, e->u.call.args, e->pos);
  	} 
- 	ty = exps;
+ 	ty = expTy(NULL, x->u.fun.result);
     /* Hint: Find funEntry with "S_look" in env and match its formals with the
 	       function arguments using "matchParams". Set ty correctly.*/
     break;
@@ -323,7 +323,7 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
    A_oper oper = e->u.op.oper;
    
    struct expty left = transExp(env, tenv, e->u.op.left);
-   struct expty right = transExp(env, tenv e->u.op.right);
+   struct expty right = transExp(env, tenv, e->u.op.right);
    /* 
 	typedef enum {A_plusOp, A_minusOp, A_timesOp, A_divideOp,
 	     A_eqOp, A_neqOp, A_ltOp, A_leOp, A_gtOp, A_geOp} A_oper;
@@ -370,7 +370,16 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
   case A_recordExp: {
     /* Hint: Find record type in tenv, get its actual type and match its field list
                   with the record expression's field list using "matchFieldlist". */
-	
+    E_enventry x = S_look(tenv, e->u.record.typ);
+    if(x && x->kind == E_varEntry) {
+      if(x->u.var.ty->kind == Ty_record) {
+        matchFieldlist(env, tenv, x->u.var.ty->u.record, e->u.record.fields);
+      }
+    } else {
+      EM_error(e->pos,"yolo Error Record creation");
+    }
+    return expTy(NULL, Ty_Record(x->u.var.ty->u.record));
+    
     break;
   }
   case A_seqExp: {
@@ -382,21 +391,25 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
     break;
   }
   case A_ifExp: {
-	if (e->u.iff.test->kind != Ty_int) {
+	if (e->u.iff.test->kind != A_intExp) {
 		EM_error(e->pos, "no valid if");	
 	}
 
 	// 'if then else'	
-	if (e->u.iff.elsee->kind != NULL) {
+	if (e->u.iff.elsee->kind) {
 		if (e->u.iff.then->kind != e->u.iff.elsee->kind) {
 			EM_error(e->pos, "if and else has different types!");		
 		}
-		
-		return expTy(NULL, e->u.iff.then->kind); // TODO: check	
-	
+		if(e->u.iff.then->kind == A_intExp)
+      return expTy(NULL, Ty_Int()); // TODO: check	
+    else if(e->u.iff.then->kind == A_stringExp)
+      return expTy(NULL, Ty_String()); // TODO: check	
+    else
+      return expTy(NULL, Ty_Void());
+  
 	} else {
 	// just 'if then'
-		return expTy(NULL, NULL); // TODO: check	
+		return expTy(NULL, Ty_Void()); // TODO: check	
 	}
 
     break;
@@ -408,20 +421,35 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
 
 	//if( e->u.whilee.body) "exp2 must not produce any value: page 524"
 
-	return expTy(Null, Ty_exp)
-
-    break;
+	return expTy(NULL, Ty_Void());
   }
-  case A_breakExp: 
-    break;
+  break;
+ case A_breakExp: 
+     break;
   case A_forExp: {
     /* Hint: Type-check for expression. Process body in new scope for env which
                   also contains new loop var. */
+    if(e->u.forr.lo->kind !=A_intExp || e->u.forr.hi->kind != A_intExp) {
+      EM_error(e->pos, "integers required");
+    }
+    S_enter(env, e->u.forr.var, e->u.forr.body);
+    return expTy(NULL, Ty_Void());
     break;
   }
   case A_letExp: {
+    struct expty exp;
+    A_decList d;
     /* Hint: Begin new scopes for env and tenv and process all declarations and
                  let-body in new scopes. */
+    S_beginScope(env);
+    S_beginScope(tenv);
+    for(d = e->u.let.decs; d; d = d->tail) {
+      transDec(env, tenv, d->head);
+    }
+    exp = transExp(env, tenv, e->u.let.body);
+    S_endScope(tenv);
+    S_endScope(env);
+    return exp;
     break;
   }
   case A_arrayExp: {
