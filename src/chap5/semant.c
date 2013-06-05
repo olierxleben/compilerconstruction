@@ -312,8 +312,9 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
  	E_enventry x = S_look(env, e->u.call.func);
  	if(x && x->kind == E_funEntry){
  		exps = matchParams(env, tenv, x->u.fun.formals, e->u.call.args, e->pos);
+ 		ty = expTy(NULL, x->u.fun.result);
  	} 
- 	ty = expTy(NULL, x->u.fun.result);
+ 	
     /* Hint: Find funEntry with "S_look" in env and match its formals with the
 	       function arguments using "matchParams". Set ty correctly.*/
     break;
@@ -324,10 +325,7 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
    
    struct expty left = transExp(env, tenv, e->u.op.left);
    struct expty right = transExp(env, tenv, e->u.op.right);
-   /* 
-	typedef enum {A_plusOp, A_minusOp, A_timesOp, A_divideOp,
-	     A_eqOp, A_neqOp, A_ltOp, A_leOp, A_gtOp, A_geOp} A_oper;
-*/
+
    switch(oper) {
 	case A_plusOp:
 	case A_minusOp:
@@ -362,9 +360,8 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
 	break;
 	default:
 		EM_error(e->pos, "You've entered hell!"); 
-        
    }
-  //TODO:  ty = expTy(NULL, NULL);
+
     break;
   }
   case A_recordExp: {
@@ -378,16 +375,24 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
     } else {
       EM_error(e->pos,"yolo Error Record creation");
     }
-    return expTy(NULL, Ty_Record(x->u.var.ty->u.record));
+    return expTy(NULL, x->u.var.ty);
     
     break;
   }
-  case A_seqExp: {
-	
+  case A_seqExp: {        
+	    A_expList list = e->u.seq;
+	    do{
+            ty = transExp(env, tenv, list->head);
+            list = list->tail;
+	    }while(list);
     break;
   }
   case A_assignExp: {
-	
+	struct expty left = transVar(env, tenv, e->u.var);
+    struct expty right = transExp(env, tenv, e->u.assign.exp);
+    if (left.ty != right.ty)
+        EM_error(e->pos, "Type mismatch.");
+    ty = expTy(NULL, Ty_Void());
     break;
   }
   case A_ifExp: {
@@ -400,12 +405,9 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
 		if (e->u.iff.then->kind != e->u.iff.elsee->kind) {
 			EM_error(e->pos, "if and else has different types!");		
 		}
-		if(e->u.iff.then->kind == A_intExp)
-      return expTy(NULL, Ty_Int()); // TODO: check	
-    else if(e->u.iff.then->kind == A_stringExp)
-      return expTy(NULL, Ty_String()); // TODO: check	
-    else
-      return expTy(NULL, Ty_Void());
+		struct expty ret = transExp(env, tenv, e->u.iff.then);
+		transExp(env, tenv, e->u.iff.elsee);
+        return expTy(NULL, ret.ty);
   
 	} else {
 	// just 'if then'
@@ -415,11 +417,11 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
     break;
   }
   case A_whileExp: {
-	if( e->u.whilee.test->kind != Ty_int) {
-          EM_error(e->u.op.left->pos, "integer required");
-        }
+	if( e->u.whilee.test->kind != A_intExp) {
+      EM_error(e->u.op.left->pos, "integer required");
+    }
 
-	//if( e->u.whilee.body) "exp2 must not produce any value: page 524"
+	transExp(env, tenv, e->u.whilee.body);
 
 	return expTy(NULL, Ty_Void());
   }
@@ -432,7 +434,10 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
     if(e->u.forr.lo->kind !=A_intExp || e->u.forr.hi->kind != A_intExp) {
       EM_error(e->pos, "integers required");
     }
-    S_enter(env, e->u.forr.var, e->u.forr.body);
+    S_beginScope(env);
+    S_enter(env, e->u.forr.var, E_VarEntry(Ty_Int()));
+    transExp(env, tenv, e->u.forr.body);
+    S_endScope(env);
     return expTy(NULL, Ty_Void());
     break;
   }
@@ -454,6 +459,19 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
   }
   case A_arrayExp: {
     /* Hint: Find array type in tenv and check array initialization. */
+    Ty_ty arr = tylook(tenv, e->u.array.typ, e->pos);
+    Ty_ty actarr = actual_ty(arr);
+    struct expty arraysize = transExp(env, tenv, e->u.array.size);
+    Ty_ty size = actual_ty(arraysize.ty);
+    if (size != Ty_Int())
+            EM_error(e->pos, "Array size is not an Integer");
+    Ty_ty element = actual_ty(actarr->u.array);
+    struct expty init = transExp(env, tenv, e->u.array.init);
+    Ty_ty actelement = actual_ty(init.ty);
+   
+    if (element != actelement)
+            EM_error(e->pos, "Type mismatch");
+    ty = expTy(NULL, arr);
     break;
   }
   default:
