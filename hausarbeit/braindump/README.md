@@ -1,6 +1,4 @@
-# Braindump
-
-Alle Ideen, Notizen, (Un-)wichtiges für die Hausarbeit
+# Braindump zur Hausarbeit
 
 ## Titel:
 
@@ -8,34 +6,18 @@ Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Date
 
 ## Hintergrund / Motivation
 
+Im Alltag eines Frontend-Entwicklers, eines Mitarbeiters an einem Web-Projekt oder des Entwicklers für das grafische User Interface kommt es nicht selten vor, dass die Beschreibung der grafischen Elemente durch Cascading Stylesheets geschieht. Noch seltener sind diese Style Angaben fehlerfrei. Sei es aufgrund von Zeitdruck, unterschiedlichen Entwicklern oder durch nachträgliches Bugfixing, oft sind CSS-Regeln inkonstistent aufgestellt, zum Beispieln existieren noch Regeln, die garnicht mehr im DOM der Seite zu finden sind. Es werden Regeln mehrmals überschrieben und es wird nicht auf Optimierung von Selektoren geachtet. 
+
+Seit 2010 berücksichtigt der Page Ranking Algorithmus von Google auch die Ladezeiten für Websites. Seiten, die neben SEO ein gutes Page Ranking erhalten, werden demnach auch durch ihre Ladezeiten bestimmt. Die Ladezeiten spielen zwar im Vergleich mit SEO nur eine kleine Rolle, können aber zu einem besseren Ergebnis beitragen (Weite Informationen: http://googlewebmastercentral.blogspot.de/2010/04/using-site-speed-in-web-search-ranking.html).
+Ladezeiten von mobilen Websites und Web-Anwendungen bzw. Seiten, die über mobile Internetverbindungen geladen werden, sollten schnell und nur wenig Daten übertragen, um ein konsistentes Benutzererlebnis zu gewährleisten. Statistiken zeigen, dass Benutzer auf Websites eher verbleiben wenn diese schnell geladen werden und der Benutzer schnell Informationen abrufen oder mit der Anwendung interagieren kann.
+
 Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Master-Studiengang Informatik - Verteilte und Mobile Anwendungen an der Hochschule Osnabrück / University of Applied Sciences soll ein Werkzeug entwickelt werden mit dem sich Stylesheets optimieren lassen. Dazu soll ein Kommandozeilentool entwickelt werden, womit CSS-Optimierungen gesteuert und ausgegeben werden können. 
-
-### Use Cases
-
-#### Allgemein
-
-Im Alltag eines Frontend-Entwicklers, bzw. eines Mitarbeiters an einem Web-Projekt kommt es nciht selten vor, dass die aufgrund von Zeitdruck, unterschiedlichen Entwicklern und durch nachträgliches Bugfixing des User Interfaces zu inkonsistenten Aufstellen von CSS-Regeln kommen kann. Regeln die garnicht mehr im DOM der Seite zu finden sind, sind noch in den CSS-Regeln vorhanden. Regeln werden u. U. überschrieben und es wird nicht auf Optimierung von Selektoren geachtet. Mit dem Ergebnis der Hausarbeit soll ein Tool geschaffen werden, womit im Nachhinein CSS-Dateien optimiert werden können. 
-
-Im Folgenden sollen Use Cases für das Tool aufgestellt werden.
-
-#### Google Page Ranking
-
-Seit 2010 berücksichtigt der Page Ranking Algorithmus von Google auch die Ladezeiten für Websites. Seiten die neben SEO ein gutes Page Ranking erhalten, werden demnach auch durch ihre Ladezeiten bestimmt. Die Optimierung von CSS-Regeln und die damit einhergehende verbesserte Ladezeit im Browser sind ein Use Case für den CSS-Optimierer. Die Ladezeiten spielen zwar im Vergleich mit SEO nur eine kleine Rolle, können aber zu einem besseren Ergebnis beitragen. <!-- TODO: Link von Google zur Statistik --> 
-
-#### Ladezeiten bei mobilen web-Anwendungen 
-
-Ladezeiten von mobilen Websites und Web-Anwendungen, bzw. Seiten die über mobile Internetverbindungen geladen werden, sollten schnell und nur wenig Daten Übertragen um ein konsistentes Benutzererlebnis zu gewährleisten. Statistiken zeigen, dass Benutzer auf Websites eher verbleiben wenn diese schnell geladen werden und der Benutzer schnell Informationen abrufen kann oder mit der Anwendung interagieren kann. CSS-Optimierung spielt dabei 
-
-## Features
-
-* CSS optimieren nach diversen Regeln
-* Kommandozeilentool
 
 ### Optmierungsregeln
 
 in CSS-Dateien:
 
-* sharthand (Beispiel: margin-top: 50px; margin-left:50px; => margin: 50px 0 0 50px;)
+* shorthand (Beispiel: margin-top: 50px; margin-left:50px; => margin: 50px 0 0 50px;)
 * Gruppierung ähnlicher Stile
 * Linebreaks-Reduzierung
 * Entfernung unnötiger Zeichen (zum Beispiel letztes Semikolon je Selektor)
@@ -59,24 +41,20 @@ außerhalb von CSS-Dateien:
 * im Vergleich werden identische Seite mit und ohne Optimierung getestet
 * Zu testende Daten: Ausgabeergebnis (immernoch korrekt?), Ladezeiten, Übertragungsgrößen
 
-### Kommandozeilentool
+## Workflow
 
-Das Kommandozeilentool nimmt als Eingabe einen Ordner, führt die definierten CSS-Regeln an und gibt als Ausgabe eine optimierte CSS-Datei aus. 
+Im Folgenden wird der Workflow skizziert sein:
+![APp Workflow](app-workflow.png)
 
-### Workflow
+### Generierter Baum (Beispiel)
 
-
-
-### Beispiel
-
-
-## Offene Punkte
-
-* welche Browser sollen unterstützt werden?
-
+![Tree Example](tree_example.png)
+(Beispiel von html5rocks.com : How Browser work)
 
 ## Links
 
-http://www.queness.com/post/402/15-css-tips-and-tricks
-http://www.queness.com/post/588/15-ways-to-optimize-css-and-reduce-css-file-size
-http://www.w3.org/TR/css3-syntax/#grammar0
+* http://www.queness.com/post/402/15-css-tips-and-tricks
+* http://www.queness.com/post/588/15-ways-to-optimize-css-and-reduce-css-file-size
+* http://www.w3.org/TR/css3-syntax/#grammar0
+* http://googlewebmastercentral.blogspot.de/2010/04/using-site-speed-in-web-search-ranking.html
+* http://www.html5rocks.com/de/tutorials/internals/howbrowserswork/
