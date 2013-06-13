@@ -460,18 +460,22 @@ static struct expty transExp (S_table env, S_table tenv, A_exp e) {
   case A_arrayExp: {
     /* Hint: Find array type in tenv and check array initialization. */
     Ty_ty arr = tylook(tenv, e->u.array.typ, e->pos);
-    Ty_ty actarr = actual_ty(arr);
-    struct expty arraysize = transExp(env, tenv, e->u.array.size);
-    Ty_ty size = actual_ty(arraysize.ty);
-    if (size != Ty_Int())
-            EM_error(e->pos, "Array size is not an Integer");
-    Ty_ty element = actual_ty(actarr->u.array);
-    struct expty init = transExp(env, tenv, e->u.array.init);
-    Ty_ty actelement = actual_ty(init.ty);
+	if (!arr) {
+		EM_error(e->pos, "undefined type %s", S_name(e->u.array.typ));
+	} else {
+	    Ty_ty actarr = actual_ty(arr);
+	    struct expty arraysize = transExp(env, tenv, e->u.array.size);
+	    Ty_ty size = actual_ty(arraysize.ty);
+	    if (size != Ty_Int())
+	            EM_error(e->pos, "Array size is not an Integer");
+	    Ty_ty element = actual_ty(actarr->u.array);
+	    struct expty init = transExp(env, tenv, e->u.array.init);
+	    Ty_ty actelement = actual_ty(init.ty);
    
-    if (element != actelement)
-            EM_error(e->pos, "Type mismatch");
-    ty = expTy(NULL, arr);
+	    if (element != actelement)
+	            EM_error(e->pos, "Type mismatch");
+	    ty = expTy(NULL, arr);
+	}
     break;
   }
   default:
