@@ -76,7 +76,7 @@
 	Informatik - Mobile und Verteilte Anwendungen\\
 	Compilerbau - Sommersemester 2013 }
 
-\title{\includegraphics[scale=0.75,keepaspectratio]{img/hs_os.png}\linebreak \linebreak Implementierung eines Source-To-Source-Compilers zur Optimierung von Ladezeiten in Web-Anwendungen [WORKING TITLE]}
+\title{\includegraphics[scale=0.75,keepaspectratio]{img/hs_os.png}\linebreak \linebreak Implementierung eines Source-To-Source-Kompilierers zur Optimierung von CSS-Dateien im Webstack}
 
 \maketitle
 \thispagestyle{empty}
@@ -87,10 +87,16 @@
 \thispagestyle{empty}
 \pagebreak
 \thispagestyle{empty}
-% TODO: Abstract fertig schreiben
+
 \begin{abstract}
 \textbf{Zusammenfassung:}\\ 	
-Die vorliegende Arbeit wurde in LaTex verfasst und ist eine gemeinsame Arbeit von Oliver Erxleben, Sergej Hert und Jörn Voßgröne. Die Arbeit beschäftigt sich mit der Optimierung von Cascading Stylesheets für Webseiten. 
+Die vorliegende Ausarbeitung wurde in LaTex verfasst und ist eine gemeinsame Arbeit von Oliver Erxleben, Sergej Hert und Jörn Voßgröne an der Hochschule Osnabrück / University of Applied Sciences im Fachbereich Ingenieurswissenschaften und Informatik für das Fach Compilerbau im Sommersemester 2013. Die Arbeit beschäftigt sich mit der Optimierung von Cascading Stylesheets für Webseiten.\\
+\\
+Die Arbeit gliedert sich in mehrere Abschnitte. Im ersten Kapitel wird der Hintergrund des Themas beschrieben und es werden wichtige Fachbegriffe definiert. Ausserdem werden die Anforderungen an die Software aufgestellt.\\
+Im zweiten Teil, Cascading Style Sheets, werden die Sprache, dessen Verwendung, sowie die zugrundeliegende Grammatik erläutert und es wird beschrieben wie Webbrowser diese interpretieren.\\
+Der dritte Teil erläutert das Vorgehen der Optimierung. Neben der Syntaxanalyse und dem Optimieren der Knoten, wird auch die Implementierung eines Kommandozeilenwerkzeugs zur Steuerung der Optimierungen erläutert.\\
+Der Abschnitt Messungen erklärt das Vorgehen für Tests. \\ % TODO: Abschnitt 4 erweitern
+Im abschließenden Abschnitt wird die Arbeit resümiert, das Ergebnis zusammengefasst und gewonnene Erfahrungen geschildert.   
 \end{abstract}
 
 \pagebreak
@@ -126,6 +132,8 @@ Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Mas
 \section{Messungen}
 \subsection{Grundlage}
 \fancyhead[R]{}
+
+\section{Ergebnis}
 
 \thispagestyle{empty}
 
