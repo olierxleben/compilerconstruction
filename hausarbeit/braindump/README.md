@@ -17,8 +17,9 @@ Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Mas
 
 in CSS-Dateien:
 
+* entfernen nicht genutzter Knoten
 * shorthand (Beispiel: margin-top: 50px; margin-left:50px; => margin: 50px 0 0 50px;)
-* Gruppierung ähnlicher Stile
+* Gruppierung ähnlicher Stile (mergen gleicher css selektoren)
 * Linebreaks-Reduzierung
 * Entfernung unnötiger Zeichen (zum Beispiel letztes Semikolon je Selektor)
 * Farb-Shorthands (#fffff => #fff, #babab => #bab)
@@ -27,6 +28,11 @@ in CSS-Dateien:
 * Kompression
 * Strukturierung
 * Automatisches Einfügen von Standard-Styles (gibt verschiedene NoWraps und Default-Wrapper)
+
+1. Entfernen nicht genutzter Knoten
+2. Gruppierung / Mergen gleicher Knoten
+3. Einzelne Regeln
+4. 
 
 außerhalb von CSS-Dateien:
 
@@ -44,7 +50,38 @@ außerhalb von CSS-Dateien:
 ## Workflow
 
 Im Folgenden wird der Workflow skizziert sein:
-![APp Workflow](app-workflow.png)
+![App Workflow](app-workflow.png)
+
+##### html DOM parsen
+HTML Dateien werden durchlaufen und CSS Dateien eingesammelt und zu einer Datei zusammengeführt. Anschließend wird mittels Flex und Bison ein Baum generiert. 
+
+##### Elemente vergleichen
+Im dem generierten Baum werden Elemente des html und Elemente des CSS verglichen. CSS Elemente die nicht im HTML vorkommen, werden aus dem  Baum entfernt.
+
+##### Gleiche Knoten mergen
+Knoten mit gleicher Bezeichnung werden verglichen und, wenn gleiche Selektoren verwendet werden, werden diese durch das Element rechts überschrieben. Alle anderen Selektoren werden zusammengeführt. 
+
+##### Selektoren optimieren
+Der restliche Baum wird durchlaufen und jeder Knoten wird analysiert und nach den aufgestellten Optimierungsregeln bearbeitet. 
+
+##### Baum strukturieren
+Nach der Optimierung wird der Baum neu geordnet. 
+
+##### Baum zu CSS
+Der Baum wird als neue CSS-Datei geschrieben und in die HTML-Dateien eingebunden. Die gesamte Ausgabe wird in einen neuen Ordner gepackt.
+
+### Arbeitspakete
+
+* Literaturrecherche
+* Testdaten / Webserver / VM
+* Kommandozeilentool-Grundaufbau / CSS sammeln
+* Baum generieren / Analyse 
+* Entfernen nicht genutzter Knoten
+* mergen gleicher Knoten
+* CSS-Eigenschaften optimieren
+* Baum strukturieren
+* Baum -> CSS
+* Doku / Hausarbeit
 
 ### Generierter Baum (Beispiel)
 
