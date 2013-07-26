@@ -6,7 +6,6 @@ require 'rubygems'
 require 'rack' # rack it up
 
 serve = Rack::Builder.new do
- # run Rack::Directory.new( ARGV[0] )
  use Rack::Static, 
    :urls => ["/images", "/js", "/css"],
    :root => ARGV[0],
