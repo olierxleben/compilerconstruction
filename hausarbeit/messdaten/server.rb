@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
+# USAGE: ./server.rb path/to/the/file
+
 require 'rubygems'
 require 'rack' # rack it up
-
-
 
 serve = Rack::Builder.new do
   run Rack::File.new( ARGV[0] )
@@ -13,6 +13,7 @@ end
 Signal.trap('INT') {
   Rack::Handler::WEBrick.shutdown
 }
+
 
 # takeoff
 
