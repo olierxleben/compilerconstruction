@@ -32,7 +32,6 @@ in CSS-Dateien:
 1. Entfernen nicht genutzter Knoten
 2. Gruppierung / Mergen gleicher Knoten
 3. Einzelne Regeln
-4. 
 
 außerhalb von CSS-Dateien:
 
@@ -53,13 +52,13 @@ Im Folgenden wird der Workflow skizziert sein:
 ![App Workflow](app-workflow.png)
 
 ##### html DOM parsen
-HTML Dateien werden durchlaufen und CSS Dateien eingesammelt und zu einer Datei zusammengeführt. Anschließend wird mittels Flex und Bison ein Baum generiert. 
+HTML Dateien werden durchlaufen und CSS Dateien eingesammelt und zu einer Datei zusammengeführt. HTML-Parsing erzeugt keinen Baum. Anschließend wird mittels Flex und Bison ein Baum generiert.
 
 ##### Elemente vergleichen
 Im dem generierten Baum werden Elemente des html und Elemente des CSS verglichen. CSS Elemente die nicht im HTML vorkommen, werden aus dem  Baum entfernt.
 
 ##### Gleiche Knoten mergen
-Knoten mit gleicher Bezeichnung werden verglichen und, wenn gleiche Selektoren verwendet werden, werden diese durch das Element rechts überschrieben. Alle anderen Selektoren werden zusammengeführt. 
+Knoten mit gleicher Bezeichnung werden verglichen und, wenn gleiche Selektoren verwendet werden, werden diese durch das Element rechts (im Baum) überschrieben. Alle anderen Selektoren werden zusammengeführt. 
 
 ##### Selektoren optimieren
 Der restliche Baum wird durchlaufen und jeder Knoten wird analysiert und nach den aufgestellten Optimierungsregeln bearbeitet. 
@@ -68,11 +67,10 @@ Der restliche Baum wird durchlaufen und jeder Knoten wird analysiert und nach de
 Nach der Optimierung wird der Baum neu geordnet. 
 
 ##### Baum zu CSS
-Der Baum wird als neue CSS-Datei geschrieben und in die HTML-Dateien eingebunden. Die gesamte Ausgabe wird in einen neuen Ordner gepackt.
+Der Baum wird als neue CSS-Datei geschrieben und in die HTML-Dateien eingebunden. Die gesamte Ausgabe wird in einen neuen Ordner ausgegeben.
 
 ### Arbeitspakete
 
-* Literaturrecherche
 * Testdaten / Webserver / VM
 * Kommandozeilentool-Grundaufbau / CSS sammeln
 * Baum generieren / Analyse 
