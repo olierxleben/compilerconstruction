@@ -1,5 +1,8 @@
-a.out: y.tab.o lex.yy.o
+a.out: css_types.o y.tab.o lex.yy.o
 	gcc -o css_2_1 -g y.tab.o lex.yy.o
+
+css_types.o: css_types.c
+	cc -g -c css_types.c
 
 y.tab.o: y.tab.c
 	cc -g -c y.tab.c
@@ -17,4 +20,4 @@ lex.yy.c: css_2_1.lex
 	flex css_2_1.lex
 
 clean: 
-	rm -f lex.yy.c a.out y.tab.c y.tab.h y.tab.o lex.yy.o 
+	rm -f css_types.o lex.yy.c a.out y.tab.c y.tab.h y.tab.o y.output lex.yy.o css_types.o css_2_1

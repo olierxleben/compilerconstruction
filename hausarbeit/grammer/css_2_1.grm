@@ -4,12 +4,22 @@
 #include <stdio.h>
 #include "y.tab.h"
 #include "parser.h"
+#include "css_types.h"
 %}
 
 %start stylesheet
 
 %union{
+	int ival;
+	char* sval;
+	int pos;
     char* string;
+	css_Selector selector;
+	css_Declaration declaration;
+	css_SelectorList selectorList;
+	css_DeclarationList declarationList;
+	css_Rule rule;
+	css_RuleList ruleList;
 }
 
 %token <string> ANGLE
@@ -35,9 +45,9 @@
 %token <string> TIME
 %token <string> URI
 
-%type <string> type_selector
-%type <string> id_selector
-%type <string> class_selector
+%type <selector> type_selector
+%type <selector> id_selector
+%type <selector> class_selector
 
 %type <string> attrib_eq
 %type <string> attrib_value
@@ -46,18 +56,30 @@
 %type <string> property
 %type <string> expr
 
-%%
+%type <selectorList> selector_list
+%type <declarationList> declarations
+%type <declaration> declaration
+%type <ruleList> stylesheet rulesets body
+%type <rule> ruleset
 
+// TODO: the following needed to check
+%type <string> combinator
+%type <string> attribute_selector
+
+%%
+program: stylesheet {$$=$1;}
 stylesheet // : [ CHARSET_SYM STRING ';' ]?
            //   [S|CDO|CDC]* [ import [ CDO S* | CDC S* ]* ]*
            //   [ [ ruleset | media | page ] [ CDO S* | CDC S* ]* ]* ;
-    : charset comments import_block body
+    : body	//: charset comments import_block body
 ;
 
+/*
 charset
     :
     | CHARSET_SYM STRING ';'
     {
+		$$ = $2; // TODO: to check
         //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_CHARSET, "s", $2);
     }
 ;
@@ -72,15 +94,15 @@ comments
 import_block
     :
     | import subcomments
-;
+;*/
 
 body
-    :
-    | body ruleset subcomments
-    | body media subcomments
-    | body page subcomments
+    : rulesets {$$ = $1;} //subcomments
+    //| body media subcomments
+    //| body page subcomments
 ;
 
+/*
 subcomments
     :
     | subcomments CDO spaces
@@ -96,13 +118,15 @@ import // : IMPORT_SYM S* [STRING|URI] S* media_list? ';' S* ;
     
 media // : MEDIA_SYM S* media_list '{' S* ruleset* '}' S* ;
     : MEDIA_SYM spaces media_list '{' spaces rulesets '}' spaces
-;
+;*/
 
 rulesets
-    :
-    | rulesets ruleset
+    : ruleset { $$ = create_CSSRuleList($1, NULL);}
+	| rulesets ruleset { $$ = create_CSSRuleList($2, $1);}
+	// HIER WEITER
 ;
 
+/*
 media_list // : medium [ COMMA S* medium]* ;
     : medium
     | media_list ',' spaces medium
@@ -128,6 +152,7 @@ page_declarations
 pseudo_page // : ':' IDENT S* ;
     : ':' IDENT spaces
 ;
+*/
 
 operator // : '/' S* | ',' S* ;
     : '/' spaces
@@ -137,10 +162,12 @@ operator // : '/' S* | ',' S* ;
 combinator // : '+' S* | '>' S* ;
     : '+' spaces
     {
+		$$ = "+"; // TODO: to check if it's okay or needed to be allocated
         //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_COMBINATOR, "s", "+");
     }
     | '>' spaces
     {
+		$$ = ">"; // TODO: s.o.
         //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_COMBINATOR, "s", ">");
     }
 ;
@@ -158,16 +185,22 @@ property // : IDENT S* ;
 ;
 
 ruleset // : selector [ ',' S* selector ]* '{' S* declaration? [ ';' S* declaration? ]* '}' S* ;
-    : selector_list '{' spaces declarations '}' spaces
-    | selector_list '{' spaces '}' spaces
+    : selector_list '{' spaces declarations '}' spaces { $$ = create_CSSRule($1, $4);}
+    | selector_list '{' spaces '}' spaces { $$ = create_CSSRule($1, NULL);}
 ;
 
 selector_list
-    : complex_selector
+	: selector_list ',' selector { $$ = create_CSSSelectorList($3, $1);}
+	| selector { $$ = $1; }
+	| { $$ = NULL; }
+    /*: complex_selector 
     | universal_selector
     | selector_list ',' spaces complex_selector
-    | selector_list ',' spaces universal_selector
+    | selector_list ',' spaces universal_selector*/
 ;
+
+selector
+	: STRING {$$ = create_CSSSelector($1);}
 
 complex_selector // : simple_selector [ combinator selector | S+ [ combinator? selector ]? ]? ;
     : compound_selector
@@ -199,24 +232,39 @@ simple_selector
 
 id_selector
     : HASH
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "id", $1); }
+    { 
+		$$ = $1; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "id", $1); 
+	}
 ;
 
 class_selector // : '.' IDENT ;
     : '.' IDENT
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "class", $2); }
+    { 
+		$$ = $2; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "class", $2); 
+	}
 ;
 
 type_selector // : IDENT | '*' ;
     : IDENT
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "type", $1); }
+    { 
+		$$ = $1; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "type", $1); 
+	}
 ;
 
 attribute_selector // : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S* [ IDENT | STRING ] S* ]? ']';
     : '[' spaces IDENT spaces ']'
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ssss", "attribute", $3, NULL, NULL); }
+    { 
+		$$ = $3; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ssss", "attribute", $3, NULL, NULL); 
+	}
     | '[' spaces IDENT spaces attrib_eq spaces attrib_value spaces ']'
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ssss", "attribute", $3, $5, $7); }
+    { 
+		$$ = $3; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ssss", "attribute", $3, $5, $7); 
+	}
 ;
 
 attrib_eq
@@ -257,9 +305,15 @@ declarations
 
 declaration // : property ':' S* expr prio? ;
     : property ':' spaces expr prio
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); }
+    { 
+		$$ = $4; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
+	}
     | property ':' spaces expr
-    //{ PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); }
+    { 
+		$$ = $4; // TODO: to check
+		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
+	}
 ;
 
 prio // : IMPORTANT_SYM S* ;
@@ -328,7 +382,7 @@ spaces
 %%
 
 /* main for manual testing */
-main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     const char* usage = "usage: %s [infile [outfile]]\n";
     char* outfile;
@@ -337,7 +391,7 @@ main(int argc, char** argv)
     
     char* progname = argv[0];
     
-    if(argc > 3)
+    /*if(argc > 3)
     {
         fprintf(stderr, usage, progname);
         return 0;
@@ -357,7 +411,7 @@ main(int argc, char** argv)
     
     if(argc > 2)
     {
-        infile = argv[2];
+        outfile = argv[2];
         yyout = fopen(outfile, "w");
         
         if(yyout == NULL)
@@ -365,8 +419,28 @@ main(int argc, char** argv)
             fprintf(stderr, "%s: cannot open %s\n", progname, outfile);
             return 1;
         }
-    }
-    
+    }*/
+	
+	if(argc != 3)
+	{
+		fprintf(stderr, usage, progname);
+        return -1;
+	}
+	//open infile
+    yyin = fopen(argv[1], "r");	
+	if(yyin == NULL)
+	{
+		fprintf(stderr, "%s: cannot open %s\n", progname, argv[1]);
+		return -1;
+	}
+	
+	// open outfile
+	yyout = fopen(argv[2], "w");        
+	if(yyout == NULL)
+	{
+		fprintf(stderr, "%s: cannot open %s\n", progname, argv[2]);
+		return -1;
+	}
     yyparse();
     
     return 0;
