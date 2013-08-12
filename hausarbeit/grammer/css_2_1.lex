@@ -1,4 +1,5 @@
 %{
+#include "css_types.h"
 #include "y.tab.h"
 // https://github.com/kreshikhin/cssparser/blob/master/src/css.l
 %}
