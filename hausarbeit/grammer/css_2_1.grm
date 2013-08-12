@@ -1,4 +1,9 @@
 
+/*
+*
+* C programs
+*
+*/
 %{
 // https://github.com/kreshikhin/cssparser/blob/master/src/css.y
 #include <stdio.h>
@@ -7,7 +12,11 @@
 #include "css_types.h"
 %}
 
-%start stylesheet
+/*
+*
+* Union of types
+*
+*/
 
 %union{
 	int ival;
@@ -21,6 +30,13 @@
 	css_Rule rule;
 	css_RuleList ruleList;
 }
+
+/*
+*
+* Tokens
+*
+*/
+
 
 %token <string> ANGLE
 %token <string> BAD_STRING
@@ -45,6 +61,13 @@
 %token <string> TIME
 %token <string> URI
 
+/*
+*
+* Types
+*
+*/
+
+
 %type <selector> type_selector
 %type <selector> id_selector
 %type <selector> class_selector
@@ -57,6 +80,7 @@
 %type <string> expr
 
 %type <selectorList> selector_list
+%type <selector> selector
 %type <declarationList> declarations
 %type <declaration> declaration
 %type <ruleList> stylesheet rulesets body
@@ -66,8 +90,13 @@
 %type <string> combinator
 %type <string> attribute_selector
 
+// takeoff
+%start program
+
 %%
-program: stylesheet {$$=$1;}
+	
+program: stylesheet
+
 stylesheet // : [ CHARSET_SYM STRING ';' ]?
            //   [S|CDO|CDC]* [ import [ CDO S* | CDC S* ]* ]*
            //   [ [ ruleset | media | page ] [ CDO S* | CDC S* ]* ]* ;
@@ -79,8 +108,7 @@ charset
     :
     | CHARSET_SYM STRING ';'
     {
-		$$ = $2; // TODO: to check
-        //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_CHARSET, "s", $2);
+		$$ = $2; // TODO: to check //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_CHARSET, "s", $2);
     }
 ;
 
@@ -100,7 +128,6 @@ body
     : rulesets {$$ = $1;} //subcomments
     //| body media subcomments
     //| body page subcomments
-;
 
 /*
 subcomments
@@ -124,7 +151,6 @@ rulesets
     : ruleset { $$ = create_CSSRuleList($1, NULL);}
 	| rulesets ruleset { $$ = create_CSSRuleList($2, $1);}
 	// HIER WEITER
-;
 
 /*
 media_list // : medium [ COMMA S* medium]* ;
@@ -157,7 +183,6 @@ pseudo_page // : ':' IDENT S* ;
 operator // : '/' S* | ',' S* ;
     : '/' spaces
     | ',' spaces
-;
 
 combinator // : '+' S* | '>' S* ;
     : '+' spaces
@@ -167,40 +192,50 @@ combinator // : '+' S* | '>' S* ;
     }
     | '>' spaces
     {
-		$$ = ">"; // TODO: s.o.
-        //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_COMBINATOR, "s", ">");
+		$$ = ">"; // TODO: s.o. å//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_COMBINATOR, "s", ">");
     }
-;
 
 unary_operator // : '-' | '+' ;
     : '-'
     | '+'
-;
+
 
 property // : IDENT S* ;
     : IDENT spaces
     {
         $$ = $1;
     }
-;
+
+
+/*
+*
+* a_selector { ... }
+*
+*/
 
 ruleset // : selector [ ',' S* selector ]* '{' S* declaration? [ ';' S* declaration? ]* '}' S* ;
     : selector_list '{' spaces declarations '}' spaces { $$ = create_CSSRule($1, $4);}
     | selector_list '{' spaces '}' spaces { $$ = create_CSSRule($1, NULL);}
-;
 
 selector_list
-	: selector_list ',' selector { $$ = create_CSSSelectorList($3, $1);}
+	: selector_list ',' selector { $$ = create_CSSSelectorList($3, $1); }
 	| selector { $$ = $1; }
 	| { $$ = NULL; }
     /*: complex_selector 
     | universal_selector
     | selector_list ',' spaces complex_selector
     | selector_list ',' spaces universal_selector*/
-;
 
+/*
+*
+* html-selector
+* id-selector
+* class-selector
+*
+*/
 selector
 	: STRING {$$ = create_CSSSelector($1);}
+
 
 complex_selector // : simple_selector [ combinator selector | S+ [ combinator? selector ]? ]? ;
     : compound_selector
@@ -208,12 +243,12 @@ complex_selector // : simple_selector [ combinator selector | S+ [ combinator? s
     | complex_selector S compound_selector 
     | complex_selector S
         /* for space symbols skipping */
-;
+
 
 universal_selector
     :
     | '*'
-;
+
 
 compound_selector // : element_name [ HASH | class | attrib | pseudo ]* | [ HASH | class | attrib | pseudo ]+ ;
     : '*' type_selector
@@ -221,14 +256,12 @@ compound_selector // : element_name [ HASH | class | attrib | pseudo ]* | [ HASH
     | '*' simple_selector
     | simple_selector
     | compound_selector simple_selector
-;
 
 simple_selector
     : attribute_selector
     | class_selector
     | id_selector
     | pseudo_class_selector
-;
 
 id_selector
     : HASH
@@ -236,7 +269,6 @@ id_selector
 		$$ = $1; // TODO: to check
 		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "id", $1); 
 	}
-;
 
 class_selector // : '.' IDENT ;
     : '.' IDENT
@@ -244,7 +276,6 @@ class_selector // : '.' IDENT ;
 		$$ = $2; // TODO: to check
 		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "class", $2); 
 	}
-;
 
 type_selector // : IDENT | '*' ;
     : IDENT
@@ -252,7 +283,6 @@ type_selector // : IDENT | '*' ;
 		$$ = $1; // TODO: to check
 		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ss", "type", $1); 
 	}
-;
 
 attribute_selector // : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S* [ IDENT | STRING ] S* ]? ']';
     : '[' spaces IDENT spaces ']'
@@ -265,7 +295,6 @@ attribute_selector // : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S* [ ID
 		$$ = $3; // TODO: to check
 		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_SELECTOR, "ssss", "attribute", $3, $5, $7); 
 	}
-;
 
 attrib_eq
     : '='
@@ -274,34 +303,28 @@ attrib_eq
     {   $$ = $1;    }
     | DASHMATCH
     {   $$ = $1;    }
-;
 
 attrib_value
     : IDENT
     {   $$ = $1;    }
     | STRING
     {   $$ = $1;    }
-;
 
 pseudo_class_selector // : ':' [ IDENT | FUNCTION S* [IDENT S*]? ')' ] ;
     : ':' pseudo_block
-;
 
 pseudo_block
     : IDENT
     | FUNCTION spaces pseudo_block_function_ident ')'
-;
 
 pseudo_block_function_ident
     :
     | IDENT spaces
-;
 
 declarations
     : declaration
     | declarations ';' spaces declaration
     | declarations ';' spaces
-;
 
 declaration // : property ':' S* expr prio? ;
     : property ':' spaces expr prio
@@ -314,11 +337,9 @@ declaration // : property ':' S* expr prio? ;
 		$$ = $4; // TODO: to check
 		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
 	}
-;
 
 prio // : IMPORTANT_SYM S* ;
     : IMPORTANT_SYM spaces
-;
 
 expr //: term [ operator? term ]*;
     : term
@@ -327,7 +348,6 @@ expr //: term [ operator? term ]*;
     }
     | expr operator term
     | expr term
-;
 
 term // : unary_operator?
      // [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* | TIME S* | FREQ S* ]
@@ -348,7 +368,6 @@ term // : unary_operator?
     }
     | hexcolor
     | function
-;
 
 term_numeral
     : NUMBER
@@ -359,11 +378,9 @@ term_numeral
     | ANGLE
     | TIME
     | FREQ
-;      
 
 function // : FUNCTION S* expr ')' S* ;
     : FUNCTION spaces expr ')' spaces
-;
 
 
 // There is a constraint on the color that it must
@@ -372,12 +389,10 @@ function // : FUNCTION S* expr ')' S* ;
 
 hexcolor // : HASH S* ;
     : HASH spaces
-;
 
 spaces
     :
     | spaces S
-;
 
 %%
 
