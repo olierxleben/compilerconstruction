@@ -27,14 +27,14 @@ css_DeclarationList create_CSSDeclarationList(css_Declaration _declaration, css_
     return tmp;
 }
 
-css_Rule create_Rule(css_SelectorList _selectorList, css_DeclarationList _declarationList){
+css_Rule create_CSSRule(css_SelectorList _selectorList, css_DeclarationList _declarationList){
     css_Rule tmp = (css_Rule)malloc(sizeof(struct css_Rule_));
     tmp->selectorList = _selectorList;
     tmp->declarationList = _declarationList;
     return tmp;
 }
 
-css_RuleList create_RuleList(css_Rule _rule, css_RuleList _next){
+css_RuleList create_CSSRuleList(css_Rule _rule, css_RuleList _next){
     css_RuleList tmp = (css_RuleList)malloc(sizeof(struct css_RuleList_));
     tmp->rule = _rule;
     tmp->next = _next;

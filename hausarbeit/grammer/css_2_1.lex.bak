@@ -61,14 +61,27 @@ Z z|\\0{0,4}(5a|7a)(\r\n|[ \t\r\n\f])?|\\z
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/ /* ignore comments */
 {badcomment} /* unclosed comment at EOF */
 
+"<!--" {return CDO;}
+"-->" {return CDC;}
+"~=" {return INCLUDES;}
+"|=" {return DASHMATCH;}
+
 {string} { yylval.string = strdup(yytext);
                           return STRING;
                         }
                         
+{badstring} {return BAD_STRING;}
 
 {ident} { yylval.string = strdup(yytext);
                           return IDENT;}
 
+"#"{name} { yylval.string = strdup(yytext);
+                          return HASH;}
+
+@{I}{M}{P}{O}{R}{T} {return IMPORT_SYM;}
+@{P}{A}{G}{E} {return PAGE_SYM;}
+@{M}{E}{D}{I}{A} {return MEDIA_SYM;}
+"@charset " {return CHARSET_SYM;}
 
 "!"({w}|{comment})*{I}{M}{P}{O}{R}{T}{A}{N}{T} {return IMPORTANT_SYM;}
 
@@ -87,13 +100,16 @@ Z z|\\0{0,4}(5a|7a)(\r\n|[ \t\r\n\f])?|\\z
 {num}{S} { yylval.string = strdup(yytext); return TIME;}
 {num}{H}{Z} { yylval.string = strdup(yytext); return FREQ;}
 {num}{K}{H}{Z} { yylval.string = strdup(yytext); return FREQ;}
+{num}{ident} { yylval.string = strdup(yytext); return DIMENSION;}
 
 {num}% {return PERCENTAGE;}
 {num} { yylval.string = strdup(yytext); return NUMBER;}
 
 "url("{w}{string}{w}")" { yylval.string = strdup(yytext); return URI;}
 "url("{w}{url}{w}")" { yylval.string = strdup(yytext); return URI;}
+{baduri} { yylval.string = strdup(yytext); return BAD_URI;}
 
+{ident}"(" {return FUNCTION;}
 
 . {return *yytext;}
 

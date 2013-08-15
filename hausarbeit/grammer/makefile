@@ -8,7 +8,7 @@ y.tab.o: y.tab.c
 	cc -g -c y.tab.c
 
 y.tab.c: css_2_1.grm
-	bison -o y.tab.c -dv -r itemset css_2_1.grm
+	bison -o y.tab.c --debug -dv -r itemset css_2_1.grm
 
 y.tab.h: y.tab.c
 	echo "y.tab.h was created at the same time as y.tab.c"

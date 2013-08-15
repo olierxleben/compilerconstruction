@@ -40,7 +40,7 @@ css_Selector create_CSSSelector(char* _name);
 css_Declaration create_CSSDeclaration(char* _dec_key);
 css_SelectorList create_CSSSelectorList(css_Selector _selector, css_SelectorList _next);
 css_DeclarationList create_CSSDeclarationList(css_Declaration _declaration, css_DeclarationList _next);
-css_Rule create_Rule(css_SelectorList _selectorList, css_DeclarationList _declarationList);
-css_RuleList create_RuleList(css_Rule _rule, css_RuleList _next);
+css_Rule create_CSSRule(css_SelectorList _selectorList, css_DeclarationList _declarationList);
+css_RuleList create_CSSRuleList(css_Rule _rule, css_RuleList _next);
 
 #endif
