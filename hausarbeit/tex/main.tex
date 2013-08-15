@@ -45,7 +45,8 @@
  \lstloadlanguages{% Check docs for further languages ...
          C,
          C++,
-         bash
+         bash,
+        %TODO check css in lstlisting package available?!
  }
 
 \setlength{\parindent}{0pt}
@@ -132,11 +133,38 @@ Die aktuelle Entwicklung für den dritten Standard von CSS begann bereits 2000. 
 
 \subsection{Allgemeiner Aufbau}
 
+Damit eine Optimierung von bestehenden CSS-Quelltext durchgeführt werden kann, muss zuvor analysiert werden wie ein Browser CSS verarbeitet und wie Kaskadierung im Browser genutzt wird um Style-Informationen zu verknüpfen.
+
+Eine CSS-Datei besteht aus einer Menge von Anweisungen die das Layout einzelner Elemente (mit bestimmten Identifier), Klassen von Elementen oder allgemein gültige Elemente.
+
+Der allgemeine Aufbau einer CSS-Regel wird im Listing \ref{css_basics} veranschaulicht.   
+%TODO comment in css style
+\begin{lstlisting}[label=css_basics,language=bash, caption=Aufbau einer CSS-Regel][!h]
+a {
+    background:#000;
+    color: #fff;
+}  
+#special {
+    border: 1px solid red;
+}
+
+.left, top.myClass {
+    border: 1px dotted green;
+}
+\end{lstlisting}
+
+Im Listing sind drei Regeln gegeben. Die erste Regel wird für ein HTML-Element angewendet. Jedes a-Element (Links im Browser) werden schwarz unterlegt und der textliche Inhalt des Elements wird weiß dargstellt. Bei dem zweiten Element wird eine Regel auf ein Element mit der ID \textbf{special} angwendet. Dies erhält einen durchgehenden roten Rahmen um den Inhalt des Elements. Die dritte Regeln legt eine gepunktete grüne Linie um den Inhalt der Elemente mit der Klasse \textbf{left}, sowie der HTML-Elemente top mit der zugewiesen Klasse \textbf{myClass}.  
+
+Wie interpretiert der Browser allerdings die vordefinierten Werte mit den kaskadierten Elementen der Stylesheet-Datei und wie berechnet sich daraus der zusammengesetzte Wert? Dazu sei die Abbildung [] gegeben. %TODO: Abbildung für CSS-Berechnung im Browser 
+
+
+
 \subsubsection{Browserunterstützung}
+% TODO: Table
 \subsection{Syntax}
 Die Syntax von CSS wurde von der W3C 
 \subsection{Grammatik}
-Die zugrundeliegende Grammatik 
+Die zugrundeliegende Grammatik stammt von der Seite des W3C (Details, siehe: \cite{w3c_css_grammar}). Dies entspricht im Wesentlichen der Grammatik für die CSS Version 2.1.
 \pagebreak
 \section{Optimierung}
 \subsection{Kommandozeilentool}

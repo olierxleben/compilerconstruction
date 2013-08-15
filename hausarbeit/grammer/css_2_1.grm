@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "css_types.h"
 #include "y.tab.h"
-#include "parser.h"
+//#include "parser.h"
 %}
 
 /*
@@ -29,6 +29,7 @@
 	css_DeclarationList declarationList;
 	css_Rule rule;
 	css_RuleList ruleList;
+	int prio;
 }
 
 /*
@@ -36,8 +37,6 @@
 * Tokens
 *
 */
-
-
 %token <string> ANGLE
 %token <string> BAD_STRING
 %token <string> BAD_URI
@@ -60,14 +59,13 @@
 %token <string> PERCENTAGE 
 %token <string> TIME
 %token <string> URI
+//%token <string> term
 
 /*
 *
 * Types
 *
 */
-
-
 %type <selector> type_selector
 %type <selector> id_selector
 %type <selector> class_selector
@@ -85,6 +83,8 @@
 %type <declaration> declaration
 %type <ruleList> stylesheet rulesets body
 %type <rule> ruleset
+
+//%type <prio> prio
 
 // TODO: the following needed to check
 %type <string> combinator
@@ -198,14 +198,6 @@ combinator // : '+' S* | '>' S* ;
 unary_operator // : '-' | '+' ;
     : '-'
     | '+'
-
-
-property // : IDENT S* ;
-    : IDENT spaces
-    {
-        $$ = $1;
-    }
-
 
 /*
 *
@@ -322,52 +314,35 @@ pseudo_block_function_ident
     | IDENT spaces
 
 declarations
-    : declaration
-    | declarations ';' spaces declaration
-    | declarations ';' spaces
+	: declaration { $$ = $1; }
+	| declarations ';' spaces declaration
+	| declarations ';' spaces
 
 declaration // : property ':' S* expr prio? ;
-    : property ':' spaces expr prio
-    { 
-		$$ = $4; // TODO: to check
-		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
-	}
-    | property ':' spaces expr
-    { 
-		$$ = $4; // TODO: to check
-		//PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
-	}
+	//: property ':' spaces expr prio { $$ = $4; } // TODO: to check //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
+	: property ':' spaces expr { $$ = $4;} // TODO: to check //PyObject_CallMethod((PyObject*)global_self, CSSPARSER_HANDLE_DECLARATION, "ss", $1, $4); 
 
-prio // : IMPORTANT_SYM S* ;
-    : IMPORTANT_SYM spaces
+property // : IDENT S* ;
+	: IDENT spaces { $$ = $1; }
 
 expr //: term [ operator? term ]*;
-    : term
-    {
-        $$ = $1;
-    }
-    | expr operator term
-    | expr term
+	: term { $$ = $1; }
+	| expr operator term
+	| expr term
+
+prio // : IMPORTANT_SYM S* ;
+	: IMPORTANT_SYM spaces
 
 term // : unary_operator?
      // [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* | TIME S* | FREQ S* ]
      // | STRING S* | IDENT S* | URI S* | hexcolor | function ;
-    : unary_operator term_numeral spaces
-    | term_numeral spaces
-    | STRING spaces
-    {
-        $$ = $1;
-    }
-    | IDENT spaces
-    {
-        $$ = $1;
-    }
-    | URI spaces
-    {
-        $$ = $1;
-    }
-    | hexcolor
-    | function
+	: unary_operator term_numeral spaces
+	| term_numeral spaces
+	| STRING spaces { $$ = $1; }
+	| IDENT spaces { $$ = $1; }
+	| URI spaces { $$ = $1; }
+	//| hexcolor
+	//| function
 
 term_numeral
     : NUMBER

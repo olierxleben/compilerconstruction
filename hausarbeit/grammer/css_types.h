@@ -8,30 +8,30 @@ typedef struct css_DeclarationList_* css_DeclarationList;
 typedef struct css_Rule_* css_Rule;
 typedef struct css_RuleList_* css_RuleList;
 
-struct css_Selector_{
+struct css_Selector_ {
 	char* name;
 };
 
-struct css_Declaration_{
+struct css_Declaration_ {
 	char* dec_key;
 };
 
-struct css_SelectorList_{
+struct css_SelectorList_ {
 	css_Selector selector;
 	css_SelectorList next;
 };
 
-struct css_DeclarationList_{
+struct css_DeclarationList_ {
 	css_Declaration declaration;
 	css_DeclarationList next;
 };
 
-struct css_Rule_{
+struct css_Rule_ {
 	css_SelectorList selectorList;
 	css_DeclarationList declarationList;	
 };
 
-struct css_RuleList_{
+struct css_RuleList_ {
 	css_Rule rule;
 	css_RuleList next;
 };
