@@ -8,6 +8,8 @@
 
 %}
 
+%option noyywrap
+
 /* 
     patterns can be described here
 */

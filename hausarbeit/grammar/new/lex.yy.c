@@ -340,6 +340,9 @@ void yyfree (void *  );
 
 /* Begin user sect3 */
 
+#define yywrap(n) 1
+#define YY_SKIP_YYWRAP
+
 typedef unsigned char YY_CHAR;
 
 FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
@@ -487,7 +490,7 @@ char *yytext;
 /* 
     patterns can be described here
 */
-#line 491 "lex.yy.c"
+#line 494 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -674,7 +677,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 21 "test.l"
+#line 23 "test.l"
 
 
 /*
@@ -683,7 +686,7 @@ YY_DECL
 
 
 
-#line 687 "lex.yy.c"
+#line 690 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -768,66 +771,66 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 29 "test.l"
+#line 31 "test.l"
 { return COMMA;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 30 "test.l"
+#line 32 "test.l"
 { return COLON;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 31 "test.l"
+#line 33 "test.l"
 { return SEMICOLON;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 32 "test.l"
+#line 34 "test.l"
 { return LBRACE ;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 "test.l"
+#line 35 "test.l"
 { return RBRACE ;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 34 "test.l"
+#line 36 "test.l"
 { return DOT ;}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 36 "test.l"
+#line 38 "test.l"
 ;   // ignore whitespace
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 38 "test.l"
+#line 40 "test.l"
 { yylval.sval = strdup(yytext); return STRING; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 39 "test.l"
+#line 41 "test.l"
 { yylval.sval = strdup(yytext); return STRING; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 40 "test.l"
+#line 42 "test.l"
 {yylval.sval = strdup(yytext); return STRING; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 42 "test.l"
+#line 44 "test.l"
 ;   // ignore everything else
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 44 "test.l"
+#line 46 "test.l"
 ECHO;
 	YY_BREAK
-#line 831 "lex.yy.c"
+#line 834 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1825,7 +1828,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 44 "test.l"
+#line 46 "test.l"
 
 
 
