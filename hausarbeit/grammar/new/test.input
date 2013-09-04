@@ -1,5 +1,13 @@
 
-a, b {
+a, div.b {
 		regel:	wert;
 		regal:	brett;
 }
+
+a, #b, c > d, div#b + x {
+	a: 12344;
+	background: url(joerny.png) #abdsq;
+}
+
+
+

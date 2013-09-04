@@ -1,50 +1,63 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include "css_types.h"
     
     extern int yylex();
     extern int yyparse();
     extern FILE *yyin;
     
     void yyerror(const char *s);
+    
+    css_RuleList root;
 %}
 
 // types which are found/returned by flex 
 %union {
-    int ival;
-    float fval;
     char *sval;
+    css_Selector aSelector;
+	css_Declaration aDeclaration;
+	css_SelectorList aSelectorList;
+	css_DeclarationList aDeclarationList;
+	css_Rule aRule;
+	css_RuleList ruleList;
 }
 
+
 // Terminal symbols of our language
-%token <ival> INT
-%token <fval> FLOAT
 %token <sval> STRING
 
 %token LBRACE RBRACE COMMA DOT SEMICOLON COLON
+
+%type <ruleList> rulelist css
+%type <aRule> rule
+%type <aDeclarationList> declarationlist
+%type <aDeclaration> declaration
+%type <aSelectorList> selectorlist
+%type <aSelector> selector
 
 
 %%
 // grammar section, parsing rules
 
-css:				rulelist  
+css:				rulelist  {$$ = root = $1;}
 	;
 
-rulelist: 			rule rulelist 
-		  			| rule
+rulelist: 			rule rulelist { $$ = createCSSRuleList($1,$2); }
+		  			| rule { $$ = createCSSRuleList($1,NULL); }
 	;
-rule:				selectorlist LBRACE declarationlist RBRACE
+rule:				selectorlist LBRACE declarationlist RBRACE {$$ = createCSSRule($1, $3); }
 	;
-selectorlist:		selector COMMA selectorlist
-					| selector
+selectorlist:		selector COMMA selectorlist { $$ = createCSSSelectorList($1,$3);}
+					| selector { $$ = createCSSSelectorList($1, NULL);}
 	;			
-selector:			STRING {printf("selector: %s\n", $1); }
+selector:			STRING { $$ = createCSSSelector($1); }
 	;
-declarationlist: 	declaration SEMICOLON declarationlist
-					| declaration SEMICOLON
-					| declaration
+declarationlist: 	declaration SEMICOLON declarationlist { $$ = createCSSDeclarationList($1,$3);}
+					| declaration SEMICOLON { $$ = createCSSDeclarationList($1, NULL);}
+					| declaration { $$ = createCSSDeclarationList($1, NULL);}
 	;				
-declaration:		STRING COLON STRING { printf("declaration: %s : %s\n", $1, $3); }
+declaration:		STRING COLON STRING { $$ = createCSSDeclaration($1, $3); }
 
      ;   
 %%

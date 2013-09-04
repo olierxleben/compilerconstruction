@@ -11,7 +11,11 @@
     patterns can be described here
 */
 
-SEL_STRING			[a-zA-Z0-9]+
+SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"]+
+KEY_STRING			[a-zA-Z"-"]+
+VAL_STRING			[a-zA-Z0-9"#""("")"" "".""/"]+
+RCHEVRON			">"
+PLUS				"+"
 
 %%
 %{
@@ -29,8 +33,13 @@ SEL_STRING			[a-zA-Z0-9]+
 "." { return DOT ;}
 
 [ \t\n]             ;   // ignore whitespace
-{SEL_STRING}        	{ yylval.sval = strdup(yytext); return STRING; }
+
+{SEL_STRING}[ ]{RCHEVRON}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
+{SEL_STRING}[ ]{PLUS}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
+{SEL_STRING} {yylval.sval = strdup(yytext); return STRING; }
+
 .                   ;   // ignore everything else
+
 %%
 
 /*
