@@ -20,12 +20,17 @@ SEL_STRING			[a-zA-Z0-9]+
 */
 %}
 
+
+"," { return COMMA;}
+":" { return COLON;}
+";" { return SEMICOLON;}
+"{" { return LBRACE ;}
+"}" { return RBRACE ;}
+"." { return DOT ;}
+
 [ \t\n]             ;   // ignore whitespace
-[0-9]+\.[0-9]+      { yylval.fval = atof(yytext); return FLOAT; }
-[0-9]+              { yylval.ival = atoi(yytext); return INT; }
 {SEL_STRING}        	{ yylval.sval = strdup(yytext); return STRING; }
 .                   ;   // ignore everything else
-
 %%
 
 /*

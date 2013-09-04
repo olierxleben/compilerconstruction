@@ -21,18 +21,32 @@
 %token <fval> FLOAT
 %token <sval> STRING
 
+%token LBRACE RBRACE COMMA DOT SEMICOLON COLON
+
+
 %%
 // grammar section, parsing rules
 
-css:
-        INT css         { printf("bison found an int: %d\n", $1); }
-        | FLOAT css     { printf("bison found a float: %f\n", $1); }
-        | STRING css    { printf("bison found a string: %s\n", $1); }
-        | INT               { printf("bison found an int: %d\n", $1); }
-        | FLOAT             { printf("bison found a float: %f\n", $1); }
-        | STRING            { printf("bison found a string: %s\n", $1); }
-        ;
-        
+css:				rulelist  
+	;
+
+rulelist: 			rule rulelist 
+		  			| rule
+	;
+rule:				selectorlist LBRACE declarationlist RBRACE
+	;
+selectorlist:		selector COMMA selectorlist
+					| selector
+	;			
+selector:			STRING {printf("selector: %s\n", $1); }
+	;
+declarationlist: 	declaration SEMICOLON declarationlist
+					| declaration SEMICOLON
+					| declaration
+	;				
+declaration:		STRING COLON STRING { printf("declaration: %s : %s\n", $1, $3); }
+
+     ;   
 %%
 // user code section
 
