@@ -72,16 +72,19 @@
 
     #include <stdio.h>
     #include <stdlib.h>
-    
-    extern int yylex();
+    #include "css_types.h"
+    #include "test.tab.h"
+        
+    css_RuleList root; 
     extern int yyparse();
     extern FILE *yyin;
     
     void yyerror(const char *s);
+    
 
 
 /* Line 189 of yacc.c  */
-#line 85 "test.tab.c"
+#line 88 "test.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -108,15 +111,13 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INT = 258,
-     FLOAT = 259,
-     STRING = 260,
-     LBRACE = 261,
-     RBRACE = 262,
-     COMMA = 263,
-     DOT = 264,
-     SEMICOLON = 265,
-     COLON = 266
+     STRING = 258,
+     LBRACE = 259,
+     RBRACE = 260,
+     COMMA = 261,
+     DOT = 262,
+     SEMICOLON = 263,
+     COLON = 264
    };
 #endif
 
@@ -127,16 +128,20 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 13 "test.y"
+#line 16 "test.y"
 
-    int ival;
-    float fval;
-    char *sval;
+    char* sval;
+    css_Selector aSelector;
+    css_Declaration aDeclaration;
+	css_SelectorList aSelectorList;
+	css_DeclarationList aDeclarationList;
+	css_Rule aRule;
+	css_RuleList aRuleList;
 
 
 
 /* Line 214 of yacc.c  */
-#line 140 "test.tab.c"
+#line 145 "test.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -148,7 +153,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 152 "test.tab.c"
+#line 157 "test.tab.c"
 
 #ifdef short
 # undef short
@@ -363,10 +368,10 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   13
+#define YYLAST   11
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  12
+#define YYNTOKENS  10
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
@@ -376,7 +381,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   266
+#define YYMAXUTOK   264
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -410,7 +415,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11
+       5,     6,     7,     8,     9
 };
 
 #if YYDEBUG
@@ -425,17 +430,17 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      13,     0,    -1,    14,    -1,    15,    14,    -1,    15,    -1,
-      16,     6,    18,     7,    -1,    17,     8,    16,    -1,    17,
-      -1,     5,    -1,    19,    10,    18,    -1,    19,    10,    -1,
-      19,    -1,     5,    11,     5,    -1
+      11,     0,    -1,    12,    -1,    13,    12,    -1,    13,    -1,
+      14,     4,    16,     5,    -1,    15,     6,    14,    -1,    15,
+      -1,     3,    -1,    17,     8,    16,    -1,    17,     8,    -1,
+      17,    -1,     3,     9,     3,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    30,    30,    33,    34,    36,    38,    39,    41,    43,
-      44,    45,    47
+       0,    42,    42,    45,    46,    48,    50,    51,    53,    55,
+      56,    57,    59
 };
 #endif
 
@@ -444,10 +449,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "INT", "FLOAT", "STRING", "LBRACE",
-  "RBRACE", "COMMA", "DOT", "SEMICOLON", "COLON", "$accept", "css",
-  "rulelist", "rule", "selectorlist", "selector", "declarationlist",
-  "declaration", 0
+  "$end", "error", "$undefined", "STRING", "LBRACE", "RBRACE", "COMMA",
+  "DOT", "SEMICOLON", "COLON", "$accept", "css", "rulelist", "rule",
+  "selectorlist", "selector", "declarationlist", "declaration", 0
 };
 #endif
 
@@ -456,16 +460,15 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    12,    13,    14,    14,    15,    16,    16,    17,    18,
-      18,    18,    19
+       0,    10,    11,    12,    12,    13,    14,    14,    15,    16,
+      16,    16,    17
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -495,14 +498,14 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -9
 static const yytype_int8 yypact[] =
 {
-      -5,    -9,     1,    -9,    -5,    -4,    -3,    -9,    -9,    -2,
-      -5,    -7,    -1,     0,    -9,     2,    -9,    -2,    -9,    -9
+      -3,    -9,     1,    -9,    -3,    -2,    -1,    -9,    -9,     0,
+      -3,    -5,     2,     3,    -9,     5,    -9,     0,    -9,    -9
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,     4,    -9,     3,    -9,    -8,    -9
+      -9,    -9,     6,    -9,    -4,    -9,    -8,    -9
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -512,22 +515,22 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       1,     7,     9,    11,    15,    10,    16,    18,     8,    19,
-      17,     0,     0,    14
+       1,     7,     9,    11,    15,    10,    14,    16,    18,    19,
+       8,    17
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-       5,     0,     6,     5,    11,     8,     7,     5,     4,    17,
-      10,    -1,    -1,    10
+       3,     0,     4,     3,     9,     6,    10,     5,     3,    17,
+       4,     8
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     5,    13,    14,    15,    16,    17,     0,    14,     6,
-       8,     5,    18,    19,    16,    11,     7,    10,     5,    18
+       0,     3,    11,    12,    13,    14,    15,     0,    12,     4,
+       6,     3,    16,    17,    14,     9,     5,     8,     3,    16
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1338,24 +1341,87 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 8:
+        case 2:
 
 /* Line 1455 of yacc.c  */
-#line 41 "test.y"
-    {printf("selector: %s\n", (yyvsp[(1) - (1)].sval)); ;}
+#line 42 "test.y"
+    {(yyval.aRuleList) = root = (yyvsp[(1) - (1)].aRuleList);;}
+    break;
+
+  case 3:
+
+/* Line 1455 of yacc.c  */
+#line 45 "test.y"
+    { (yyval.aRuleList) = create_CSSRuleList((yyvsp[(1) - (2)].aRule),(yyvsp[(2) - (2)].aRuleList)); ;}
+    break;
+
+  case 4:
+
+/* Line 1455 of yacc.c  */
+#line 46 "test.y"
+    { (yyval.aRuleList) = create_CSSRuleList((yyvsp[(1) - (1)].aRule),NULL); ;}
+    break;
+
+  case 5:
+
+/* Line 1455 of yacc.c  */
+#line 48 "test.y"
+    {(yyval.aRule) = create_CSSRule((yyvsp[(1) - (4)].aSelectorList), (yyvsp[(3) - (4)].aDeclarationList)); ;}
+    break;
+
+  case 6:
+
+/* Line 1455 of yacc.c  */
+#line 50 "test.y"
+    { (yyval.aSelectorList) = create_CSSSelectorList((yyvsp[(1) - (3)].aSelector),(yyvsp[(3) - (3)].aSelectorList));;}
+    break;
+
+  case 7:
+
+/* Line 1455 of yacc.c  */
+#line 51 "test.y"
+    { (yyval.aSelectorList) = create_CSSSelectorList((yyvsp[(1) - (1)].aSelector), NULL);;}
+    break;
+
+  case 8:
+
+/* Line 1455 of yacc.c  */
+#line 53 "test.y"
+    { (yyval.aSelector) = create_CSSSelector((yyvsp[(1) - (1)].sval)); ;}
+    break;
+
+  case 9:
+
+/* Line 1455 of yacc.c  */
+#line 55 "test.y"
+    { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (3)].aDeclaration),(yyvsp[(3) - (3)].aDeclarationList));;}
+    break;
+
+  case 10:
+
+/* Line 1455 of yacc.c  */
+#line 56 "test.y"
+    { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (2)].aDeclaration), NULL);;}
+    break;
+
+  case 11:
+
+/* Line 1455 of yacc.c  */
+#line 57 "test.y"
+    { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (1)].aDeclaration), NULL);;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 47 "test.y"
-    { printf("declaration: %s : %s\n", (yyvsp[(1) - (3)].sval), (yyvsp[(3) - (3)].sval)); ;}
+#line 59 "test.y"
+    { (yyval.aDeclaration) = create_CSSDeclaration((yyvsp[(1) - (3)].sval), (yyvsp[(3) - (3)].sval)); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1359 "test.tab.c"
+#line 1425 "test.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1567,7 +1633,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 50 "test.y"
+#line 62 "test.y"
 
 // user code section
 

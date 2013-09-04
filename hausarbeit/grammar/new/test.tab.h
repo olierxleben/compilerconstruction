@@ -39,15 +39,13 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INT = 258,
-     FLOAT = 259,
-     STRING = 260,
-     LBRACE = 261,
-     RBRACE = 262,
-     COMMA = 263,
-     DOT = 264,
-     SEMICOLON = 265,
-     COLON = 266
+     STRING = 258,
+     LBRACE = 259,
+     RBRACE = 260,
+     COMMA = 261,
+     DOT = 262,
+     SEMICOLON = 263,
+     COLON = 264
    };
 #endif
 
@@ -58,16 +56,20 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 13 "test.y"
+#line 16 "test.y"
 
-    int ival;
-    float fval;
-    char *sval;
+    char* sval;
+    css_Selector aSelector;
+    css_Declaration aDeclaration;
+	css_SelectorList aSelectorList;
+	css_DeclarationList aDeclarationList;
+	css_Rule aRule;
+	css_RuleList aRuleList;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 71 "test.tab.h"
+#line 73 "test.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

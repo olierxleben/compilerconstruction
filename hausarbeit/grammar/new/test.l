@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 // include generated bison header
+    #include "css_types.h"
 #include "test.tab.h"
 
 %}
