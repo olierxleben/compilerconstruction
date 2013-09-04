@@ -1,5 +1,6 @@
 all: parser
 
+
 parser: lex.yy.c test.tab.c test.tab.h css_types.h
 	gcc test.tab.c css_types.c lex.yy.c -lfl -o parser
 
@@ -10,4 +11,5 @@ lex.yy.c: test.l test.tab.h
 	flex test.l
 
 clean: 
-	rm -f lex.yy.c test.tab.h test.tab.c a.out
+	rm -f lex.yy.c test.tab.h test.tab.c parser
+	
