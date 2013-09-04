@@ -73,6 +73,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "css_types.h"
+    #include "printCSS.h"
     #include "test.tab.h"
         
     css_RuleList root; 
@@ -84,7 +85,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 88 "test.tab.c"
+#line 89 "test.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -128,7 +129,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 16 "test.y"
+#line 17 "test.y"
 
     char* sval;
     css_Selector aSelector;
@@ -141,7 +142,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 145 "test.tab.c"
+#line 146 "test.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -153,7 +154,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 157 "test.tab.c"
+#line 158 "test.tab.c"
 
 #ifdef short
 # undef short
@@ -439,8 +440,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    42,    42,    45,    46,    48,    50,    51,    53,    55,
-      56,    57,    59
+       0,    43,    43,    46,    47,    49,    51,    52,    54,    56,
+      57,    58,    60
 };
 #endif
 
@@ -1344,84 +1345,84 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 42 "test.y"
+#line 43 "test.y"
     {(yyval.aRuleList) = root = (yyvsp[(1) - (1)].aRuleList);;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 45 "test.y"
+#line 46 "test.y"
     { (yyval.aRuleList) = create_CSSRuleList((yyvsp[(1) - (2)].aRule),(yyvsp[(2) - (2)].aRuleList)); ;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 46 "test.y"
+#line 47 "test.y"
     { (yyval.aRuleList) = create_CSSRuleList((yyvsp[(1) - (1)].aRule),NULL); ;}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 48 "test.y"
+#line 49 "test.y"
     {(yyval.aRule) = create_CSSRule((yyvsp[(1) - (4)].aSelectorList), (yyvsp[(3) - (4)].aDeclarationList)); ;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 50 "test.y"
+#line 51 "test.y"
     { (yyval.aSelectorList) = create_CSSSelectorList((yyvsp[(1) - (3)].aSelector),(yyvsp[(3) - (3)].aSelectorList));;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 51 "test.y"
+#line 52 "test.y"
     { (yyval.aSelectorList) = create_CSSSelectorList((yyvsp[(1) - (1)].aSelector), NULL);;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 53 "test.y"
+#line 54 "test.y"
     { (yyval.aSelector) = create_CSSSelector((yyvsp[(1) - (1)].sval)); ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 55 "test.y"
+#line 56 "test.y"
     { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (3)].aDeclaration),(yyvsp[(3) - (3)].aDeclarationList));;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 56 "test.y"
+#line 57 "test.y"
     { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (2)].aDeclaration), NULL);;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 57 "test.y"
+#line 58 "test.y"
     { (yyval.aDeclarationList) = create_CSSDeclarationList((yyvsp[(1) - (1)].aDeclaration), NULL);;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 59 "test.y"
+#line 60 "test.y"
     { (yyval.aDeclaration) = create_CSSDeclaration((yyvsp[(1) - (3)].sval), (yyvsp[(3) - (3)].sval)); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1425 "test.tab.c"
+#line 1426 "test.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1633,9 +1634,12 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 62 "test.y"
+#line 63 "test.y"
 
 // user code section
+
+
+
 
 
 int main(int argc, char** argv) {
@@ -1655,8 +1659,11 @@ int main(int argc, char** argv) {
         yyparse();
     } while(!feof(yyin));
     
+    printRuleList(root);
+    
     return 0;
 }
+
 
 void yyerror(const char *s) {
     printf("EEK, parse error! Message: %s\n", s);

@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "css_types.h"
+    #include "printCSS.h"
     #include "test.tab.h"
         
     css_RuleList root; 
@@ -63,6 +64,9 @@ declaration:		STRING COLON STRING { $$ = create_CSSDeclaration($1, $3); }
 // user code section
 
 
+
+
+
 int main(int argc, char** argv) {
     // set inputfile
     FILE *inFile = fopen(argv[1], "r");
@@ -80,8 +84,11 @@ int main(int argc, char** argv) {
         yyparse();
     } while(!feof(yyin));
     
+    printRuleList(root);
+    
     return 0;
 }
+
 
 void yyerror(const char *s) {
     printf("EEK, parse error! Message: %s\n", s);

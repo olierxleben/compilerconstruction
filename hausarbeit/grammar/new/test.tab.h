@@ -56,7 +56,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 16 "test.y"
+#line 17 "test.y"
 
     char* sval;
     css_Selector aSelector;

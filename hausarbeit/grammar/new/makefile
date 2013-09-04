@@ -1,8 +1,7 @@
 all: parser
 
-
 parser: lex.yy.c test.tab.c test.tab.h css_types.h
-	gcc test.tab.c css_types.c lex.yy.c -lfl -o parser
+	gcc test.tab.c css_types.c printCSS.c lex.yy.c -lfl -o parser
 
 test.tab.c test.tab.h: test.y
 	bison -d test.y
