@@ -25,7 +25,7 @@ extern int yydebug;
 
 %union{
 	int pos;
-    char* string;
+    char* sval;
 	css_Selector selector;
 	css_Declaration declaration;
 	css_SelectorList selectorList;
