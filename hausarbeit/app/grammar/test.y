@@ -68,9 +68,9 @@ declaration:		STRING COLON STRING { $$ = create_CSSDeclaration($1, $3); }
 
 
 
-int main(int argc, char** argv) {
+css_RuleList parseCSS(char* fileName) {
     // set inputfile
-    FILE *inFile = fopen(argv[1], "r");
+    FILE *inFile = fopen(fileName, "r");
     if(!inFile) {
         printf("Could not open input file!\n");
         return -1;
@@ -85,9 +85,7 @@ int main(int argc, char** argv) {
         yyparse();
     } while(!feof(yyin));
     
-    printRuleList(root);
-    
-    return 0;
+    return root;
 }
 
 

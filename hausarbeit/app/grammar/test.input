@@ -5,8 +5,13 @@ a, div.b {
 }
 
 a, #b, c > d, div#b + x {
-	a: 12344;
+	border: 12344;
 	background: url(joerny.png) #abdsq;
+	
+}
+
+a {
+	border: 4567;
 }
 
 
