@@ -1,0 +1,256 @@
+Terminale, die in Grammatik unbenutzt sind
+
+   DOT
+
+
+Grammatik
+
+    0 $accept: program $end
+
+    1 program: rulesets
+
+    2 rulesets: ruleset rulesets
+    3         | ruleset
+
+    4 ruleset: selectorlist LBRACE declarations RBRACE
+
+    5 selectorlist: selector COMMA selectorlist
+    6             | selector
+
+    7 selector: STRING
+
+    8 declarations: declaration SEMICOLON declarations
+    9             | declaration SEMICOLON
+   10             | declaration
+
+   11 declaration: STRING COLON STRING
+
+
+Terminale und die Regeln, in denen sie verwendet werden
+
+$end (0) 0
+error (256)
+STRING (258) 7 11
+SEMICOLON (259) 8 9
+COLON (260) 11
+COMMA (261) 5
+LBRACE (262) 4
+RBRACE (263) 4
+DOT (264)
+
+
+Nicht-Terminal und die Regeln, in denen sie verwendet werden
+
+$accept (10)
+    auf der linken Seite: 0
+program (11)
+    auf der linken Seite: 1, auf der rechten Seite: 0
+rulesets (12)
+    auf der linken Seite: 2 3, auf der rechten Seite: 1 2
+ruleset (13)
+    auf der linken Seite: 4, auf der rechten Seite: 2 3
+selectorlist (14)
+    auf der linken Seite: 5 6, auf der rechten Seite: 4 5
+selector (15)
+    auf der linken Seite: 7, auf der rechten Seite: 5 6
+declarations (16)
+    auf der linken Seite: 8 9 10, auf der rechten Seite: 4 8
+declaration (17)
+    auf der linken Seite: 11, auf der rechten Seite: 8 9 10
+
+
+Zustand 0
+
+    0 $accept: . program $end
+    1 program: . rulesets
+    2 rulesets: . ruleset rulesets
+    3         | . ruleset
+    4 ruleset: . selectorlist LBRACE declarations RBRACE
+    5 selectorlist: . selector COMMA selectorlist
+    6             | . selector
+    7 selector: . STRING
+
+    STRING  schiebe und gehe zu Zustand 1 über
+
+    program       gehe zu Zustand 2 über
+    rulesets      gehe zu Zustand 3 über
+    ruleset       gehe zu Zustand 4 über
+    selectorlist  gehe zu Zustand 5 über
+    selector      gehe zu Zustand 6 über
+
+
+Zustand 1
+
+    7 selector: STRING .
+
+    $default  reduziere mit Regel 7 (selector)
+
+
+Zustand 2
+
+    0 $accept: program . $end
+
+    $end  schiebe und gehe zu Zustand 7 über
+
+
+Zustand 3
+
+    1 program: rulesets .
+
+    $default  reduziere mit Regel 1 (program)
+
+
+Zustand 4
+
+    2 rulesets: . ruleset rulesets
+    2         | ruleset . rulesets
+    3         | . ruleset
+    3         | ruleset .
+    4 ruleset: . selectorlist LBRACE declarations RBRACE
+    5 selectorlist: . selector COMMA selectorlist
+    6             | . selector
+    7 selector: . STRING
+
+    STRING  schiebe und gehe zu Zustand 1 über
+
+    $default  reduziere mit Regel 3 (rulesets)
+
+    rulesets      gehe zu Zustand 8 über
+    ruleset       gehe zu Zustand 4 über
+    selectorlist  gehe zu Zustand 5 über
+    selector      gehe zu Zustand 6 über
+
+
+Zustand 5
+
+    4 ruleset: selectorlist . LBRACE declarations RBRACE
+
+    LBRACE  schiebe und gehe zu Zustand 9 über
+
+
+Zustand 6
+
+    5 selectorlist: selector . COMMA selectorlist
+    6             | selector .
+
+    COMMA  schiebe und gehe zu Zustand 10 über
+
+    $default  reduziere mit Regel 6 (selectorlist)
+
+
+Zustand 7
+
+    0 $accept: program $end .
+
+    $default  annehmen
+
+
+Zustand 8
+
+    2 rulesets: ruleset rulesets .
+
+    $default  reduziere mit Regel 2 (rulesets)
+
+
+Zustand 9
+
+    4 ruleset: selectorlist LBRACE . declarations RBRACE
+    8 declarations: . declaration SEMICOLON declarations
+    9             | . declaration SEMICOLON
+   10             | . declaration
+   11 declaration: . STRING COLON STRING
+
+    STRING  schiebe und gehe zu Zustand 11 über
+
+    declarations  gehe zu Zustand 12 über
+    declaration   gehe zu Zustand 13 über
+
+
+Zustand 10
+
+    5 selectorlist: . selector COMMA selectorlist
+    5             | selector COMMA . selectorlist
+    6             | . selector
+    7 selector: . STRING
+
+    STRING  schiebe und gehe zu Zustand 1 über
+
+    selectorlist  gehe zu Zustand 14 über
+    selector      gehe zu Zustand 6 über
+
+
+Zustand 11
+
+   11 declaration: STRING . COLON STRING
+
+    COLON  schiebe und gehe zu Zustand 15 über
+
+
+Zustand 12
+
+    4 ruleset: selectorlist LBRACE declarations . RBRACE
+
+    RBRACE  schiebe und gehe zu Zustand 16 über
+
+
+Zustand 13
+
+    8 declarations: declaration . SEMICOLON declarations
+    9             | declaration . SEMICOLON
+   10             | declaration .
+
+    SEMICOLON  schiebe und gehe zu Zustand 17 über
+
+    $default  reduziere mit Regel 10 (declarations)
+
+
+Zustand 14
+
+    5 selectorlist: selector COMMA selectorlist .
+
+    $default  reduziere mit Regel 5 (selectorlist)
+
+
+Zustand 15
+
+   11 declaration: STRING COLON . STRING
+
+    STRING  schiebe und gehe zu Zustand 18 über
+
+
+Zustand 16
+
+    4 ruleset: selectorlist LBRACE declarations RBRACE .
+
+    $default  reduziere mit Regel 4 (ruleset)
+
+
+Zustand 17
+
+    8 declarations: . declaration SEMICOLON declarations
+    8             | declaration SEMICOLON . declarations
+    9             | . declaration SEMICOLON
+    9             | declaration SEMICOLON .
+   10             | . declaration
+   11 declaration: . STRING COLON STRING
+
+    STRING  schiebe und gehe zu Zustand 11 über
+
+    $default  reduziere mit Regel 9 (declarations)
+
+    declarations  gehe zu Zustand 19 über
+    declaration   gehe zu Zustand 13 über
+
+
+Zustand 18
+
+   11 declaration: STRING COLON STRING .
+
+    $default  reduziere mit Regel 11 (declaration)
+
+
+Zustand 19
+
+    8 declarations: declaration SEMICOLON declarations .
+
+    $default  reduziere mit Regel 8 (declarations)

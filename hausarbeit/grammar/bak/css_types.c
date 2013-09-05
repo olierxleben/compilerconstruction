@@ -7,10 +7,9 @@ css_Selector create_CSSSelector(char* _name){
     return tmp;
 }
 
-css_Declaration create_CSSDeclaration(char* _dec_key, char* _dec_val){
+css_Declaration create_CSSDeclaration(char* _dec_key){
     css_Declaration tmp = (css_Declaration)malloc(sizeof(struct css_Declaration_));
     tmp->dec_key = _dec_key;
-    tmp->dec_val = _dec_val;
     return tmp;
 }
 
