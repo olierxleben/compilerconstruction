@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ncurses.h>
 
 #include "cli_parse.h"
 #include "css_merge.h"
