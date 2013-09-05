@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "printCSS.h"
 
+// TODO fprintf um datei ausgabe, Baumstrukturen mit ausgeben
 
 void printRuleList(css_RuleList root) {
 	while(root != NULL) {
@@ -28,6 +29,9 @@ void printSelectorList(css_SelectorList list) {
 	while(list != NULL) {
 		if(list->selector != NULL)
 			printSelector(list->selector);		
+		
+		if(list->next != NULL)
+			printf(", ");
 		
 		// next item
 		list = list->next;
