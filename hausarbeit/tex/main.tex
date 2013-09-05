@@ -159,111 +159,38 @@ Wie interpretiert der Browser allerdings die vordefinierten Werte mit den kaskad
 
 
 
-\subsubsection{Browserunterstützung}
+\subsection{Browserunterstützung}
 % TODO: Table
 \subsection{Syntax}
 Die Syntax von CSS wurde von der W3C 
+% TODO: Tabelle Selektoren
+% TODO: Tabelle 
 \cite{w3c_css_syntax}
 \subsection{Grammatik}
 Die zugrundeliegende Grammatik stammt von der Seite des W3C (Details, siehe: \cite{w3c_css_grammar}). Dies entspricht im Wesentlichen der Grammatik für die CSS Version 2.1. Das Listing \ref{css_grammar} zeigt die Grammatik des W3C. 
 
-\begin{lstlisting}[label=css_grammar,language=bash, caption=Grammatik von CSS nach W3C][!h]
-stylesheet
-  : [ CHARSET_SYM STRING ';' ]?
-    [S|CDO|CDC]* [ import [ CDO S* | CDC S* ]* ]*
-    [ [ ruleset | media | page ] [ CDO S* | CDC S* ]* ]*
-  ;
-import
-  : IMPORT_SYM S*
-    [STRING|URI] S* media_list? ';' S*
-  ;
-media
-  : MEDIA_SYM S* media_list '{' S* ruleset* '}' S*
-  ;
-media_list
-  : medium [ COMMA S* medium]*
-  ;
-medium
-  : IDENT S*
-  ;
-page
-  : PAGE_SYM S* pseudo_page?
-    '{' S* declaration? [ ';' S* declaration? ]* '}' S*
-  ;
-pseudo_page
-  : ':' IDENT S*
-  ;
-operator
-  : '/' S* | ',' S*
-  ;
-combinator
-  : '+' S*
-  | '>' S*
-  ;
-unary_operator
-  : '-' | '+'
-  ;
-property
-  : IDENT S*
-  ;
-ruleset
-  : selector [ ',' S* selector ]*
-    '{' S* declaration? [ ';' S* declaration? ]* '}' S*
-  ;
-selector
-  : simple_selector [ combinator selector | S+ [ combinator? selector ]? ]?
-  ;
-simple_selector
-  : element_name [ HASH | class | attrib | pseudo ]*
-  | [ HASH | class | attrib | pseudo ]+
-  ;
-class
-  : '.' IDENT
-  ;
-element_name
-  : IDENT | '*'
-  ;
-attrib
-  : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S*
-    [ IDENT | STRING ] S* ]? ']'
-  ;
-pseudo
-  : ':' [ IDENT | FUNCTION S* [IDENT S*]? ')' ]
-  ;
-declaration
-  : property ':' S* expr prio?
-  ;
-prio
-  : IMPORTANT_SYM S*
-  ;
-expr
-  : term [ operator? term ]*
-  ;
-term
-  : unary_operator?
-    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* |
-      TIME S* | FREQ S* ]
-  | STRING S* | IDENT S* | URI S* | hexcolor | function
-  ;
-function
-  : FUNCTION S* expr ')' S*
-  ;
-/*
- * There is a constraint on the color that it must
- * have either 3 or 6 hex-digits (i.e., [0-9a-fA-F])
- * after the "#"; e.g., "#000" is OK, but "#abcd" is not.
- */
-hexcolor
-  : HASH S*
-  ;
-\end{lstlisting}
+Für die Optimierung einer CSS-Datei ist diese Grammatik allerdings ungeeignet. Zum einen gehört die Grammatik zu einer älteren CSS-Version und zum anderen ist die Aufgabe des Optimierers nicht die Darstellung oder die Interpretation der CSS-Quelldateien, sondern die Verbesserung der definierten Elemente nach definierten Regeln. Dafür wurde eine eigene Grammatik entwickelt. Diese wird im Abschnitt \ref{tree_generation_used_grammar} vorgestellt. 
+
 
 \pagebreak
+\section{Baumgenerierung}
+\subsection{Aufbau,}
+\subsection{Verwendete Grammatik}
+\label{tree_generation_used_grammar}
+% TODO: Listing eigene Grammatik
+Der Baum soll nach wie i
+\subsection{Ausgabe}
+
+\pagebreak
+
+\section{Kommandozeilenwerkzeug}
+
+\pagebreak
+
 \section{Optimierung}
-\subsection{Kommandozeilentool}
+
 \subsection{Syntaxanalyse}
 \subsection{Knotenoptimierung}
-\subsubsection{}
 
 \pagebreak
 \section{Messungen}
