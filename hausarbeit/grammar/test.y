@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+	#include <ncurses.h>
     #include "css_types.h"
     #include "printCSS.h"
     #include "test.tab.h"
