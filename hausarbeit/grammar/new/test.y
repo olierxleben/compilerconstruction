@@ -1,16 +1,16 @@
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include "css_types.h"
-    #include "printCSS.h"
-    #include "test.tab.h"
+	
+#include <stdio.h>
+#include <stdlib.h>
+#include <ncurses.h>
+#include "css_types.h"
+#include "printCSS.h"
+#include "test.tab.h"
         
-    css_RuleList root; 
-    extern int yyparse();
-    extern FILE *yyin;
-    
-    void yyerror(const char *s);
-    
+css_RuleList root; 
+extern int yyparse();
+extern FILE *yyin;
+void yyerror(const char *s);
 %}
 
 // types which are found/returned by flex 
