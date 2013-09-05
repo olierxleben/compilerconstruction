@@ -14,7 +14,6 @@ struct css_Selector_ {
 
 struct css_Declaration_ {
 	char* dec_key;
-	char* dec_val;
 };
 
 struct css_SelectorList_ {
@@ -38,7 +37,7 @@ struct css_RuleList_ {
 };
 
 css_Selector create_CSSSelector(char* _name);
-css_Declaration create_CSSDeclaration(char* _dec_key, char* _dec_val);
+css_Declaration create_CSSDeclaration(char* _dec_key);
 css_SelectorList create_CSSSelectorList(css_Selector _selector, css_SelectorList _next);
 css_DeclarationList create_CSSDeclarationList(css_Declaration _declaration, css_DeclarationList _next);
 css_Rule create_CSSRule(css_SelectorList _selectorList, css_DeclarationList _declarationList);
