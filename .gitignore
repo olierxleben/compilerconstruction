@@ -17,9 +17,9 @@
 *.app
 
 
-# random files
+# grammar and output files
 test.tab.c
 test.tab.h
 lex.yy.c
 parser
-
+optimCSS
