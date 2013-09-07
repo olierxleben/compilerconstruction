@@ -2,16 +2,19 @@
     #include <stdio.h>
     #include <stdlib.h>
 	#include <ncurses.h>
+	#include <string.h>
     #include "css_types.h"
     #include "printCSS.h"
     #include "test.tab.h"
         
     css_RuleList root; 
+	
     extern int yyparse();
     extern FILE *yyin;
     
     void yyerror(const char *s);
-    
+    css_RuleList parseCSS(char* fileName);
+	
 %}
 
 // types which are found/returned by flex 
@@ -64,16 +67,12 @@ declaration:		STRING COLON STRING { $$ = create_CSSDeclaration($1, $3); }
 %%
 // user code section
 
-
-
-
-
 css_RuleList parseCSS(char* fileName) {
     // set inputfile
     FILE *inFile = fopen(fileName, "r");
     if(!inFile) {
         printf("Could not open input file!\n");
-        return -1;
+        exit(-1);
     }
     yyin = inFile;
    
@@ -84,7 +83,7 @@ css_RuleList parseCSS(char* fileName) {
     do {
         yyparse();
     } while(!feof(yyin));
-    
+   	
     return root;
 }
 

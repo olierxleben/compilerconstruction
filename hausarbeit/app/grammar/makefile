@@ -1,5 +1,3 @@
-all: parser
-
 parser: lex.yy.c test.tab.c test.tab.h css_types.h
 	gcc test.tab.c css_types.c lex.yy.c -lncurses -o parser
 

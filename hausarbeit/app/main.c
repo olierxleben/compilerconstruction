@@ -31,9 +31,9 @@ int main(int argc, char* argv[]) {
 
 
 	// optimize CSS
-	rules = optimize(rules);
+	//rules = optimize(rules);
 
-	printGUI(rules);
+	//printGUI(rules);
 
 	// start css optimization
 	printf("optimizing css...\n");

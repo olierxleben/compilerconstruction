@@ -26,7 +26,7 @@ void printGUI(css_RuleList list) {
 	start_color();
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_BLACK, COLOR_BLACK);
-	init_pair(3, COLOR_GREEN, COLOR_BLACK);	
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);	
 
 	bkgd(COLOR_PAIR(1));
 
@@ -62,15 +62,15 @@ void printGUI(css_RuleList list) {
 			}
 			
 			// print declarations
-			css_DeclarationList decs = list->rule->declarationList; 	
-			decsPos = 0;					
-			while(decs) {
-				if(decs->declaration) {
-					printNode(currY+6+decsPos, currX+20, 0, decs->declaration->dec_key);				
-				}
-				decsPos++;
-				decs = decs->next;
-			}
+			// css_DeclarationList decs = list->rule->declarationList; 	
+// 			decsPos = 0;					
+// 			while(decs) {
+// 				if(decs->declaration) {
+// 					printNode(currY+6+decsPos, currX+20, 0, decs->declaration->dec_key);				
+// 				}
+// 				decsPos++;
+// 				decs = decs->next;
+// 			}
 			
 			currX += 40;
 			currNode++;
