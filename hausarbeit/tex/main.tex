@@ -81,6 +81,7 @@
 
 \maketitle
 \thispagestyle{empty}
+\pagebreak
 \tableofcontents
 \listoffigures
 
@@ -111,20 +112,24 @@ Im abschließenden Abschnitt wird die Arbeit resümiert, das Ergebnis zusammenge
 \subsection{Motivation}
 Im Alltag eines Frontend-Entwicklers, eines Mitarbeiters an einem Web-Projekt oder des Entwicklers für das grafische User Interface kommt es nicht selten vor, dass die Beschreibung der grafischen Elemente durch Cascading Stylesheets geschieht. Noch seltener sind diese Style Angaben fehlerfrei. Sei es aufgrund von Zeitdruck, unterschiedlichen Entwicklern oder durch nachträgliches Bugfixing, oft sind CSS-Regeln inkonstistent aufgestellt, zum Beispieln existieren noch Regeln, die garnicht mehr im DOM der Seite zu finden sind. Es werden Regeln mehrmals überschrieben und es wird nicht auf Optimierung von Selektoren geachtet. 
 
-Seit 2010 berücksichtigt der Page Ranking Algorithmus von Google auch die Ladezeiten für Websites. Seiten, die neben SEO ein gutes Page Ranking erhalten, werden demnach auch durch ihre Ladezeiten bestimmt. Die Ladezeiten spielen zwar im Vergleich mit SEO nur eine kleine Rolle, können aber zu einem besseren Ergebnis beitragen (Weite Informationen: http://googlewebmastercentral.blogspot.de/2010/04/using-site-speed-in-web-search-ranking.html).
+Seit 2010 berücksichtigt der Page Ranking Algorithmus von Google auch die Ladezeiten für Websites. Seiten, die neben SEO\footnote{SEO: Search Engine Optimization / Suchmaschinenoptimierung} ein gutes Page Ranking erhalten, werden demnach auch durch ihre Ladezeiten bestimmt. Die Ladezeiten spielen zwar im Vergleich mit SEO nur eine kleine Rolle, können aber zu einem besseren Ergebnis beitragen (Weite Informationen: http://googlewebmastercentral.blogspot.de/2010/04/using-site-speed-in-web-search-ranking.html).
 Ladezeiten von mobilen Websites und Web-Anwendungen bzw. Seiten, die über mobile Internetverbindungen geladen werden, sollten schnell und nur wenig Daten übertragen, um ein konsistentes Benutzererlebnis zu gewährleisten. Statistiken zeigen, dass Benutzer auf Websites eher verbleiben wenn diese schnell geladen werden und der Benutzer schnell Informationen abrufen oder mit der Anwendung interagieren kann.
 
 Im Rahmen der Hausarbeit für das Fach Compilerbau im Sommersemester 2013 im Master-Studiengang Informatik - Verteilte und Mobile Anwendungen an der Hochschule Osnabrück / University of Applied Sciences soll ein Werkzeug entwickelt werden mit dem sich Stylesheets optimieren lassen. Dazu soll ein Kommandozeilentool entwickelt werden, womit CSS-Optimierungen gesteuert und ausgegeben werden können. 
-\subsection{Zielsetzung}
-\subsection{Begriffsdefinitionen}
-\subsubsection{Web-Stack / Web-Anwendungen}
-\subsubsection{Document Object Model}
+% \subsection{Zielsetzung}
+%\subsection{Begriffsdefinitionen}
+%\subsubsection{Web-Stack / Web-Anwendungen}
+%Unter dem Web-Stack wird im allgemeinen die 3-Schichten-Architektur % TODO: 
+%\subsubsection{Document Object Model}
+
+\subsection{Anforderungen}
+% TODO: Als Tabelle
 
 \pagebreak
 \section{Cascading Style Sheets}
 \subsection{Einführung in CSS}
 
-Cascading Stylesheets gilt aktuell als Standard-Stylesheetsprache für Websites. Es findet aber auch Verwendung in anderen Umgebungen, wie zum Beispiel JavaFX. Mit CSS ist es möglich Ausgabemedien unterschiedliche Darstellung vorzugeben. Beispielsweise soll einen Hyperlink\footnote{Hyperlink:} beim Druck einer Seite in einer anderen Farbe dargestellt werden oder die Elemente einer Bildergalerie sollen auf Geräten mit kleinerer Auflösung (wie etwa Tablets oder Smartphones) in einer anderen Darstellung gelistet werden, als bei einem Display mit FullHD-Auflösung.  
+Cascading Stylesheets gilt aktuell als Standard-Stylesheetsprache für Websites. Es findet aber auch Verwendung in anderen Umgebungen, wie zum Beispiel JavaFX. Mit CSS ist es möglich Ausgabemedien unterschiedliche Darstellung vorzugeben. Beispielsweise soll einen Hyperlink\footnote{Hyperlink:} beim Druck einer Seite in einer anderen Farbe dargestellt werden oder die Elemente einer Bildergalerie sollen auf Geräten mit kleinerer Auflösung (wie etwa Tablets oder Smartphones) in einer anderen Darstellung gelistet werden, als bei einem Display mit FullHD-Auflösung. Verschiedene spezielle CSS-Eigenschaften können für die unterschiedlichen Einsatzgebiete von CSS existieren. Die vorliegende Ausarbeitung bezieht sich auf CSS im Web-Stack, bzw. untersucht nur CSS für Webseiten. 
 
 \subsection{Revisionen und Probleme}
 Die Entwicklung von CSS wurde 1993 begonnen und hat nach mehreren Versionen 1995 den Stand der ersten Version erreicht. 1998 wurde die Version 2 vorgestellt. Diese ist aktuell und wurde bis heute allerdings von keinem der Mainstream-Browser vollständig implementiert. Einige Browser setzen große Teile des CSS2, bzw. CSS2.1-Standards korrekt um. Es kann aber zu Problemen bei unterschiedlichen Browsern führen. 2011 wurde die Recommandation für CSS 2.1 veröffentlicht. 
