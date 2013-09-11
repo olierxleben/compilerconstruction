@@ -19,4 +19,4 @@ Signal.trap('INT') {
 }
 
 # takeoff
-Rack::Handler::WEBrick.run(serve, :port => 8080, 'Contetn-Type'=>'text/html')
+Rack::Handler::WEBrick.run(serve, :port => 80, 'Contetn-Type'=>'text/html')
