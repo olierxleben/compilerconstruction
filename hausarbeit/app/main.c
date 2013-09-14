@@ -28,13 +28,13 @@ int main(int argc, char* argv[]) {
 	rules = parseCSS(argv[1]);
 
 	//print CSS tree
-	printGUI(rules);
+	//printGUI(rules);
 
 
 	// optimize CSS
-	//rules = optimize(rules);
+	rules = optimize(rules);
 
-	//printGUI(rules);
+	printGUI(rules);
 
 	// start css optimization
 	printf("optimizing css...\n");

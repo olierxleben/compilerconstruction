@@ -1,5 +1,7 @@
 #include "optimizer.h"
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 css_RuleList optimize(css_RuleList list) {
 	// merge nodes with same selector
@@ -15,10 +17,12 @@ css_RuleList mergeNodes(css_RuleList list) {
 		css_RuleList tmpList = list->next;
 	
 		css_Rule newRule = NULL;
+		newRule = mergeToNewRule(tmpRule, NULL, currSel);
 		while(tmpList) {
 			if(containsSelector(tmpList->rule->selectorList, currSel)) {
-				css_Rule old = newRule;
-				newRule = mergeToNewRule(tmpRule, tmpList->rule, currSel);
+				//css_Rule old = newRule;
+				newRule = mergeToNewRule(newRule, tmpList->rule, currSel);
+				
 				
 				//free(old); // TODO MAL gucken wegen speicherlecks
 			}
@@ -37,11 +41,12 @@ css_RuleList mergeNodes(css_RuleList list) {
 }
 
 int containsSelector(css_SelectorList list, css_Selector selector) {
-	while(list) {
-		if(list->selector->name == selector->name)
+    css_SelectorList tmp = list;
+	while(tmp) {
+		if(strcmp(tmp->selector->name ,selector->name) == 0)
 			return 1;
 			
-		list = list->next;
+		tmp = tmp->next;
 	}
 	return 0;
 }
@@ -49,21 +54,24 @@ int containsSelector(css_SelectorList list, css_Selector selector) {
 css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	css_DeclarationList decList = NULL;
 	css_DeclarationList tmpList;
+	if(rule1){
+	    tmpList = rule1->declarationList;
+	    while(tmpList) {
+		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
+		    decList = create_CSSDeclarationList(tmpDec, decList);
+		    printf("1. %s %s %s\n", selector->name, tmpList->declaration->dec_key, tmpList->declaration->dec_val);
+		    tmpList = tmpList->next;
+	    }
+    }
 	
-	tmpList = rule1->declarationList;
-	while(tmpList) {
-		css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
-		decList = create_CSSDeclarationList(tmpDec, decList);
-		
-		tmpList = tmpList->next;
-	}
-	
-	tmpList = rule2->declarationList;
-	while(tmpList) {
-		css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
-		decList = create_CSSDeclarationList(tmpDec, decList);
-		
-		tmpList = tmpList->next;
+	if(rule2){
+	    tmpList = rule2->declarationList;
+	    while(tmpList) {
+		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
+		    decList = create_CSSDeclarationList(tmpDec, decList);
+		    printf("2. %s %s %s\n", selector->name, tmpList->declaration->dec_key, tmpList->declaration->dec_val);
+		    tmpList = tmpList->next;
+	    }
 	}
 	
 	return create_CSSRule(create_CSSSelectorList(selector, NULL), decList);

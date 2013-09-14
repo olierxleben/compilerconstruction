@@ -46,6 +46,9 @@ void printGUI(css_RuleList list) {
 				sprintf(buffer, "%d", currNode);
 				printNode(currY, currX, 0, strcat(prStr, buffer));
 			}
+			else {
+			    break;
+			}
 			
 			// print selector and declaration list
 			printNode(currY+3, currX, 0, "sels");
@@ -62,15 +65,15 @@ void printGUI(css_RuleList list) {
 			}
 			
 			// print declarations
-			// css_DeclarationList decs = list->rule->declarationList; 	
-// 			decsPos = 0;					
-// 			while(decs) {
-// 				if(decs->declaration) {
-// 					printNode(currY+6+decsPos, currX+20, 0, decs->declaration->dec_key);				
-// 				}
-// 				decsPos++;
-// 				decs = decs->next;
-// 			}
+			css_DeclarationList decs = list->rule->declarationList; 	
+ 			decsPos = 0;					
+ 			while(decs) {
+ 				if(decs->declaration) {
+ 					printNode(currY+6+decsPos, currX+20, 0, decs->declaration->dec_key);				
+ 				}
+ 				decsPos++;
+ 				decs = decs->next;
+ 			}
 			
 			currX += 40;
 			currNode++;
