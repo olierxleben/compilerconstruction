@@ -6,6 +6,7 @@
     #include "css_types.h"
     #include "printCSS.h"
     #include "test.tab.h"
+    #include "parsecss.h"
         
     css_RuleList root; 
 	
@@ -13,7 +14,7 @@
     extern FILE *yyin;
     
     void yyerror(const char *s);
-    css_RuleList parseCSS(char* fileName);
+
 	
 %}
 
