@@ -59,7 +59,6 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    while(tmpList) {
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    decList = create_CSSDeclarationList(tmpDec, decList);
-		    printf("1. %s %s %s\n", selector->name, tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    tmpList = tmpList->next;
 	    }
     }
@@ -69,7 +68,6 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    while(tmpList) {
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    decList = create_CSSDeclarationList(tmpDec, decList);
-		    printf("2. %s %s %s\n", selector->name, tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    tmpList = tmpList->next;
 	    }
 	}
