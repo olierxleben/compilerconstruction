@@ -46,7 +46,8 @@
          C,
          C++,
          bash,
-        %TODO: check css in lstlisting package available?!
+         HTML,
+         Clean % use this for CSS
  }
 
 \setlength{\parindent}{0pt}
@@ -61,8 +62,9 @@
 
 % Headings
 \usepackage{fancyhdr}
-% TODO: footer
-\fancyfoot{}
+\renewcommand{\footrulewidth}{0.4pt}
+\cfoot{}
+\rfoot{\thepage}
 
 % Document begins now
 \begin{document}
