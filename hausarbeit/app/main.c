@@ -8,6 +8,7 @@
 #include "grammar/css_types.h"
 #include "grammar/test.tab.h"
 #include "optimizer.h"
+#include "grammar/parsecss.h"
 
 int main(int argc, char* argv[]) {
 	struct input_data id;
