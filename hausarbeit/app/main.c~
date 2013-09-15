@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 
 	// output
-	structuredOutput(rules, "yolo_output.css");
+	minifiedOutput(rules, "yolo_output.css");
 
 	// start css optimization
 	printf("optimizing css...\n");

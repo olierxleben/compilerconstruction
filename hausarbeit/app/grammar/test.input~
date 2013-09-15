@@ -1,7 +1,7 @@
 
 a, div.b {
-		regel: wert;
-		regal: brett;
+		regel:	wert;
+		regal:	brett;
 }
 
 a, #b, c > d, div#b + x {
