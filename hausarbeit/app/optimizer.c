@@ -26,6 +26,17 @@ static void shortHandColour(char** val){
     *val = strdup(newValue);
 }
 
+
+/*
+* Add this moment only removes px from 0px for marging
+* TODO: funnily the 0px isn't detected :D maybe it's a problem in the lexer data
+*/
+static void shortHandMargin0PX(char** val){
+    if(strcmp(*val, "0px") == 0){
+        *val[1] = '\0';
+    }
+}
+
 css_RuleList optimize(css_RuleList list) {
 	// merge nodes with same selector
 	return mergeNodes(list);
@@ -42,6 +53,7 @@ css_RuleList mergeNodes(css_RuleList list) {
 	
 		css_Rule newRule = NULL;
 		newRule = mergeToNewRule(tmpRule, NULL, currSel);
+		//shortHandMargin0PX(&(newRule->declarationList->declaration->dec_val));
 		while(tmpList) {
 			if(containsSelector(tmpList->rule->selectorList, currSel)) {
 				newRule = mergeToNewRule(newRule, tmpList->rule, currSel);
@@ -77,6 +89,7 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    tmpList = rule1->declarationList;
 	    while(tmpList) {
 	        shortHandColour(&(tmpList->declaration->dec_val));
+            //shortHandMargin0PX(&(tmpList->declaration->dec_val));
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    decList = create_CSSDeclarationList(tmpDec, decList);
 		    tmpList = tmpList->next;
@@ -87,6 +100,7 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    tmpList = rule2->declarationList;
 	    while(tmpList) {
 	        shortHandColour(&(tmpList->declaration->dec_val));
+	        //shortHandMargin0PX(&(tmpList->declaration->dec_val));
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
 		    decList = create_CSSDeclarationList(tmpDec, decList);
 		    tmpList = tmpList->next;
