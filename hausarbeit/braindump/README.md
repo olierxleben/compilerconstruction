@@ -30,7 +30,7 @@ in CSS-Dateien:
 * Automatisches Einfügen von Standard-Styles (gibt verschiedene NoWraps und Default-Wrapper)
 
 1. Entfernen nicht genutzter Knoten
-2. Gruppierung / Mergen gleicher Knoten
+**2. Gruppierung / Mergen gleicher Knoten**
 3. Einzelne Regeln
 
 außerhalb von CSS-Dateien:
