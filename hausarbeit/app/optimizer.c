@@ -13,7 +13,6 @@ static void shortHandColour(char** val){
     char *value = *val;
     char newValue[sizeof(value)/sizeof(char)] = {0};    // Init    
     // Isn't a hex value don't do anything
-    // IMPORTANT first character is a space :(
     if(value && value[0] == '#'){
         newValue[0] = '#';
         for(; i < (sizeof(value)/sizeof(char)-1); i++, j++){
@@ -26,20 +25,69 @@ static void shortHandColour(char** val){
     }
 }
 
+css_RuleList shortHandMargin(css_RuleList list){
+	while(list) {	
+		if(list->next) {	
+	//		if(strcmp(list->selector->name, sel->name) == 0) {
+				
+		//	}
+		}
+		
+		list = list->next;
+	}
+}
+
 
 /*
 * Add this moment only removes px from 0px for marging
 */
 static void shortHandMargin0PX(char** val){
-    // IMPORTANT first character is a space :(
     if(strcmp(*val, "0px") == 0){
         (*val)[1] = '\0';
     }
 }
 
+void removeDeclaration(css_Declaration dec, css_DeclarationList list) {
+	while(list) {
+		if(list->next) {	
+			printf("%s,", dec->dec_key);
+			printf("%s\n", list->declaration->dec_key);
+			if(strcmp(list->declaration->dec_key, dec->dec_key) == 0) {
+				list->declaration = list->next->declaration;
+				list->next = list->next->next;
+			}
+		}
+		else {
+			list->declaration = NULL;
+			list->next = NULL;
+		}
+		list = list->next;
+	}
+}
+
+css_RuleList removeDoubleDeclarations(css_RuleList list) {
+	css_RuleList ret = list;
+	while(list) {
+		css_DeclarationList decs = list->rule->declarationList;
+		
+		while(decs) {
+			removeDeclaration(decs->declaration, decs->next);
+						
+			decs = decs->next;	
+		}				
+		
+		list = list->next;
+	}
+	
+	return ret;
+}
+
 css_RuleList optimize(css_RuleList list) {
 	// merge nodes with same selector
-	return mergeNodes(list);
+	list = mergeNodes(list);
+	list = removeDoubleDeclarations(list);
+//	list = shortHandMargin(list);
+	return list;
 }
 
 void removeSelector(css_Selector sel, css_SelectorList list) {
