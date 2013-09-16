@@ -19,25 +19,25 @@ in CSS-Dateien:
 
 * entfernen nicht genutzter Knoten
 * shorthand (Beispiel: margin-top: 50px; margin-left:50px; => margin: 50px 0 0 50px;)
-* Gruppierung ähnlicher Stile (mergen gleicher css selektoren)
-* Linebreaks-Reduzierung
-* Entfernung unnötiger Zeichen (zum Beispiel letztes Semikolon je Selektor)
-* Farb-Shorthands (#fffff => #fff, #babab => #bab)
-* Entfernen von "px" bei Wert 0 (padding: 0px; => padding: 0;)
+* **Gruppierung ähnlicher Stile (mergen gleicher css selektoren)**
+* **Linebreaks-Reduzierung**
+* **Entfernung unnötiger Zeichen (zum Beispiel letztes Semikolon je Selektor)**
+* **Farb-Shorthands (#fffff => #fff, #babab => #bab)**
+* **Entfernen von "px" bei Wert 0 (padding: 0px; => padding: 0;)**
 * Entfernen von unbenutzten Selektoren (Vgl. mit DOM)
-* Kompression
-* Strukturierung
+* **Kompression**
+* **Strukturierung**
 * Automatisches Einfügen von Standard-Styles (gibt verschiedene NoWraps und Default-Wrapper)
 
 1. Entfernen nicht genutzter Knoten
-2. Gruppierung / Mergen gleicher Knoten
+2. **Gruppierung / Mergen gleicher Knoten**
 3. Einzelne Regeln
 
 außerhalb von CSS-Dateien:
 
 * CSS Platzierung (in html)
-* Zusammenführung zu einer Datei
-* Minifizieren
+* **Zusammenführung zu einer Datei**
+* **Minifizieren**
 * Verschönerung
 
 ## Testdaten
