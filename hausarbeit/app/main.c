@@ -28,6 +28,7 @@ int main(int argc, char* argv[]) {
 	
 	// parse CSS
 	rules = parseCSS(argv[1]);
+	trimTree(rules);
 
 	//print CSS tree
 	//printGUI(rules);

@@ -3,31 +3,6 @@
 #include <string.h>
 #include "output.h"
 
-char* trimSpaces(char* string) {
-	int len = strlen(string);
-	int i = 0;
-	
-	while(i < len) {
-		if(isspace(string[i]))
-			++string;
-		else
-		  break;
-		++i;
-	}
-	
-	i = len;
-	
-		while(i > 0) {
-		if(isspace(string[i]))
-			string[i] = '\0';
-		else
-		  break;
-		--i;
-	}
-	
-	return string;
-}
-
 void structuredOutput(css_RuleList rules, char* fileName) {
 	FILE *outFile;
 	
@@ -51,7 +26,7 @@ void structuredOutput(css_RuleList rules, char* fileName) {
 			while(sels != NULL) {
 				fprintf(outFile, "%s ", trimSpaces(sels->selector->name));		
 				if(sels->next != NULL)
-					printf(", ");
+					fprintf(outFile,", ");
 				// next item
 				sels = sels->next;
 			}
@@ -100,7 +75,7 @@ void minifiedOutput(css_RuleList rules, char* fileName) {
 			while(sels != NULL) {
 				fprintf(outFile, "%s", trimSpaces(sels->selector->name));		
 				if(sels->next != NULL)
-					printf(",");
+					fprintf(outFile, ",");
 				// next item
 				sels = sels->next;
 			}
@@ -127,5 +102,53 @@ void minifiedOutput(css_RuleList rules, char* fileName) {
 	}	
 	
 	fclose(outFile);
+}
+
+char* trimSpaces(char* string) {
+	int len = strlen(string);
+	int i = 0;
+	
+	while(i < len) {
+		if(string[0] == ' ')
+			++string;
+		else
+		  break;
+		++i;
+	}
+	
+	i = strlen(string) - 1;
+	
+	while(i > 0) {
+		if(isspace(string[i]))
+			string[i] = '\0';
+		else
+		  break;
+		--i;
+	}
+	
+	return strdup(string);
+}
+
+
+void trimTree(css_RuleList rules) {
+	while(rules) {
+		css_SelectorList sels = rules->rule->selectorList;
+		css_DeclarationList decs = rules->rule->declarationList;
+	
+		while(sels) {
+			sels->selector->name = trimSpaces(sels->selector->name);
+								
+			sels = sels->next;
+		}
+		
+		while(decs) {
+			decs->declaration->dec_key = trimSpaces(decs->declaration->dec_key);
+			decs->declaration->dec_val = trimSpaces(decs->declaration->dec_val);
+			
+			decs = decs->next;
+		}
+	
+		rules = rules->next;
+	}	
 }
 
