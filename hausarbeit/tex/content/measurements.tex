@@ -1,8 +1,37 @@
 \section{Messungen und Ergebnis}
 \subsection{Grundlage}
-Als Grundlage zur Bewertung von Optimierungen, soll eine größere \textbf{Single Page Applikation} verwendet werden. Single Page Anwendungen folgen dem Paradigma niemals die gesamte Seite neu zu laden, sondern nur gewünschte Teile der Anwendung zu aktualisieren. Oft werden dabei asynchrone Requests oder auch Web-Sockets verwendet.
+Als Grundlage zur Bewertung von Optimierungen, soll eine größere \textbf{Single Page Applikation} verwendet werden. Single Page Anwendungen folgen dem Paradigma niemals die gesamte Seite neu zu laden, sondern nur gewünschte Teile der Anwendung zu aktualisieren. Oft werden dabei asynchrone Requests oder auch Web-Sockets verwendet. Dies verbessert Ladezeiten, SEO, ... 
 % TODO: überarbeiten, auf Korrektheit prüfen.
 
+
+
+Weiterhin wurde ein eigener minimalistischer Webservice, basierend auf \textit{Ruby Rack} und \textit{WEBrick}, entwickelt. Der Webdienst dient zur Bereitstellung der Testdaten vor und nach der Optimierung. Das Listing \ref{server_rb} zeigt die Implementierung des Dienstes, welcher den aus der Standard-Ruby-Implementierung mitgelieferten Web-Server nutzt und auf Port 80 lauscht. 
+
+% TODO: listing
+\begin{lstlisting}[label=server_rb,language=Ruby, caption=Ruby Webservice für Messdaten]
+#!/usr/bin/env ruby
+
+# USAGE: ./server.rb path/to/the/root/dir
+
+require 'rubygems'
+require 'rack' # rack it up
+
+serve = Rack::Builder.new do
+ use Rack::Static, 
+   :urls => ["/images", "/js", "/css"],
+   :root => ARGV[0],
+   :index => 'index.html'
+ run Rack::File.new(ARGV[0])
+end
+
+# by default WEBrick doesen`t listen to sigkill, cause the script runs in a new session. 
+Signal.trap('INT') {
+  Rack::Handler::WEBrick.shutdown
+}
+
+# takeoff
+Rack::Handler::WEBrick.run(serve, :port => 80, 'Contetn-Type'=>'text/html')
+\end{lstlisting}
 % TODO: Bibliotheken
 \subsection{Bewertungskriterien}
 
