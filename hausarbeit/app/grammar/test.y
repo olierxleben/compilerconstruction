@@ -56,13 +56,20 @@ rule:				selectorlist LBRACE declarationlist RBRACE {$$ = create_CSSRule($1, $3)
 selectorlist:		selector COMMA selectorlist { $$ = create_CSSSelectorList($1,$3);}
 					| selector { $$ = create_CSSSelectorList($1, NULL);}
 	;			
-selector:			STRING  { $$ = create_CSSSelector($1); }
+selector:			STRING { $$ = create_CSSSelector($1); }
+					| STRING COLON STRING { char buffer[256] = {0}; strcat(buffer, $1); strcat(buffer, ":"); strcat(buffer, $3); $$ = create_CSSSelector(strdup(buffer)); }
 	;
 declarationlist: 	declaration SEMICOLON declarationlist { $$ = create_CSSDeclarationList($1,$3);}
 					| declaration SEMICOLON { $$ = create_CSSDeclarationList($1, NULL);}
 					| declaration { $$ = create_CSSDeclarationList($1, NULL);}
 	;				
 declaration:		STRING COLON STRING { $$ = create_CSSDeclaration($1, $3); }
+					| STRING COLON STRING COMMA STRING COMMA STRING { 
+						 char buffer[256] = {0}; strcat(buffer, $3); strcat(buffer, ","); strcat(buffer, $5); strcat(buffer, ","); strcat(buffer, $7);
+						 $$ = create_CSSDeclaration($1, strdup(buffer)); }
+					 | STRING COLON STRING COMMA STRING COMMA STRING COMMA STRING { 
+						 char buffer[256] = {0}; strcat(buffer, $3); strcat(buffer, ","); strcat(buffer, $5); strcat(buffer, ","); strcat(buffer, $7);
+						 strcat(buffer, ","); strcat(buffer, $9); $$ = create_CSSDeclaration($1, strdup(buffer)); }
 	; 
        
 %%

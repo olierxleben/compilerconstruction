@@ -22,10 +22,11 @@ void merge_files(char* dest, char* src) {
 	}
 
 	while(!feof(src_css)) {
+		buffer[0] = '\0';
 		fgets(buffer, BUFFER_SIZE, src_css);
 		fputs(buffer, dest_css);
 	}
-	fputs("\n\n",dest_css);
+	fputs("\n",dest_css);
 
 	fclose(src_css);
 	fclose(dest_css);

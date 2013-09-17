@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 // include generated bison header
-    #include "css_types.h"
+#include "css_types.h"
 #include "test.tab.h"
 
 %}
@@ -14,9 +14,10 @@
     patterns can be described here
 */
 
-SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"]+
+SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"\-"%"\[\]"*""_""=""!""@"]+ 
 KEY_STRING			[a-zA-Z"-"]+
-VAL_STRING			[a-zA-Z0-9"#""("")"" "".""/"]+
+VAL_STRING			[a-zA-Z0-9"#""("")"" "".""/"]+ 
+DEC_STRING			["#"]*[a-zA-Z0-9"#""("")"" "".""/"":"\-]+
 RCHEVRON			">"
 PLUS				"+"
 
@@ -35,11 +36,12 @@ PLUS				"+"
 "}" { return RBRACE ;}
 "." { return DOT ;}
 
-[ \t\n]             ;   // ignore whitespace
+[ \t\n\r]             ;   // ignore whitespace
 
 {SEL_STRING}[ ]{RCHEVRON}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
 {SEL_STRING}[ ]{PLUS}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
 {SEL_STRING} {yylval.sval = strdup(yytext); return STRING; }
+
 
 .                   ;   // ignore everything else
 
