@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "gumbo.h" // HTML 5 parser
 
 /*
 * Set hex pair values to one value #336699 -> #369 or #34228 -> #3428
@@ -37,6 +38,14 @@ css_RuleList shortHandMargin(css_RuleList list){
 	}
 }
 
+void parseHTML(char* file) {
+	// create output
+	GumboOutput* output = gumbo_parse(file);
+	// ...
+	
+	// destroy   
+	gumbo_destroy_output(&kGumboDefaultOptions, output);
+}
 
 /*
 * Add this moment only removes px from 0px for marging
@@ -82,11 +91,14 @@ css_RuleList removeDoubleDeclarations(css_RuleList list) {
 	return ret;
 }
 
-css_RuleList optimize(css_RuleList list) {
+css_RuleList optimize(css_RuleList list, char* filename) {
 	// merge nodes with same selector
 	list = mergeNodes(list);
 	list = removeDoubleDeclarations(list);
 //	list = shortHandMargin(list);
+	
+	parseHTML(filename);
+	
 	return list;
 }
 
@@ -186,5 +198,4 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	
 	return create_CSSRule(create_CSSSelectorList(selector, NULL), decList);
 }
-
 

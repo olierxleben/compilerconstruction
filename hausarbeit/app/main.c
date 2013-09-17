@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
 
 	// optimize CSS
-	rules = optimize(rules);
+	rules = optimize(rules, argv[1]);
 
 	printGUI(rules);
 
