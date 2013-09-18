@@ -149,17 +149,23 @@ css_RuleList mergeDoubleDeclarations(css_RuleList list) {
 	css_RuleList ret = list;
 	while(list) {
 		css_RuleList tmpList = list->next;
+		css_RuleList lastList = NULL;
 		while(tmpList) {
 				css_DeclarationList currDecs = list->rule->declarationList;
 				css_DeclarationList nextDecs = tmpList->rule->declarationList;
-			
+			    int isMerged = 0;
 				if(compareDeclarationLists(currDecs, nextDecs) == 0 && compareDeclarationLists(nextDecs, currDecs) == 0) {
 					// Selectors mergen
 					css_SelectorList tmp = mergeSelectors(list->rule->selectorList, tmpList->rule->selectorList);
 					list->rule->selectorList = tmp;
-					list->next = tmpList->next;
+					if(lastList)
+					    lastList->next = tmpList->next;
+					else
+					    list->next = tmpList->next;
+				    isMerged = 1;
 				}
-					
+			if(isMerged == 0)
+			    lastList = tmpList;
 			tmpList = tmpList->next;
 		}
 		list = list->next;
