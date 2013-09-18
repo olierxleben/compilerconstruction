@@ -5,7 +5,7 @@
 #include "css_merge.h"
 #include "cli_parse.h"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 4096
 
 void merge_files(char* dest, char* src) {
 	char buffer[BUFFER_SIZE];

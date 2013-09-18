@@ -14,12 +14,14 @@
     patterns can be described here
 */
 
-SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"\-"%"\[\]"*""_""=""!""@"]+ 
+SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"\-"%"\[\]"*""_""=""!""@""'""?"]+
 KEY_STRING			[a-zA-Z"-"]+
 VAL_STRING			[a-zA-Z0-9"#""("")"" "".""/"]+ 
 DEC_STRING			["#"]*[a-zA-Z0-9"#""("")"" "".""/"":"\-]+
 RCHEVRON			">"
 PLUS				"+"
+
+%x COMMENT
 
 %%
 %{
@@ -27,7 +29,6 @@ PLUS				"+"
     rules for pattern recognition
 */
 %}
-
 
 "," { return COMMA;}
 ":" { return COLON;}
@@ -41,7 +42,6 @@ PLUS				"+"
 {SEL_STRING}[ ]{RCHEVRON}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
 {SEL_STRING}[ ]{PLUS}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
 {SEL_STRING} {yylval.sval = strdup(yytext); return STRING; }
-
 
 .                   ;   // ignore everything else
 

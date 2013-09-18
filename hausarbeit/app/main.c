@@ -46,6 +46,6 @@ int main(int argc, char* argv[]) {
 		structuredOutput(rules, "output.css");
 	else
 		minifiedOutput(rules, "output.css");
-
+/**/
 	return 0;
 }

@@ -1,4 +1,4 @@
-/* Tablet Devices Resizing */
+
 @media screen and (min-width:750px) and (max-width: 970px) {
 #horizontal-ad
 {
@@ -13,10 +13,10 @@ div#wrap {
 	width:740px
 }
 div#sidebar {
-	width:175px /*200px*/;
+	width:175px;
 }
 ul#navigation {
-	width:175px /*205px*/;
+	width:175px;
 }
 div#container {
 	width:535px
@@ -87,7 +87,6 @@ div.page_content img {
 }
 }
 
-/* Phone Devices Resizing */
 @media screen and (max-width:750px) {
 #horizontal-ad
 {

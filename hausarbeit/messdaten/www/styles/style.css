@@ -205,7 +205,6 @@ ul#works_filter li a:hover, ul#works_filter li a.selected {
 	-webkit-border-radius: 0.2em;
 	-moz-border-radius: 0.2em;
 	border-radius: 0.2em;
-	/* IE hacks */
     zoom: 1;
  *display: inline;
 }
@@ -442,7 +441,6 @@ ol.comments li.comment a.reply:hover, div.tab ul.tab_menu li:hover, div.tab ul.t
 	-webkit-border-radius: 0.2em;
 	-moz-border-radius: 0.2em;
 	border-radius: 0.2em;
-	/* IE hacks */
     zoom: 1;
  *display: inline;
 	position: relative;
@@ -459,11 +457,9 @@ ol.comments li.comment a.reply:hover, div.tab ul.tab_menu li:hover, div.tab ul.t
 	-webkit-background-clip: padding;
 	-moz-background-clip: padding;
 	-o-background-clip: padding-box;
-	/*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
     -webkit-border-radius: 0.2em;
 	-moz-border-radius: 0.2em;
 	border-radius: 0.2em;
-	/* IE hacks */
     zoom: 1;
  *display: inline;
 }
@@ -478,8 +474,7 @@ ol.comments li.comment a.reply:hover, div.tab ul.tab_menu li:hover, div.tab ul.t
 	background-color: #12415c;
 }
 
-/* overrides extra padding on button elements in Firefox */
-.button::-moz-focus-inner {
+.button:-moz-focus-inner {
  padding: 0;
  border: 0;
 }
@@ -498,7 +493,7 @@ ul.sublist li a {
 ul.sublist li a:hover {
 	color:#002b44;
 }
-/* GRID */
+
 .grid {
 	border: 1px solid #4b88ad;
 	border-bottom: none;
@@ -534,7 +529,6 @@ ul.sublist li a:hover {
 	border:0px !important;
 	width: 100%;
 	opacity: .65;
-	-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=65)";
 	filter: alpha(opacity=65);
 	-webkit-transition: all .3s ease-in-out;
 	-moz-transition: all .3s ease-in-out;
@@ -544,24 +538,19 @@ ul.sublist li a:hover {
 }
 .grid li:hover img {
 	opacity: 1;
-	-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=100)";
 	filter: alpha(opacity=100);
 }
-/* CLIENTS */
 
 
 
 #clients li:hover .original_img,  .ie7 #clients li:hover a img, .ie8 #clients li:hover a img {
 	opacity: 1;
-	-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=100)";
 	filter: alpha(opacity=100);
 }
 #clients li:hover .grayscale_img {
 	opacity: 0;
-	-ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
 	filter: alpha(opacity=0);
 }
-/* CLIENTS */
 
 #clients .westfield:hover, #clients .westfield.active {
 	background: #d9001f;

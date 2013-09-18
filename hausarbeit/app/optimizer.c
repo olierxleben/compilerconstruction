@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "gumbo.h" // HTML 5 parser
+//#include "gumbo.h" // HTML 5 parser
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 4096
 
 /*
 * Set hex pair values to one value #336699 -> #369 or #34228 -> #3428
@@ -49,11 +49,11 @@ css_RuleList shortHandMargin(css_RuleList list){
 
 void parseHTML(char* file) {
 	// create output
-	GumboOutput* output = gumbo_parse(file);
+	//GumboOutput* output = gumbo_parse(file);
 	// ...
 	
 	// destroy   
-	gumbo_destroy_output(&kGumboDefaultOptions, output);
+	//gumbo_destroy_output(&kGumboDefaultOptions, output);
 }
 
 /*
@@ -169,8 +169,8 @@ css_RuleList mergeDoubleDeclarations(css_RuleList list) {
 
 css_RuleList optimize(css_RuleList list, char* filename) {
 	// merge nodes with same selector
-//	list = mergeNodes(list);
-//	list = removeDoubleDeclarations(list);
+	list = mergeNodes(list);
+	list = removeDoubleDeclarations(list);
 //	list = mergeDoubleDeclarations(list);
 //	list = shortHandMargin(list);
 	

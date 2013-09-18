@@ -1,0 +1,127 @@
+.tipsy-west  {
+	background-position: left center;
+}
+
+.tipsy-east  {
+	background-position: right center;
+}
+
+.tipsy-south  {
+	background-position: bottom center;
+}
+
+.tipsy-north  {
+	background-position: top center;
+}
+
+.tipsy-inner  {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 5px 8px 4px 8px;
+	background-color: black !important;
+	color: white !important;
+	max-width: 200px;
+	text-align: center;
+	font-size: 10px !important;
+}
+
+.tipsy  {
+	background-image: url(../images/tipsy.gif);
+	background-repeat: no-repeat;
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+	font-size: 10px;
+	padding: 5px;
+}
+
+.pp_fade , .pp_gallery li.default a img , #vertical-ad  {
+	display: none;
+}
+
+#horizontal-ad  {
+	display: block;
+}
+
+button  {
+	font-style: normal;
+	margin-right: -2px !important;
+	cursor: pointer;
+	border: 0;
+	outline: 0;
+	font-family: Arial, Helvetica, Sans-Serif;
+	color: #fff;
+	vertical-align: baseline;
+	list-style: none;
+	text-decoration: none;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+}
+
+textarea  {
+	padding: 10px;
+	margin-bottom: 1px;
+	font-style: italic;
+	float: left;
+	clear: both;
+	background: url(./images/bg/15.png);
+	border: 0;
+	outline: 0;
+	font-family: Arial, Helvetica, Sans-Serif;
+	color: #fff;
+	vertical-align: baseline;
+	list-style: none;
+	text-decoration: none;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+}
+
+input  {
+	width: 97.5%;
+	padding: 0;
+	margin: 0;
+	line-height: 1.5em;
+	text-decoration: none;
+	list-style: none;
+	vertical-align: baseline;
+	color: #fff;
+	font-family: Arial, Helvetica, Sans-Serif;
+	outline: 0;
+	border: 0;
+	background: url(./images/bg/15.png);
+	clear: both;
+	float: left;
+	font-style: italic;
+	margin-bottom: 1px;
+	padding: 10px;
+}
+
+div , table , tr , span , abbr , cite , img , ol , dl , dt , label , caption , fieldset , form , dd , li , ul , code , address , a , td , tbody , h6 , p  {
+	padding: 0;
+	margin: 0;
+	line-height: 1.5em;
+	text-decoration: none;
+	list-style: none;
+	vertical-align: baseline;
+	color: #fff;
+	font-family: Arial, Helvetica, Sans-Serif;
+	outline: 0;
+	border: 0;
+}
+
+body  {
+	font-size: 14px;
+	background: #195f88;
+	border: 0;
+	outline: 0;
+	font-family: Arial, Helvetica, Sans-Serif;
+	color: #fff;
+	vertical-align: baseline;
+	list-style: none;
+	text-decoration: none;
+	line-height: 1.5em;
+	margin: 0;
+	padding: 0;
+}
+

@@ -1,12 +1,4 @@
-/*
- 
- *
- * Copyright 2012 WooThemes
- * Free to use under the MIT license.
- * http://www.opensource.org/licenses/mit-license.php
- */
 
-/* Browser Resets */
 .flex-container a:active, .gf-slider a:active, .flex-container a:focus, .gf-slider a:focus {
 	outline: none;
 }
@@ -16,8 +8,7 @@
 	list-style: none;
 	padding-right: 10px;
 }
-/* gf-slider Necessary Styles
-*********************************/
+
 .gf-slider {
 	margin: 0;
 	padding: 0;
@@ -36,7 +27,7 @@
 .flex-pauseplay span {
 	text-transform: capitalize;
 }
-/* Clearfix for the .slides element */
+
 .slides:after {
 	content: ".";
 	display: block;
@@ -51,14 +42,11 @@ html[xmlns] .slides {
 * html .slides {
 	height: 1%;
 }
-/* No JavaScript Fallback */
-/* If you are not using another script, such as Modernizr, make sure you
- * include js that eliminates this class on page load */
+
 .no-js .slides > li:first-child {
 	display: block;
 }
-/* gf-slider Default Theme
-*********************************/
+
 .gf-slider {
 	position: relative;
 	zoom: 1;
@@ -72,17 +60,14 @@ html[xmlns] .slides {
 	background:none;
 	padding:0
 }
-/* Suggested container for "Slide" animation setups. Can replace this with your own, if you wish */
+
 .flex-container {
 	zoom: 1;
 	position: relative;
 }
-/* Caption style */
-/* IE rgba() hack */
+
 .flex-caption {
 	background:none;
--ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000, endColorstr=#4C000000);
-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000, endColorstr=#4C000000);
 	zoom: 1;
 }
 .flex-caption {
@@ -98,7 +83,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000, endCo
 	font-size: 12px;
 	line-height: 18px;
 }
-/* Direction Nav */
+
 .flex-direction-nav {
 	height: 0;
 	display:block
@@ -136,7 +121,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C000000, endCo
 	filter:alpha(opacity=30);
 	cursor: default;
 }
-/* Control Nav */
+
 .flex-control-nav {
 	width: 100%;
 	position: absolute;
