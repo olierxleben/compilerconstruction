@@ -35,18 +35,6 @@ static void shortHandColor(char** val){
     }
 }
 
-css_RuleList shortHandMargin(css_RuleList list){
-	while(list) {	
-		if(list->next) {	
-	//		if(strcmp(list->selector->name, sel->name) == 0) {
-				
-		//	}
-		}
-		
-		list = list->next;
-	}
-}
-
 void parseHTML(char* file) {
 	// create output
 	//GumboOutput* output = gumbo_parse(file);
