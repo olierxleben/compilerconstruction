@@ -71,21 +71,22 @@ void removeDeclaration(css_Declaration dec, css_DeclarationList list) {
 	while(list) {
 		if(list->declaration != NULL ) {
 		
-		if(strcmp(list->declaration->dec_key, dec->dec_key) == 0) {			
-			if(list->next) {	
-				list->declaration = list->next->declaration;
-				list->next = list->next->next;			
-			}
-			else {
-				if(last) {
-					last->next = NULL;
-				}
-				else {
-					list = NULL;
-				}
-			}								
-		}
-		}
+		    if(strcmp(list->declaration->dec_key, dec->dec_key) == 0) {			
+			    if(list->next) {	
+				    list->declaration = list->next->declaration;
+				    list->next = list->next->next;			
+			    }
+			    else {
+				    if(last) {
+					    last->next = NULL;
+				    }
+				    else {
+					    list = NULL;
+					    continue;
+				    }
+			    }								
+		    }
+	    }
 		
 		last = list;
 		list = list->next;
@@ -171,7 +172,7 @@ css_RuleList optimize(css_RuleList list, char* filename) {
 	// merge nodes with same selector
 	list = mergeNodes(list);
 	list = removeDoubleDeclarations(list);
-//	list = mergeDoubleDeclarations(list);
+	list = mergeDoubleDeclarations(list);
 //	list = shortHandMargin(list);
 	
 	parseHTML(filename);
