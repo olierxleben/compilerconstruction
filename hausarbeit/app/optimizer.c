@@ -4,25 +4,34 @@
 #include <stdio.h>
 #include "gumbo.h" // HTML 5 parser
 
+#define BUFFER_SIZE 256
+
 /*
 * Set hex pair values to one value #336699 -> #369 or #34228 -> #3428
 * char ** because I need the adress of the pointer to set the new value
 */ 
-static void shortHandColour(char** val){
+static void shortHandColor(char** val){
     int i = 1;  // position in value 
     int j = 1;  // position in newValue
     char *value = *val;
-    char newValue[sizeof(value)/sizeof(char)] = {0};    // Init    
+    char newValue[BUFFER_SIZE] = {0};    // Init
+    int shorting = 1;
+        
     // Isn't a hex value don't do anything
     if(value && value[0] == '#'){
         newValue[0] = '#';
-        for(; i < (sizeof(value)/sizeof(char)-1); i++, j++){
-            newValue[j] = value[i];   
-            if(value[i] == value[i+1]){
-                i++;
+        for(; i < strlen(*val); i=i+2, j++){
+            if(value[i] == value[i+1]) {
+            	newValue[j] = value[i];
             }           
+            else {
+            	shorting = 0;
+            	break;
+            }
         }
-        *val = strdup(newValue);   
+        
+        if(shorting == 1)        
+        	*val = strdup(newValue);   
     }
 }
 
@@ -56,22 +65,32 @@ static void shortHandMargin0PX(char** val){
     }
 }
 
-void removeDeclaration(css_Declaration dec, css_DeclarationList list) {
+void removeDeclaration(css_Declaration dec, css_DeclarationList list) {	
+	css_DeclarationList last = NULL;
+	
 	while(list) {
-		if(list->next) {	
-			printf("%s,", dec->dec_key);
-			printf("%s\n", list->declaration->dec_key);
-			if(strcmp(list->declaration->dec_key, dec->dec_key) == 0) {
+		if(list->declaration != NULL ) {
+		
+		if(strcmp(list->declaration->dec_key, dec->dec_key) == 0) {			
+			if(list->next) {	
 				list->declaration = list->next->declaration;
-				list->next = list->next->next;
+				list->next = list->next->next;			
 			}
+			else {
+				if(last) {
+					last->next = NULL;
+				}
+				else {
+					list = NULL;
+				}
+			}								
 		}
-		else {
-			list->declaration = NULL;
-			list->next = NULL;
 		}
+		
+		last = list;
 		list = list->next;
 	}
+	
 }
 
 css_RuleList removeDoubleDeclarations(css_RuleList list) {
@@ -81,10 +100,67 @@ css_RuleList removeDoubleDeclarations(css_RuleList list) {
 		
 		while(decs) {
 			removeDeclaration(decs->declaration, decs->next);
-						
+					
 			decs = decs->next;	
 		}				
 		
+		list = list->next;
+	}	
+	
+	return ret;
+}
+
+int compareDeclarationLists(css_DeclarationList currDecs, css_DeclarationList nextDecs) {
+	css_DeclarationList nextStart = nextDecs;
+	while(currDecs) {
+		int found = 0;
+		nextDecs = nextStart;
+		while(nextDecs) {
+			if(strcmp(currDecs->declaration->dec_key, nextDecs->declaration->dec_key) == 0 &&
+			   strcmp(currDecs->declaration->dec_val, nextDecs->declaration->dec_val) == 0) {
+				found = 1;	
+			}
+			nextDecs = nextDecs->next;
+		}
+		
+		if(found == 0) {
+			return 1;
+		}
+		
+		currDecs = currDecs->next;
+	}
+	
+	return 0;
+}
+
+css_SelectorList mergeSelectors(css_SelectorList first, css_SelectorList second) {
+	while(first) {
+		
+		second = create_CSSSelectorList(first->selector, second);
+		
+		first = first->next;
+	}
+	
+	return second;
+}
+
+css_RuleList mergeDoubleDeclarations(css_RuleList list) {
+	css_RuleList ret = list;
+	while(list) {
+		css_RuleList tmpList = list->next;
+		while(tmpList) {
+				css_DeclarationList currDecs = list->rule->declarationList;
+				css_DeclarationList nextDecs = tmpList->rule->declarationList;
+			
+				if(compareDeclarationLists(currDecs, nextDecs) == 0 && compareDeclarationLists(nextDecs, currDecs) == 0) {
+					// Selectors mergen
+					css_SelectorList tmp = mergeSelectors(list->rule->selectorList, tmpList->rule->selectorList);
+					list->rule->selectorList = tmp;
+					list->next = tmpList->next;
+				}
+					
+			tmpList = tmpList->next;
+		}
 		list = list->next;
 	}
 	
@@ -93,8 +169,9 @@ css_RuleList removeDoubleDeclarations(css_RuleList list) {
 
 css_RuleList optimize(css_RuleList list, char* filename) {
 	// merge nodes with same selector
-	list = mergeNodes(list);
-	list = removeDoubleDeclarations(list);
+//	list = mergeNodes(list);
+//	list = removeDoubleDeclarations(list);
+//	list = mergeDoubleDeclarations(list);
 //	list = shortHandMargin(list);
 	
 	parseHTML(filename);
@@ -138,7 +215,7 @@ css_RuleList mergeNodes(css_RuleList list) {
 				if(containsSelector(tmpList->rule->selectorList, currSel)) {
 					newRule = mergeToNewRule(newRule, tmpList->rule, currSel);					
 					removeSelector(currSel, tmpList->rule->selectorList);
-				}		
+				}
 		
 				tmpList = tmpList->next;
 			}
@@ -158,10 +235,15 @@ css_RuleList mergeNodes(css_RuleList list) {
 
 int containsSelector(css_SelectorList list, css_Selector selector) {
     css_SelectorList tmp = list;
+    
+    if(selector == NULL)
+    	return 0;
+    
 	while(tmp) {
-		if(strcmp(tmp->selector->name ,selector->name) == 0)
-			return 1;
-			
+		if(tmp->selector) {
+			if(strcmp(tmp->selector->name ,selector->name) == 0)
+				return 1;
+		}	
 		tmp = tmp->next;
 	}
 	return 0;
@@ -174,7 +256,7 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    tmpList = rule1->declarationList;
 	    while(tmpList) {
 	    	// shorthand optimization
-	        shortHandColour(&(tmpList->declaration->dec_val));
+	        shortHandColor(&(tmpList->declaration->dec_val));
 			shortHandMargin0PX(&(tmpList->declaration->dec_val));
 			
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);
@@ -187,7 +269,7 @@ css_Rule mergeToNewRule(css_Rule rule1, css_Rule rule2, css_Selector selector) {
 	    tmpList = rule2->declarationList;
 	    while(tmpList) {
 	    	// shorthand optimization
-	        shortHandColour(&(tmpList->declaration->dec_val));
+	        shortHandColor(&(tmpList->declaration->dec_val));
 			shortHandMargin0PX(&(tmpList->declaration->dec_val));
 			
 		    css_Declaration tmpDec = create_CSSDeclaration(tmpList->declaration->dec_key, tmpList->declaration->dec_val);

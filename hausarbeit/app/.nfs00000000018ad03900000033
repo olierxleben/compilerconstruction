@@ -1,24 +1,19 @@
-a, .b {
+a, b {
 	yolo: swag;
 	hansi: wurst;
 }
 
-.b, a, d {
+b, a, d {
 	peter: pan;
 	dieter: wurst;
 }
 
-a, d-asd {
+a, d {
 	border: 1px;
 	color: #332199;
 }
 
-.b, d {
+b, d {
 	margin: 0px;
 	color: #ffffff;
 }
-
-#yolo:active {
-	border: 0px;
-}
-

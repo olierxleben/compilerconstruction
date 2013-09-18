@@ -17,34 +17,35 @@ int main(int argc, char* argv[]) {
 	struct css_data cd;
 	css_RuleList rules;
 
-/*	// parse command line arguments
+	// parse command line arguments
 	printf("parsing parameters...\n");
 	id = parse_cli(argc, argv);
 
 	// merge css files from given html documents
 	printf("merging css files...\n");
 	cd = merge_css(id.input_type, id.src);
-*/
+
 	
 	// parse CSS
-	rules = parseCSS(argv[1]);
+	rules = parseCSS(cd.merged_css);
 	trimTree(rules);
 
 	//print CSS tree
 	//printGUI(rules);
 
-
 	// optimize CSS
+
+	printf("optimizing css...\n");
 	rules = optimize(rules, argv[1]);
 
-	printGUI(rules);
 
+	//printGUI(rules);
 
 	// output
-	structuredOutput(rules, "yolo_output.css");
-
-	// start css optimization
-	printf("optimizing css...\n");
+	if(id.output_type == STRUCTURED)
+		structuredOutput(rules, "output.css");
+	else
+		minifiedOutput(rules, "output.css");
 
 	return 0;
 }
