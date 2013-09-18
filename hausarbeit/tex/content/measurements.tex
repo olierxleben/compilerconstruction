@@ -35,3 +35,19 @@ Rack::Handler::WEBrick.run(serve, :port => 80, 'Contetn-Type'=>'text/html')
 \subsection{Bewertungskriterien}
 
 \subsection{Ergebnisanalyse}
+
+% TODO: Als Tabelle
+\begin{table}[ht!]
+	\centering
+	\begin{tabular}{c | c}
+		Anforderung & Beschreibung \\
+		\hline
+		Ausgabeformat & optimiertes CSS soll entstehen \\
+		5 & Spieler ist weiß und beginnt \\
+		6 & Spieler hat gewonnen \\
+		7 & Spielfeld voll \\
+		8 & Start einer neuen Runde \\
+	\end{tabular}
+	\caption{Anforderungen an die Optimierungen}
+	\label{server-proto-bit-usage}
+\end{table}
