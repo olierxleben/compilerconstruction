@@ -25,30 +25,36 @@ clean:
 	rm -f lex.yy.c grammar/test.tab.h grammar/test.tab.c grammar/parser optimCSS
 \end{lstlisting}
 
+\subsection{Verwendete Bibliotheken}
 
-\subsection{Curses/NCurses}
+\subsubsection{Curses/NCurses}
 
 Zur Ausgabe der Kommandozeile wurde die Programmierbibliothek \textbf{curses}, bzw. \textbf{ncurses} verwendet. Curses wird zum Screen Handling und dessen Optimierung verwendet. Es liegt allen gängigen Linux-Distributionen in den Standartpaketquellen vor. Unter Mac OS X wird die curses-Bibliothek mit den Developer Tools von Xcode mit installiert. Unter Windows kann Cygwin oder MingGW genutzt werden um die Bibliothek zu erhalten. Weitere Informationen können den \textit{man pages}\footnote{man page (unix): \textbf{man ncurses} auf der Kommandozeile} entnommen werden. 
 
 Wie im Listing \ref{makefile_listing} zu sehen ist, wird die Anwendung (\textit{app}) mittels \textbf{-lncurses} kompiliert. 
 
-\subsection{Gumbo - HTML5 Parser}
+\subsubsection{Gumbo - HTML5 Parser}
 Für Optimierungen werden Inhalte der zugrundeliegenden HTML-Datei benötigt. So ist es beispielsweise notwendig alle HTML-Tags, Klassen und IDs die in den CSS-Dateien definiert wurden mit den vorhandenen Tags der HTML-Datei zu vergleichen. Unbenutzte Definitionen sind im CSS somit unnötig und können entfernt werden.
 
-Zum Parsen der HTML-Datei wird der Parser \textit{Gumbo} verwendet. Gumbo wurde im August 2013 von Google als Open Source - Projekt freigegeben. Die Bibliothek selbst ist in C geschrieben und hält sich an den HTML-Parsing-Algorithmus\footnote{(X)HTML-Parsing-Algorithmus:http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html}. Die Quellen dazu liegen auf Github\footnote{https://github.com/google/gumbo-parser/}. Das Listing \ref{gumbo_install} zeigt die notwendigen Instruktionen um Gumbo nach erfolgreichen herunterladen zu installieren.
+Zum Parsen der HTML-Datei wird der Parser \textit{Gumbo} verwendet. Gumbo wurde im August 2013 von Google als Open Source - Projekt freigegeben. Die Bibliothek selbst ist in C geschrieben und hält sich an den HTML-Parsing-Algorithmus\footnote{(X)HTML-Parsing-Algorithmus:http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html}. Die Quellen\footnote{https://github.com/google/gumbo-parser/} liegen auf Github. Das Listing \ref{gumbo_install} zeigt die notwendigen Instruktionen um Gumbo nach erfolgreichen herunterladen (auf einem unixoiden System) zu installieren.
 
 \begin{lstlisting}[label=gumbo_install,language=bash, caption=Installation der gumbo Bibliothek]
 $ ./autogen.sh
 $ ./configure
 $ make
-$ sudo make install
+$ (sudo) make install
 \end{lstlisting}
 
 Die detailierte Verwendung wird im Abschnitt \ref{unused_css_delete} vorgestellt. Das Listing \ref{makefile_listing}, Zeile 6 verwendet \textbf{lgumbo} um den Compiler mizuteilen, dass die Anwendung damit kompiliert werden soll. 
 
-\subsection{Einlesen der CSS-Dateien}
+\subsection{Hauptroutine}
 % TODO: verfassen
+
+\subsection{Einlesen der HTML- und CSS-Dateien}
+% TODO: verfassen
+
 \subsection{Zusammenführen der CSS-Dateien}
 % TODO: verfassen
+
 \subsection{Teilergebnis}
 % TODO: verfassen
