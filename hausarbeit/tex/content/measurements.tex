@@ -3,8 +3,6 @@
 Als Grundlage zur Bewertung von Optimierungen, soll eine größere \textbf{Single Page Applikation} verwendet werden. Single Page Anwendungen folgen dem Paradigma niemals die gesamte Seite neu zu laden, sondern nur gewünschte Teile der Anwendung zu aktualisieren. Oft werden dabei asynchrone Requests oder auch Web-Sockets verwendet. Dies verbessert Ladezeiten, SEO, ... 
 % TODO: überarbeiten, auf Korrektheit prüfen.
 
-
-
 Weiterhin wurde ein eigener minimalistischer Webservice, basierend auf \textit{Ruby Rack} und \textit{WEBrick}, entwickelt. Der Webdienst dient zur Bereitstellung der Testdaten vor und nach der Optimierung. Das Listing \ref{server_rb} zeigt die Implementierung des Dienstes, welcher den aus der Standard-Ruby-Implementierung mitgelieferten Web-Server nutzt und auf Port 80 lauscht. 
 
 \begin{lstlisting}[label=server_rb,language=Ruby, caption=Ruby Webservice für Messdaten]
@@ -31,23 +29,32 @@ Signal.trap('INT') {
 # takeoff
 Rack::Handler::WEBrick.run(serve, :port => 80, 'Contetn-Type'=>'text/html')
 \end{lstlisting}
-% TODO: Bibliotheken
-\subsection{Bewertungskriterien}
 
-\subsection{Ergebnisanalyse}
+\subsection{Ergebnis}
+Das Ergebnis wird durch folgende Typen gemessen:
+\begin{itemize}
+    \item{Anzahl Dateien}
+    \item{Dateigröße}
+    \item{Ladezeit im Browser}
+    \item{Anzahl Knoten im generierten Baum}
+\end{itemize}
+
+Die Tabelle \ref{messungen-ergebnis} grenzt die Messergebnisse von einander ab.
 
 % TODO: Als Tabelle
 \begin{table}[ht!]
 	\centering
-	\begin{tabular}{c | c}
-		Anforderung & Beschreibung \\
+	\begin{tabular}{l | c | c}
+		Art & Ursprung & Optimierung \\
 		\hline
-		Ausgabeformat & optimiertes CSS soll entstehen \\
-		5 & Spieler ist weiß und beginnt \\
-		6 & Spieler hat gewonnen \\
-		7 & Spielfeld voll \\
-		8 & Start einer neuen Runde \\
+		Anzahl Dateien & 1..n Dateien & 1 Datei \\
+		Größe & ca. 37 KB & ca. 33 KB \\
+		Ladezeit &  & \\
+		Anzahl Knoten & & \\
 	\end{tabular}
-	\caption{Anforderungen an die Optimierungen}
-	\label{server-proto-bit-usage}
+	\caption{Ergebnis der Messungen}
+	\label{messungen-ergebnis}
 \end{table}
+
+\subsection{Fazit}
+Mittels (F)lex, Yacc/Bison und der verwendeten Grammatik kann ein Baum generiert werden, dessen Knoten optimiert werden können. 

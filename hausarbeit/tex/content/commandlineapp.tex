@@ -4,8 +4,7 @@ Um Optimierungen durchzuführen wurde im Rahmen der Hausarbeit ein Kommandozeile
 \subsection{Makefile und Start des Programms}
 Zur Kompilierung und Bereitstellung wurde ein Makefile erstellt (Details siehe Listing \ref{makefile_listing}). Mit dem Makefile besteht ebenfalls die Möglichkeit Einzelteile des Projekts zu erstellen. Zum Beispiel kann mittels \textbf{make parser} nur der Parser erstellt werden.
 % TODO: verfassen
-\begin{lstlisting}[label=makefile_listing,language=C, caption=Makefile]
-#include grammar/makefile.mk
+\begin{lstlisting}[label=makefile_listing,language=C, caption=Auszug aus dem Makefile des Projekt]
 
 all: app
 	
@@ -15,14 +14,6 @@ app: lex.yy.c test.tab.c test.tab.h grammar/css_types.h
 parser: lex.yy.c test.tab.c test.tab.h grammar/css_types.h
 	cc grammar/test.tab.c grammar/css_types.c grammar/lex.yy.c -o parser
 
-test.tab.c test.tab.h: grammar/test.y
-	bison -d grammar/test.y -o grammar/test.tab.c
-            
-lex.yy.c: grammar/test.l test.tab.h
-	flex -o grammar/lex.yy.c grammar/test.l
-
-clean: 
-	rm -f lex.yy.c grammar/test.tab.h grammar/test.tab.c grammar/parser optimCSS
 \end{lstlisting}
 
 \subsection{Datenstrukturen}
