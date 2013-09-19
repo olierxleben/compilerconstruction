@@ -7,7 +7,7 @@
 #define BUFFER_SIZE 4096
 
 /*
-* Set hex pair values to one value #336699 -> #369 or #34228 -> #3428
+* Set hex pair values to one value #336699 -> #369
 * char ** because I need the adress of the pointer to set the new value
 */ 
 static void shortHandColor(char** val){
@@ -45,7 +45,7 @@ void parseHTML(char* file) {
 }
 
 /*
-* Add this moment only removes px from 0px for marging
+* Function to removes px from 0px for marging
 */
 static void shortHandMargin0PX(char** val){
     if(strcmp(*val, "0px") == 0){
@@ -53,6 +53,12 @@ static void shortHandMargin0PX(char** val){
     }
 }
 
+/**
+ * 
+ *
+ *
+ *
+ */
 void removeDeclaration(css_Declaration dec, css_DeclarationList list) {	
 	css_DeclarationList last = NULL;
 	
@@ -167,7 +173,6 @@ css_RuleList optimize(css_RuleList list, char* filename) {
 	list = mergeNodes(list);
 	list = removeDoubleDeclarations(list);
 	list = mergeDoubleDeclarations(list);
-//	list = shortHandMargin(list);
 	
 	parseHTML(filename);
 	

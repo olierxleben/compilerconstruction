@@ -3,6 +3,7 @@
 #include <string.h>
 #include "output.h"
 
+
 void structuredOutput(css_RuleList rules, char* fileName) {
 	FILE *outFile;
 	
@@ -108,6 +109,7 @@ char* trimSpaces(char* string) {
 	int len = strlen(string);
 	int i = 0;
 	
+	// remove whitespaces at the front
 	while(i < len) {
 		if(string[0] == ' ')
 			++string;
@@ -118,6 +120,7 @@ char* trimSpaces(char* string) {
 	
 	i = strlen(string) - 1;
 	
+	// remove whitespaces at the end
 	while(i > 0) {
 		if(isspace(string[i]))
 			string[i] = '\0';
@@ -129,18 +132,21 @@ char* trimSpaces(char* string) {
 	return strdup(string);
 }
 
-
 void trimTree(css_RuleList rules) {
+    // All rules
 	while(rules) {
+	    // Get selectorlist and declarationlist
 		css_SelectorList sels = rules->rule->selectorList;
 		css_DeclarationList decs = rules->rule->declarationList;
-	
+	    
+	    // remove whitespaces from all selector names
 		while(sels) {
 			sels->selector->name = trimSpaces(sels->selector->name);
 								
 			sels = sels->next;
 		}
 		
+		// remove whitespaces from all declaration values and keys
 		while(decs) {
 			decs->declaration->dec_key = trimSpaces(decs->declaration->dec_key);
 			decs->declaration->dec_val = trimSpaces(decs->declaration->dec_val);
