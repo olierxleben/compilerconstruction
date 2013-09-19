@@ -45,10 +45,7 @@ static void shortHandMargin0PX(char** val){
 }
 
 /**
- * 
- *
- *
- *
+ * removes declaration from the given list
  */
 void removeDeclaration(css_Declaration dec, css_DeclarationList list) {	
 	css_DeclarationList last = NULL;
@@ -79,6 +76,10 @@ void removeDeclaration(css_Declaration dec, css_DeclarationList list) {
 	
 }
 
+/**
+ * removes double declarations
+ */
+
 css_RuleList removeDoubleDeclarations(css_RuleList list) {
 	css_RuleList ret = list;
 	while(list) {
@@ -96,6 +97,10 @@ css_RuleList removeDoubleDeclarations(css_RuleList list) {
 	return ret;
 }
 
+/**
+ * compares declaration list if they are same
+ * NOTE: use the function 2 times and change the lists with eachother
+ */
 int compareDeclarationLists(css_DeclarationList currDecs, css_DeclarationList nextDecs) {
 	css_DeclarationList nextStart = nextDecs;
 	while(currDecs) {
@@ -168,6 +173,9 @@ css_RuleList optimize(css_RuleList list, char* filename) {
 	return list;
 }
 
+/**
+ * removes selector form the selector list
+ */
 void removeSelector(css_Selector sel, css_SelectorList list) {
 	while(list) {	
 		if(list->next) {	
@@ -222,6 +230,9 @@ css_RuleList mergeNodes(css_RuleList list) {
 	return newRules;
 }
 
+/**
+ * Looks if the given selector is in the selector list
+ */
 int containsSelector(css_SelectorList list, css_Selector selector) {
     css_SelectorList tmp = list;
     
