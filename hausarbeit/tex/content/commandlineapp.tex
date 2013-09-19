@@ -25,17 +25,53 @@ clean:
 	rm -f lex.yy.c grammar/test.tab.h grammar/test.tab.c grammar/parser optimCSS
 \end{lstlisting}
 
-\subsection{Datenstrukturen}
+Der Start des Programms geschieht über die Konsole unter Angabe von Parametern. Zur Verfügung stehen die folgenden Parameter:
 
-\begin{lstlisting}[label=datastructures_listing,language=C, caption=Datenstrukturen]
+\begin{description}[label=description_program_start]
+   \item[-f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und zusammengeführt für die Optimierung.
+   \item[-m] Minifizierte Ausgabe.
+   \item[-s] Strukturierte Ausgabe.
+\end{description}
+
+Zum Start des Programms ist der Parameter -f zwingend nötig um dem Optimierer CSS-Dateien zur Verfügung zu stellen. Ein Beispiel ist in Listing \ref{example_program_start} dargestetllt.
+
+\begin{lstlisting}[label=example_program_start,language=Bash, caption=Programmstart]
+
+./optimCSS -f index.html
 
 \end{lstlisting}
 
-\subsection{Einlesen der HTML- und CSS-Dateien}
-% TODO: verfassen
+\subsection{Datenstrukturen}
 
-\subsection{Zusammenführen der CSS-Dateien}
-% TODO: verfassen
+Zum Einlesen der Kommandozeilen parameter und der HTML- bzw. CSS-Dateien wurden Datenstrukturen definiert. Diese sind in Listing \ref{datastructures_input_listing} dargestellt.
+Mit Hilfe der Strukturen ist es möglich den Ausgabetyp, Eingabetyp, Eingabedatei sowie eine temporäre gemergte CSS-Datei zu halten.
 
-\subsection{Teilergebnis}
-% TODO: verfassen
+\begin{lstlisting}[label=datastructures_input_listing,language=C, caption=Datenstrukturen]
+
+enum output_type {STRUCTURED, MINIFIED};  // -s, -m
+enum input_type {FILE_INPUT, PATH_INPUT}; // -f, -p
+
+struct input_data {
+	int output_type;
+	int input_type;
+	char* src;
+};
+
+struct css_data {
+	char* src_html;
+	char* merged_css;
+};
+
+\end{lstlisting}
+
+
+\subsection{Grundaufbau des Kommandozeilenwerkzeugs}
+Das Kommandozeilenwerkzeug lässt sich in fünf Komponenten unterteilen. In der ersten Komponente werden die Kommandozeilenparameter eingelesen und für die spätere Nutzung in einer Struktur abgelegt.
+Die folgende Komponente ermittelt aus der übergebenen HTML-Datei alle genutzten CSS-Dateien und merged diese zu einer temporären CSS-Datei, welche später zur Optimierung verwendet wird.
+Nachdem nun eine einzelne CSS-Datei zum Optimieren bereit steht wird diese zunächst mittel eines durch Flex und Bison erzeugten Parsers in eine Baumstruktur überführt und so für die eigentiche Optimierung aufbereitet.
+Die hierzu genutzten Flex- und Bison-Quellen sind in den Listings \ref{css_lex} und \ref{css_bison} dargestellt. 
+Auf dem nun vorliegenden CSS-Baum werden nachfolgend einige Optimierungen durchgeführt, welche in Kapitel \ref{chap_optimization} detaillierter beschrieben werden.
+Abschließend wird der optimierte CSS-Baum in Textform als CSS-Datei ausgegeben. Die Ausgabe kann sowohl strukturiert (gut lesbar) als auch minifiziert erfolgen. Dies wird mittels Kommandozeilenparameter eingestellt.
+
+
+

@@ -10,10 +10,23 @@
 
 #include "output.h"
 
+int countRules(css_RuleList list) {
+	int cnt = 0;
+	while(list){
+		if(list->rule)
+			++cnt;
+	
+		list = list->next;
+	}
+	
+	return cnt;
+}
+
 int main(int argc, char* argv[]) {
 	struct input_data id;
 	struct css_data cd;
 	css_RuleList rules;
+	int parsed_rules, optimized_rules;
 
 	// parse command line arguments
 	printf("parsing parameters...\n");
@@ -25,13 +38,17 @@ int main(int argc, char* argv[]) {
 
 	// parse CSS
 	rules = parseCSS(cd.merged_css);
-	trimTree(rules);
+	trimTree(rules);	
 
+	parsed_rules = countRules(rules);
 
 	// optimize CSS
-
 	printf("optimizing css...\n");
 	rules = optimize(rules, argv[1]);
+
+	optimized_rules = countRules(rules);
+
+	printf("parsed_count: %i, optimized_count; %i\n", parsed_rules, optimized_rules);
 
 	// output
 	if(id.output_type == STRUCTURED)
