@@ -3,7 +3,7 @@ Um Optimierungen durchzuführen wurde im Rahmen der Hausarbeit ein Kommandozeile
 
 \subsection{Makefile und Start des Programms}
 Zur Kompilierung und Bereitstellung wurde ein Makefile erstellt (Details siehe Listing \ref{makefile_listing}). Mit dem Makefile besteht ebenfalls die Möglichkeit Einzelteile des Projekts zu erstellen. Zum Beispiel kann mittels \textbf{make parser} nur der Parser erstellt werden.
-% TODO: verfassen
+
 \begin{lstlisting}[label=makefile_listing,language=C, caption=Makefile]
 #include grammar/makefile.mk
 
@@ -27,10 +27,10 @@ clean:
 
 Der Start des Programms geschieht über die Konsole unter Angabe von Parametern. Zur Verfügung stehen die folgenden Parameter:
 
-\begin{description}[label=description_program_start]
-   \item[-f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und zusammengeführt für die Optimierung.
-   \item[-m] Minifizierte Ausgabe.
-   \item[-s] Strukturierte Ausgabe.
+\begin{description}
+   \item[ -f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und zusammengeführt für die Optimierung.
+   \item[ -m] Minifizierte Ausgabe.
+   \item[ -s] Strukturierte Ausgabe.
 \end{description}
 
 Zum Start des Programms ist der Parameter -f zwingend nötig um dem Optimierer CSS-Dateien zur Verfügung zu stellen. Ein Beispiel ist in Listing \ref{example_program_start} dargestetllt.
