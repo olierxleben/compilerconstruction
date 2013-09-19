@@ -4,7 +4,7 @@
 
 // include generated bison header
 #include "css_types.h"
-#include "test.tab.h"
+#include "css.tab.h"
 
 %}
 
@@ -15,9 +15,6 @@
 */
 
 SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"\-"%"\[\]"*""_""=""!""@""'""?"]+
-KEY_STRING			[a-zA-Z"-"]+
-VAL_STRING			[a-zA-Z0-9"#""("")"" "".""/"]+ 
-DEC_STRING			["#"]*[a-zA-Z0-9"#""("")"" "".""/"":"\-]+
 RCHEVRON			">"
 PLUS				"+"
 

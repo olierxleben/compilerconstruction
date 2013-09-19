@@ -1,12 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <ncurses.h>
 
 #include "cli_parse.h"
 #include "css_merge.h"
-#include "guiCSS.h"
 #include "grammar/css_types.h"
-#include "grammar/test.tab.h"
+#include "grammar/css.tab.h"
 #include "optimizer.h"
 #include "grammar/parsecss.h"
 
@@ -25,27 +23,21 @@ int main(int argc, char* argv[]) {
 	printf("merging css files...\n");
 	cd = merge_css(id.input_type, id.src);
 
-	
 	// parse CSS
 	rules = parseCSS(cd.merged_css);
 	trimTree(rules);
 
-	//print CSS tree
-	//printGUI(rules);
 
 	// optimize CSS
 
 	printf("optimizing css...\n");
 	rules = optimize(rules, argv[1]);
 
-
-	//printGUI(rules);
-
 	// output
 	if(id.output_type == STRUCTURED)
 		structuredOutput(rules, "output.css");
 	else
 		minifiedOutput(rules, "output.css");
-/**/
+
 	return 0;
 }

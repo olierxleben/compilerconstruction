@@ -4,8 +4,7 @@
 	#include <ncurses.h>
 	#include <string.h>
     #include "css_types.h"
-    #include "printCSS.h"
-    #include "test.tab.h"
+    #include "css.tab.h"
     #include "parsecss.h"
         
     css_RuleList root; 
