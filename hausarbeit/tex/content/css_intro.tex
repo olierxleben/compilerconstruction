@@ -17,7 +17,7 @@ Damit eine Optimierung von bestehenden CSS-Quelltext durchgeführt werden kann, 
 Eine CSS-Datei besteht aus einer Menge von Anweisungen, oder Regeln, die das Layout einzelner Elemente (mit bestimmter ID), Klassen von Elementen oder allgemein gültigen Elementen bestimmen. Regeln deren anzuwendenen Eigenschaften gleich sind, können mittels Kommata getrennt werden.
 
 Der allgemeine Aufbau einer CSS-Regel wird im Listing \ref{css_basics} veranschaulicht.   
-%TODO comment in css style
+
 \begin{lstlisting}[label=css_basics,language=bash, caption=Aufbau einer CSS-Regel]
 a {
     background:#000;
@@ -34,13 +34,9 @@ a {
 
 Im Listing \ref{css_basics} sind drei Regeln gegeben. Die erste Regel wird für ein HTML-Element angewendet. Jedes a-Element (Hyperlinks im Browser) werden mit schwarzen Hintergrund angezeigt und der textliche Inhalt des Elements wird weiß dargstellt. Bei dem zweiten Element wird eine Regel auf ein Element mit der ID \textbf{special} angwendet. Dies erhält einen durchgehenden roten Rahmen um den Inhalt des Elements. Die dritte Regel legt eine gepunktete grüne Linie um den Inhalt der Elemente mit der Klasse \textbf{left}, sowie der HTML-Elemente top mit der zugewiesen Klasse \textbf{myClass}.  
 
-% TODO: Table
-
-
-% TODO: Tabelle Selektoren
 Nach der Spezifiktation des W3C
 \subsection{Grammatik}
-% TODO: Grammatik einfügen
+
 Die zugrundeliegende Grammatik stammt von der Seite des W3C (Details, siehe: \cite{w3c_css_grammar}). Dies entspricht im Wesentlichen der Grammatik für die CSS Version 2.1. Das Listing \ref{w3c_grammar} zeigt einen Auszug der Grammatik des W3C. 
 
 \begin{lstlisting}[label=w3c_grammar,language=C, caption=Grammatik des W3C]
