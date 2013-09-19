@@ -1,7 +1,240 @@
 \section{Baumgenerierung}
+Im folgenden wird die Erstellung des Baumes beschrieben. Dabei wird zum Einen auf die Implementierung der Bison und Lex Dateien eingegangen. Und zum Anderen wird auf die Abbildung des Baumes und die erstellen CSS Strukturen erläutert.
+In diesem Abschnitt wird die Beschreibung der Grammatik durch Lex und Bison Dateien beschreiben. 
+\subsection{Abbildung der CSS Grammatik in Lex}
+\label{tree_generation_lex}
+Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns als nicht nutzbar erwiesen hat, haben wir uns dafür entschieden diese selber zuschreiben. Dabei haben wir uns dazu entschieden, dass die Beschreibung dabei einfach gehalten wird. Das bedeutet, dass bei der Beschreibung nicht alles akribisch interpretieren wird. Dies ist auch nicht notwendig. Im folgenden werden die Punkte aufgelistet die wir unterscheiden. 
+\begin{itemize}
+\item{String: kann ein Selektor, Deklarationschlüssel, etc. sein} 
+\item{Komma} 
+\item{Doppelpunkt} 
+\item{Semikolon} 
+\item{Geschweifteklammer auf} 
+\item{Geschweifteklammer zu} 
+\item{Punkt} 
+\end{itemize}
+Diese einfache Unterteilung hat als Vorteil, dass die Beschreibung der CSS Grammatik in Lex simpel erstellt werden kann. Es wird zur Unterscheidung von Selektoren / Deklaration die oben beschreibenen Sonderzeichen benötigt. 
+\begin{lstlisting}[label=css_lex,language=C, caption=Beschreibung der CSS Grammatik in Lex]
+%{
+#include <stdio.h>
+#include <stdlib.h>
 
-\subsection{Verwendete Grammatik}
-\label{tree_generation_used_grammar}
-% TODO: Listing eigene Grammatik
+// include generated bison header
+#include "css_types.h"
+#include "css.tab.h"
 
-\subsection{Ausgabe}
+%}
+
+%option noyywrap
+
+/* 
+    patterns can be described here
+*/
+
+SEL_STRING			["#"|"."]*[a-zA-Z0-9"#""("")"" "".""/"\-"%"\[\]"*""_""=""!""@""'""?"]+
+RCHEVRON			">"
+PLUS				"+"
+
+%x COMMENT
+
+%%
+%{
+/*
+    rules for pattern recognition
+*/
+%}
+
+"," { return COMMA;}
+":" { return COLON;}
+";" { return SEMICOLON;}
+"{" { return LBRACE ;}
+"}" { return RBRACE ;}
+"." { return DOT ;}
+
+[ \t\n\r]             ;   // ignore whitespace
+
+{SEL_STRING}[ ]{RCHEVRON}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
+{SEL_STRING}[ ]{PLUS}[ ]{SEL_STRING}	{ yylval.sval = strdup(yytext); return STRING; }
+{SEL_STRING} {yylval.sval = strdup(yytext); return STRING; }
+
+.                   ;   // ignore everything else
+
+%%
+
+/*
+    user code, lexen etc.
+    moved to test.bison
+*/
+\end{lstlisting} 
+Im Listing \ref{css_lex} ist die Implementierung zu sehen. Dabei werden in den Zeilen 37 - 39 die verschiedenen CSS kontelationen beachtet und als String interpretiert. Im Vergleich zur CSS Grammatik Beschreibung der W3C ist keine detaillierte möglich, aber auch nicht gewünscht.
+\subsection{Benötigte Datenstrukturen zur Erstellung des Baums}
+Bevor die interpretierete CSS Grammatik auf einen Baum abgebildet werden kann, werden Datenstrukturen benötigt. Diese ermöglichen es eine automatische Baumgenerierung und Verknüpfung. Dabei werden für folgende Punkte Strukturen abgebildet.
+\begin{itemize}
+\item{CSS Rule List: Beinhaltet die gesammten Regeln und ist der Wurzelknoten des Baums} 
+\item{CSS Rule: Ist eine CSS Regel die Selektoren und ihre Deklarationen beinhalten} 
+\item{CSS Selector List: Ist eine Selektorliste, die einzelne Selektoren beinhaltet} 
+\item{CSS Selector: Beinhaltet nur den Namen. Richtige Zuordnung geschieht in der CSS Rule} 
+\item{CSS Declaration List: Iste eine Deklarationsliste, die die einzelnen Deklarationen beinhaltet} 
+\item{CSS Declaration: Beinhaltet der Deklarationsschluessel und Deklarationwert. Richtige Zuordnung geschieht in der CSS Rule} 
+\end{itemize}
+Diese Punkte sind dem Listing \ref{css_structs} zu sehen. Dabei sind auch die Funktionen zur Erstellung der einzelnen Elementen zu sehen. Diese werden bei der Baumgenerierung benötigt und werden im folgenden Abschnitt genutzt.
+\begin{lstlisting}[label=css_structs,language=C, caption=C Struckturen für die Baumgenerierung]
+#ifndef CSS_TYPES_H_
+#define CSS_TYPES_H_
+
+/**
+ *
+ * Structures for CSS tree
+ *
+ */
+
+typedef struct css_Selector_* css_Selector;
+typedef struct css_Declaration_* css_Declaration;
+typedef struct css_SelectorList_* css_SelectorList;
+typedef struct css_DeclarationList_* css_DeclarationList;
+typedef struct css_Rule_* css_Rule;
+typedef struct css_RuleList_* css_RuleList;
+
+struct css_Selector_ {
+	char* name;
+};
+
+struct css_Declaration_ {
+	char* dec_key;
+	char* dec_val;
+};
+
+struct css_SelectorList_ {
+	css_Selector selector;
+	css_SelectorList next;
+};
+
+struct css_DeclarationList_ {
+	css_Declaration declaration;
+	css_DeclarationList next;
+};
+
+struct css_Rule_ {
+	css_SelectorList selectorList;
+	css_DeclarationList declarationList;	
+};
+
+struct css_RuleList_ {
+	css_Rule rule;
+	css_RuleList next;
+};
+
+css_Selector create_CSSSelector(char* _name);
+css_Declaration create_CSSDeclaration(char* _dec_key, char* _dec_val);
+css_SelectorList create_CSSSelectorList(css_Selector _selector, css_SelectorList _next);
+css_DeclarationList create_CSSDeclarationList(css_Declaration _declaration, css_DeclarationList _next);
+css_Rule create_CSSRule(css_SelectorList _selectorList, css_DeclarationList _declarationList);
+css_RuleList create_CSSRuleList(css_Rule _rule, css_RuleList _next);
+
+#endif
+\end{lstlisting}
+\subsection{Baumgenerierung mit Bison}
+Nachdem die CSS Grammatik Beschreibung in Lex und die benötigten Datenstrukturen beschrieben wurden. Wird jetzt die Baumgenerierung mit Bison erläutert. Dabei liefert die Grammatik Beschreibung verscheidene Tokens(Merkmale), die in \ref{tree_generation_lex} beschrieben sind. Diese tokens werden von Bison genutzt, um den Baum zu generieren. 
+\begin{lstlisting}[label=css_biso,language=C, caption=Baumgenerierung mit Bison]
+%{
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <ncurses.h>
+    #include <string.h>
+    #include "css_types.h"
+    #include "css.tab.h"
+    #include "parsecss.h"
+        
+    css_RuleList root; 
+	
+    extern int yyparse();
+    extern FILE *yyin;
+    
+    void yyerror(const char *s);
+	#define BUFFER_SIZE 4096
+	
+%}
+
+// types which are found/returned by flex 
+%union{
+    char* sval;
+    css_Selector aSelector;
+    css_Declaration aDeclaration;
+    css_SelectorList aSelectorList;
+    css_DeclarationList aDeclarationList;
+    css_Rule aRule;
+    css_RuleList aRuleList;
+}
+
+
+// Terminal symbols of our language
+%token <sval> STRING
+
+%token LBRACE RBRACE COMMA DOT SEMICOLON COLON
+
+%type <aRuleList> rulelist css
+%type <aRule> rule
+%type <aDeclarationList> declarationlist
+%type <aDeclaration> declaration
+%type <aSelectorList> selectorlist
+%type <aSelector> selector
+
+%%
+// grammar section, parsing rules
+
+css:			rulelist {$$ = root = $1;}
+	;
+
+rulelist:		rule rulelist { $$ = create_CSSRuleList($1,$2); }
+			| rule { $$ = create_CSSRuleList($1,NULL); }
+	;
+rule:			selectorlist LBRACE declarationlist RBRACE {$$ = create_CSSRule($1, $3); }
+	;
+selectorlist:		selector COMMA selectorlist { $$ = create_CSSSelectorList($1,$3);}
+			| selector { $$ = create_CSSSelectorList($1, NULL);}
+	;			
+selector:		STRING { $$ = create_CSSSelector($1); }
+			| STRING COLON STRING { char buffer[256] = {0}; strcat(buffer, $1); strcat(buffer, ":"); strcat(buffer, $3);  $$ = create_CSSSelector(strdup(buffer)); }
+	;
+declarationlist: 	declaration SEMICOLON declarationlist { $$ = create_CSSDeclarationList($1,$3);}
+			| declaration SEMICOLON { $$ = create_CSSDeclarationList($1, NULL);}
+			| declaration { $$ = create_CSSDeclarationList($1, NULL);}
+	;				
+declaration:		STRING COLON STRING { $$ = create_CSSDeclaration($1, $3); }
+			| STRING COLON STRING COMMA STRING COMMA STRING { 
+			  char buffer[BUFFER_SIZE] = {0}; strcat(buffer, $3); strcat(buffer, ","); strcat(buffer, $5); strcat(buffer, ","); strcat(buffer, $7);
+			  $$ = create_CSSDeclaration($1, strdup(buffer)); }
+			| STRING COLON STRING COMMA STRING COMMA STRING COMMA STRING { 
+			  char buffer[BUFFER_SIZE] = {0}; strcat(buffer, $3); strcat(buffer, ","); strcat(buffer, $5); strcat(buffer, ","); strcat(buffer, $7);
+			  strcat(buffer, ","); strcat(buffer, $9); 
+			  $$ = create_CSSDeclaration($1, strdup(buffer)); }
+	;
+
+%%
+// user code section
+
+css_RuleList parseCSS(char* fileName) {
+    // set inputfile
+    FILE *inFile = fopen(fileName, "r");
+    if(!inFile) {
+        printf("Could not open input file!\n");
+        exit(-1);
+    }
+    yyin = inFile;
+    
+    // bison: parse until there is no input anymore
+    do {
+        yyparse();
+    } while(!feof(yyin));
+   	
+    return root;
+}
+
+
+void yyerror(const char *s) {
+    printf("EEK, parse error! Message: %s\n", s);
+    exit(-1);
+}
+\end{lstlisting}
+
+Im Listing \ref{css_bison} ist die Erstellung des Baums aufgeführt. Im folgenden wird Beispielhaft erläutert, wie der Baum genriert wird. In den Zeilen 46 - 73 geschieht der verkettete Aufbau des Baums. Als erstes wird eine CSS Regelliste erkannt und erstellt. Dieser nimmt CSS regeln auf. In den CSS Regeln müssen ein Selektor und eine Deklaration beinhalten. Der erstellte Baum ist eine verkettete Liste mit den einzelnen CSS Regeln.
