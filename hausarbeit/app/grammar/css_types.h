@@ -1,6 +1,12 @@
 #ifndef CSS_TYPES_H_
 #define CSS_TYPES_H_
 
+/**
+ *
+ * Structures for CSS tree
+ *
+ */
+
 typedef struct css_Selector_* css_Selector;
 typedef struct css_Declaration_* css_Declaration;
 typedef struct css_SelectorList_* css_SelectorList;

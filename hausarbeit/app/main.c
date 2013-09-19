@@ -4,7 +4,7 @@
 #include "cli_parse.h"
 #include "css_merge.h"
 #include "grammar/css_types.h"
-#include "grammar/test.tab.h"
+#include "grammar/css.tab.h"
 #include "optimizer.h"
 #include "grammar/parsecss.h"
 
