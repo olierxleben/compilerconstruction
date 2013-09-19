@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-//#include "gumbo.h" // HTML 5 parser
 
 #define BUFFER_SIZE 4096
 
@@ -35,14 +34,6 @@ static void shortHandColor(char** val){
     }
 }
 
-void parseHTML(char* file) {
-	// create output
-	//GumboOutput* output = gumbo_parse(file);
-	// ...
-	
-	// destroy   
-	//gumbo_destroy_output(&kGumboDefaultOptions, output);
-}
 
 /*
 * Function to removes px from 0px for marging
@@ -173,8 +164,7 @@ css_RuleList optimize(css_RuleList list, char* filename) {
 	list = mergeNodes(list);
 	list = removeDoubleDeclarations(list);
 	list = mergeDoubleDeclarations(list);
-	
-	parseHTML(filename);
+//	list = shortHandMargin(list);
 	
 	return list;
 }
