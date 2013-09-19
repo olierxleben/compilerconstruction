@@ -164,7 +164,6 @@ css_RuleList optimize(css_RuleList list, char* filename) {
 	list = mergeNodes(list);
 	list = removeDoubleDeclarations(list);
 	list = mergeDoubleDeclarations(list);
-//	list = shortHandMargin(list);
 	
 	return list;
 }

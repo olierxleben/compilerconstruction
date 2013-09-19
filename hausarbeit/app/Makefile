@@ -3,10 +3,10 @@
 all: app
 	
 app: lex.yy.c test.tab.c test.tab.h grammar/css_types.h
-	cc grammar/test.tab.c grammar/lex.yy.c grammar/css_types.c main.c cli_parse.c css_merge.c guiCSS.c optimizer.c output.c -lncurses -lgumbo -o optimCSS
+	cc grammar/test.tab.c grammar/lex.yy.c grammar/css_types.c main.c cli_parse.c css_merge.c optimizer.c output.c -o optimCSS
 	
 parser: lex.yy.c test.tab.c test.tab.h grammar/css_types.h
-	cc grammar/test.tab.c grammar/css_types.c grammar/lex.yy.c -o parser
+	cc grammar/test.tab.c grammar/css_types.c grammar/lex.yy.c -g -o parser
 
 test.tab.c test.tab.h: grammar/test.y
 	bison -d grammar/test.y -o grammar/test.tab.c
