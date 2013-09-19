@@ -78,6 +78,7 @@ Bevor die interpretierete CSS Grammatik auf einen Baum abgebildet werden kann, w
 \item{CSS Declaration: Beinhaltet der Deklarationsschluessel und Deklarationwert. Richtige Zuordnung geschieht in der CSS Rule} 
 \end{itemize}
 Diese Punkte sind dem Listing \ref{css_structs} zu sehen. Dabei sind auch die Funktionen zur Erstellung der einzelnen Elementen zu sehen. Diese werden bei der Baumgenerierung benötigt und werden im folgenden Abschnitt genutzt.
+
 \begin{lstlisting}[label=css_structs,language=C, caption=C Struckturen für die Baumgenerierung]
 #ifndef CSS_TYPES_H_
 #define CSS_TYPES_H_
@@ -135,7 +136,7 @@ css_RuleList create_CSSRuleList(css_Rule _rule, css_RuleList _next);
 \end{lstlisting}
 \subsection{Baumgenerierung mit Bison}
 Nachdem die CSS Grammatik Beschreibung in Lex und die benötigten Datenstrukturen beschrieben wurden. Wird jetzt die Baumgenerierung mit Bison erläutert. Dabei liefert die Grammatik Beschreibung verscheidene Tokens(Merkmale), die in \ref{tree_generation_lex} beschrieben sind. Diese tokens werden von Bison genutzt, um den Baum zu generieren. 
-\begin{lstlisting}[label=css_biso,language=C, caption=Baumgenerierung mit Bison]
+\begin{lstlisting}[label=css_bison,language=C, caption=Baumgenerierung mit Bison]
 %{
     #include <stdio.h>
     #include <stdlib.h>
