@@ -23,48 +23,7 @@ display:none;
 	margin-top:20px;
 	padding-left:10px;
 }
-@font-face {
-	font-family: 'OstrichSansCondensedLight';
-	src: url('Fonts/ostrich-light-webfont.eot');
-	src: url('Fonts/ostrich-light-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-light-webfont.woff') format('woff'),  url('Fonts/ostrich-light-webfont.ttf') format('truetype'),  url('Fonts/ostrich-light-webfont.svg#OstrichSansCondensedLight') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OstrichSansMedium';
-	src: url('Fonts/ostrich-regular-webfont.eot');
-	src: url('Fonts/ostrich-regular-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-regular-webfont.woff') format('woff'),  url('Fonts/ostrich-regular-webfont.ttf') format('truetype'),  url('Fonts/ostrich-regular-webfont.svg#OstrichSansMedium') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OstrichSansBold';
-	src: url('Fonts/ostrich-bold-webfont.eot');
-	src: url('Fonts/ostrich-bold-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-bold-webfont.woff') format('woff'),  url('Fonts/ostrich-bold-webfont.ttf') format('truetype'),  url('Fonts/ostrich-bold-webfont.svg#OstrichSansBold') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OstrichSansBlack';
-	src: url('Fonts/ostrich-black-webfont.eot');
-	src: url('Fonts/ostrich-black-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-black-webfont.woff') format('woff'),  url('Fonts/ostrich-black-webfont.ttf') format('truetype'),  url('Fonts/ostrich-black-webfont.svg#OstrichSansBlack') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OstrichSansRoundedMedium';
-	src: url('Fonts/ostrich-rounded-webfont.eot');
-	src: url('Fonts/ostrich-rounded-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-rounded-webfont.woff') format('woff'),  url('Fonts/ostrich-rounded-webfont.ttf') format('truetype'),  url('Fonts/ostrich-rounded-webfont.svg#OstrichSansRoundedMedium') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'OstrichSansDashedMedium';
-	src: url('Fonts/ostrich-dashed-webfont.eot');
-	src: url('Fonts/ostrich-dashed-webfont.eot?#iefix') format('embedded-opentype'),  url('Fonts/ostrich-dashed-webfont.woff') format('woff'),  url('Fonts/ostrich-dashed-webfont.ttf') format('truetype'),  url('Fonts/ostrich-dashed-webfont.svg#OstrichSansDashedMedium') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
+
 body {
 	background:#195f88;
 	font-size:14px
