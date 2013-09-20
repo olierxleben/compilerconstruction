@@ -1,7 +1,7 @@
 \section{Baumgenerierung}
 Im folgenden wird die Erstellung des Baumes beschrieben. Dabei wird zum Einen auf die Implementierung der Bison und Lex Dateien eingegangen und zum Anderen wird auf die Abbildung des Baumes und es werden die erstellten CSS Strukturen erläutert.
-In diesem Abschnitt wird die Beschreibung der Grammatik durch Lex und Bison Dateien beschrieben. 
-\subsection{Abbildung der CSS Grammatik in Lex}
+
+\subsection{Abbildung der CSS Grammatik in Flex}
 \label{tree_generation_lex}
 Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns als nicht nutzbar erwiesen hat, haben wir uns dafür entschieden diese selber zu entwickeln.Es wurde entschieden, die Beschreibung einfach zu halten. Dies bedeutet, dass bei der Beschreibung nicht alles akribisch interpretiert wird. Intepretation ist auch nicht notwendig. Im folgenden werden die Punkte aufgelistet die unterschieden werden. 
 \begin{itemize}
@@ -13,8 +13,8 @@ Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns al
 \item{Geschweifteklammer zu} 
 \item{Punkt} 
 \end{itemize}
-Diese einfache Unterteilung hat als Vorteil, dass die Beschreibung der CSS Grammatik in Lex simpel erstellt werden kann. Es wird zur Unterscheidung von Selektoren / Deklaration die oben beschreibenen Sonderzeichen benötigt. 
-\begin{lstlisting}[label=css_lex,language=C, caption=Beschreibung der CSS Grammatik in Lex]
+Diese einfache Unterteilung hat als Vorteil, dass die Beschreibung der CSS Grammatik in Flex simpel erstellt werden kann. Es wird zur Unterscheidung von Selektoren / Deklaration die oben beschreibenen Sonderzeichen benötigt. 
+\begin{lstlisting}[label=css_lex,language=C, caption=Beschreibung der CSS Grammatik in Flex]
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,7 +66,7 @@ PLUS				"+"
     moved to test.bison
 */
 \end{lstlisting} 
-Im Listing \ref{css_lex} ist die Implementierung zu sehen. Dabei werden in den Zeilen 37 bis 39 die verschiedenen CSS Konstellationen beachtet und als String interpretiert. Im Vergleich zur CSS-Grammatik der W3C ist keine detaillierte Unterscheidung möglich, aber auch nicht gewünscht.
+Im Listing \ref{css_lex} ist die Implementierung zu sehen. Dabei werden in den Zeilen 39 bis 41 die verschiedenen CSS Konstellationen beachtet und als String interpretiert. Im Vergleich zur CSS-Grammatik der W3C ist keine detaillierte Unterscheidung möglich, aber auch nicht gewünscht.
 
 \subsection{Benötigte Datenstrukturen zur Erstellung des Baums}
 Bevor die interpretierete CSS-Grammatik auf einen Baum abgebildet werden kann, werden Datenstrukturen benötigt. Diese ermöglichen es eine automatische Baumgenerierung und Verknüpfung zu gewährleisten. Dabei werden für folgende Punkte Strukturen abgebildet:
