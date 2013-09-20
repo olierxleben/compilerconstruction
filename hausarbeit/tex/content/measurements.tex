@@ -80,21 +80,21 @@ Die Tabelle \ref{messungen-ergebnis} grenzt die Messergebnisse von einander ab. 
 	\label{messungen-ergebnis}
 \end{table}
 
-Die Anzahl der Dateien wird verringert. Im Beispiel der Messdaten wird aus vier CSS-Dateien eine CSS-Datei zusammengeführt. Dies verringert den Overhead für den Browser und hängt stark mit den Ladezeiten zusammen. 
+Die Anzahl der Dateien wird verringert. Im Beispiel der Messdaten wird aus vier CSS-Dateien eine CSS-Datei zusammengeführt. Dies verringert den Overhead für den Browser und verbessert die Ladezeiten sehr. 
 
-Die Abbildungen \ref{ladezeiten-dflt} und \ref{ladezeiten-opted} zeigen Ausschnitte aus den Entwicklerwerkzeugen von Google Chrome. Mit diesen ist es möglich alle zu ladenden Dateien zu überwachen und mit welcher Geschwindigkeit der Browser sie lädt. Wie die Abbildungen zeigen benötigen die vier nicht optimierten Dateien aus Abbildung \ref{ladezeiten-dflt} länger als die optimierte CSS-Datei. 
+Die Abbildungen \ref{ladezeiten-dflt} und \ref{ladezeiten-opted} zeigen Ausschnitte aus den Entwicklerwerkzeugen von Google Chrome. Mit diesen ist es möglich alle zu ladenden Dateien zu überwachen und mit welcher Geschwindigkeit der Browser diese lädt. Wie die Abbildungen zeigen benötigen die vier nicht optimierten Dateien aus Abbildung \ref{ladezeiten-dflt} länger als die optimierte CSS-Datei. 
 
 Im Beispiel werden mehrere Knoten im Baum entfernt. Dies geschieht durch das Zusammenführen identischer Knoten. Außerdem wird die optimierte CSS-Datei beim Schreiben minifiziert, sodass Whitespaces und Linebreaks entfernt werden. Dies führt zur Reduktion der Ausgabedatei. 
  
 \pagebreak
 
 \subsection{Fazit}
-Mittels (F)lex, Yacc/Bison und der verwendeten Grammatik kann ein Baum generiert und dessen Knoten optimiert werden. Die CSS-Dateien können mit dem entwickelten Tool Webseiten beschleunigen. Wie die Testdaten zeigen, ergibt sich eine Beschleunigung von ca. 75 \%. 
+Mittels (F)lex, Yacc/Bison und der verwendeten Grammatik kann ein Baum generiert und dessen Knoten optimiert werden. Die CSS-Dateien können mit dem entwickelten Tool Webseiten beschleunigen. Wie die Testdaten zeigen, ergibt sich eine Beschleunigung von ca. 75 \% beim Laden der CSS-Daten. 
 
 Die Anwendung benötigt neben Flex und Yacc/Bison keine weiteren Abhängigkeiten, sodass eine gute Plattformunabhängigkeit gewährleistet ist. Der Sourcecode wurde im Rahmen der Hausarbeit unter Ubuntu 10.10, Ubuntu 12.04 mittels gcc und unter Mac OS X mittels clang und gcc erfolgreich kompiliert. 
 
 Der vorgestellte CSS-Optimierer lässt sich für statische Websites und für Single Page Web-Apps gut einsetzen. Allerdings kann es zu Problemen kommen, wenn die Web-Anwendung eine Template-Engine einsetzt oder dynamisch CSS-Resourcen in die Seite lädt. Neue Resourcen, HTML-Elemente oder auch CSS-Stile können somit nicht optimiert werden. 
 
-Neben CSS sollte vor allem auch JavaScript optimiert werden, da so alle Resourcen einer Web-Anwendung verbessert werden und eine noch größere Reduktion der Ladezeiten entstehen kann. 
+Auf CSS selbst können noch weitere Optimierungen folgen, die allerdings im Rahmen dieser Hausarbeit nicht durchgeführt wurden. 
 
-Auf CSS selbst können noch weitere Optimierungen folgen, die allerdings im Rahmen dieser Hausarbeit nicht durchgeführt wurden.  
+Neben CSS sollte vor allem auch JavaScript optimiert werden, da so alle Resourcen einer Web-Anwendung verbessert werden und eine noch größere Reduktion der Ladezeiten entstehen kann. 

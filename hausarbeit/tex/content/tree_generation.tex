@@ -1,9 +1,9 @@
 \section{Baumgenerierung}
-Im folgenden wird die Erstellung des Baumes beschrieben. Dabei wird zum Einen auf die Implementierung der Bison und Lex Dateien eingegangen. Und zum Anderen wird auf die Abbildung des Baumes und die erstellen CSS Strukturen erläutert.
-In diesem Abschnitt wird die Beschreibung der Grammatik durch Lex und Bison Dateien beschreiben. 
+Im folgenden wird die Erstellung des Baumes beschrieben. Dabei wird zum Einen auf die Implementierung der Bison und Lex Dateien eingegangen und zum Anderen wird auf die Abbildung des Baumes und es werden die erstellten CSS Strukturen erläutert.
+In diesem Abschnitt wird die Beschreibung der Grammatik durch Lex und Bison Dateien beschrieben. 
 \subsection{Abbildung der CSS Grammatik in Lex}
 \label{tree_generation_lex}
-Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns als nicht nutzbar erwiesen hat, haben wir uns dafür entschieden diese selber zuschreiben. Dabei haben wir uns dazu entschieden, dass die Beschreibung dabei einfach gehalten wird. Das bedeutet, dass bei der Beschreibung nicht alles akribisch interpretieren wird. Dies ist auch nicht notwendig. Im folgenden werden die Punkte aufgelistet die wir unterscheiden. 
+Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns als nicht nutzbar erwiesen hat, haben wir uns dafür entschieden diese selber zu entwickeln.Es wurde entschieden, die Beschreibung einfach zu halten. Dies bedeutet, dass bei der Beschreibung nicht alles akribisch interpretiert wird. Intepretation ist auch nicht notwendig. Im folgenden werden die Punkte aufgelistet die unterschieden werden. 
 \begin{itemize}
 \item{String: kann ein Selektor, Deklarationschlüssel, etc. sein} 
 \item{Komma} 
@@ -66,17 +66,25 @@ PLUS				"+"
     moved to test.bison
 */
 \end{lstlisting} 
-Im Listing \ref{css_lex} ist die Implementierung zu sehen. Dabei werden in den Zeilen 37 - 39 die verschiedenen CSS kontelationen beachtet und als String interpretiert. Im Vergleich zur CSS Grammatik Beschreibung der W3C ist keine detaillierte möglich, aber auch nicht gewünscht.
+Im Listing \ref{css_lex} ist die Implementierung zu sehen. Dabei werden in den Zeilen 37 bis 39 die verschiedenen CSS Konstellationen beachtet und als String interpretiert. Im Vergleich zur CSS-Grammatik der W3C ist keine detaillierte Unterscheidung möglich, aber auch nicht gewünscht.
+
 \subsection{Benötigte Datenstrukturen zur Erstellung des Baums}
-Bevor die interpretierete CSS Grammatik auf einen Baum abgebildet werden kann, werden Datenstrukturen benötigt. Diese ermöglichen es eine automatische Baumgenerierung und Verknüpfung. Dabei werden für folgende Punkte Strukturen abgebildet.
-\begin{itemize}
-\item{CSS Rule List: Beinhaltet die gesammten Regeln und ist der Wurzelknoten des Baums} 
-\item{CSS Rule: Ist eine CSS Regel die Selektoren und ihre Deklarationen beinhalten} 
-\item{CSS Selector List: Ist eine Selektorliste, die einzelne Selektoren beinhaltet} 
-\item{CSS Selector: Beinhaltet nur den Namen. Richtige Zuordnung geschieht in der CSS Rule} 
-\item{CSS Declaration List: Iste eine Deklarationsliste, die die einzelnen Deklarationen beinhaltet} 
-\item{CSS Declaration: Beinhaltet der Deklarationsschluessel und Deklarationwert. Richtige Zuordnung geschieht in der CSS Rule} 
-\end{itemize}
+Bevor die interpretierete CSS-Grammatik auf einen Baum abgebildet werden kann, werden Datenstrukturen benötigt. Diese ermöglichen es eine automatische Baumgenerierung und Verknüpfung zu gewährleisten. Dabei werden für folgende Punkte Strukturen abgebildet:
+\begin{description}
+    \item[css\_RuleList] Beinhaltet die gesammten Regeln und ist der Wurzelknoten des Baums 
+
+    \item[css\_Rule] Eine CSS Regel die Selektoren und ihre Deklarationen beinhalten 
+
+    \item[css\_SelectorList] Ist eine Selektorliste, die einzelne Selektoren beinhaltet 
+    
+    \item[css\_Selector] Beinhaltet nur den Namen. Richtige Zuordnung geschieht in der CSS Rule
+
+    \item[css\_DeclarationList] Iste eine Deklarationsliste, die die einzelnen Deklarationen beinhaltet 
+
+    \item[css\_Declaration] Beinhaltet der Deklarationsschluessel und Deklarationwert. Richtige Zuordnung geschieht in der CSS Rule 
+
+\end{description}
+
 Diese Punkte sind dem Listing \ref{css_structs} zu sehen. Dabei sind auch die Funktionen zur Erstellung der einzelnen Elementen zu sehen. Diese werden bei der Baumgenerierung benötigt und werden im folgenden Abschnitt genutzt.
 
 \begin{lstlisting}[label=css_structs,language=C, caption=C Struckturen für die Baumgenerierung]
@@ -135,7 +143,7 @@ css_RuleList create_CSSRuleList(css_Rule _rule, css_RuleList _next);
 #endif
 \end{lstlisting}
 \subsection{Baumgenerierung mit Bison}
-Nachdem die CSS Grammatik Beschreibung in Lex und die benötigten Datenstrukturen beschrieben wurden. Wird jetzt die Baumgenerierung mit Bison erläutert. Dabei liefert die Grammatik Beschreibung verscheidene Tokens(Merkmale), die in \ref{tree_generation_lex} beschrieben sind. Diese tokens werden von Bison genutzt, um den Baum zu generieren. 
+Nachdem die Beschreibung der CSS-Grammatik in Lex und die benötigten Datenstrukturen beschrieben wurden. Wird jetzt die Baumgenerierung mit Bison erläutert. Dabei liefert die Grammatik verschiedene Tokens (Merkmale), welche im Abschnitt \ref{tree_generation_lex} beschrieben sind. Diese Tokens werden von Bison genutzt, um den Baum zu generieren. 
 \begin{lstlisting}[label=css_bison,language=C, caption=Baumgenerierung mit Bison]
 %{
     #include <stdio.h>
@@ -238,4 +246,4 @@ void yyerror(const char *s) {
 }
 \end{lstlisting}
 
-Im Listing \ref{css_bison} ist die Erstellung des Baums aufgeführt. Im folgenden wird Beispielhaft erläutert, wie der Baum genriert wird. In den Zeilen 46 - 73 geschieht der verkettete Aufbau des Baums. Als erstes wird eine CSS Regelliste erkannt und erstellt. Dieser nimmt CSS regeln auf. In den CSS Regeln müssen ein Selektor und eine Deklaration beinhalten. Der erstellte Baum ist eine verkettete Liste mit den einzelnen CSS Regeln.
+Im Listing \ref{css_bison} ist die Erstellung des Baums aufgeführt. Im folgenden wird Beispielhaft erläutert, wie der Baum generiert wird. In den Zeilen 46 bis 73 geschieht der verkettete Aufbau des Baums. Als erstes wird eine CSS Regelliste erkannt und erstellt. Dieser nimmt CSS regeln auf. Die CSS Regeln müssen ein Selektor und eine Deklaration beinhalten. Der erstellte Baum ist eine verkettete Liste mit den einzelnen CSS Regeln.
