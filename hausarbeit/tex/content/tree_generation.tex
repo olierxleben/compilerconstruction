@@ -13,7 +13,7 @@ Da sich die Nutzung der Beschreibung der CSS Grammatik durch die W3C für uns al
 \item{Geschweifteklammer zu} 
 \item{Punkt} 
 \end{itemize}
-Diese einfache Unterteilung hat als Vorteil, dass die Beschreibung der CSS Grammatik in Flex simpel erstellt werden kann. Es wird zur Unterscheidung von Selektoren / Deklaration die oben beschreibenen Sonderzeichen benötigt. 
+Diese einfache Unterteilung hat den Vorteil, dass die Beschreibung der CSS Grammatik in Flex simpel erstellt werden kann. Es wird zur Unterscheidung von Selektoren / Deklaration die oben beschreibenen Sonderzeichen benötigt. 
 \begin{lstlisting}[label=css_lex,language=C, caption=Beschreibung der CSS Grammatik in Flex]
 %{
 #include <stdio.h>
@@ -73,7 +73,7 @@ Bevor die interpretierete CSS-Grammatik auf einen Baum abgebildet werden kann, w
 \begin{description}
     \item[css\_RuleList] Beinhaltet die gesammten Regeln und ist der Wurzelknoten des Baums 
 
-    \item[css\_Rule] Eine CSS Regel die Selektoren und ihre Deklarationen beinhalten 
+    \item[css\_Rule] Eine CSS Regel, die Selektoren und ihre Deklarationen beinhalten 
 
     \item[css\_SelectorList] Ist eine Selektorliste, die einzelne Selektoren beinhaltet 
     
@@ -81,11 +81,11 @@ Bevor die interpretierete CSS-Grammatik auf einen Baum abgebildet werden kann, w
 
     \item[css\_DeclarationList] Iste eine Deklarationsliste, die die einzelnen Deklarationen beinhaltet 
 
-    \item[css\_Declaration] Beinhaltet der Deklarationsschluessel und Deklarationwert. Richtige Zuordnung geschieht in der CSS Rule 
+    \item[css\_Declaration] Beinhaltet der Deklarationsschluessel und Deklarationswert. Richtige Zuordnung geschieht in der CSS Rule 
 
 \end{description}
 
-Diese Punkte sind dem Listing \ref{css_structs} zu sehen. Dabei sind auch die Funktionen zur Erstellung der einzelnen Elementen zu sehen. Diese werden bei der Baumgenerierung benötigt und werden im folgenden Abschnitt genutzt.
+Diese Punkte sind dem Listing \ref{css_structs} zu sehen. Dabei sind auch die Funktionen zur Erstellung der einzelnen Elemente zu sehen. Diese werden bei der Baumgenerierung benötigt und werden im folgenden Abschnitt genutzt.
 
 \begin{lstlisting}[label=css_structs,language=C, caption=C Struckturen für die Baumgenerierung]
 #ifndef CSS_TYPES_H_
@@ -246,4 +246,4 @@ void yyerror(const char *s) {
 }
 \end{lstlisting}
 
-Im Listing \ref{css_bison} ist die Erstellung des Baums aufgeführt. Im folgenden wird Beispielhaft erläutert, wie der Baum generiert wird. In den Zeilen 46 bis 73 geschieht der verkettete Aufbau des Baums. Als erstes wird eine CSS Regelliste erkannt und erstellt. Dieser nimmt CSS regeln auf. Die CSS Regeln müssen ein Selektor und eine Deklaration beinhalten. Der erstellte Baum ist eine verkettete Liste mit den einzelnen CSS Regeln.
+Im Listing \ref{css_bison} ist die Erstellung des Baums aufgeführt. Im folgenden wird beispielhaft erläutert, wie der Baum generiert wird. In den Zeilen 46 bis 73 zeigtAufbau des Baums. Als erstes wird eine CSS Regelliste erkannt und erstellt. Dieser nimmt CSS regeln auf. Die CSS Regeln müssen ein Selektor und eine Deklaration beinhalten. Der erstellte Baum ist eine verkettete Liste mit den einzelnen CSS Regeln.

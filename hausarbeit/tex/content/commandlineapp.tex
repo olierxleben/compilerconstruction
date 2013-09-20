@@ -29,7 +29,7 @@ clean:
 Der Start des Programms geschieht über die Konsole unter Angabe von Parametern. Zur Verfügung stehen die folgenden Parameter:
 
 \begin{description}
-   \item[ -f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und zusammengeführt für die Optimierung.
+   \item[ -f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und für die Optimierung zusammengeführt.
    \item[ -m] Minifizierte Ausgabe.
    \item[ -s] Strukturierte Ausgabe.
 \end{description}
@@ -45,7 +45,7 @@ Zum Start des Programms ist der Parameter -f zwingend nötig um dem Optimierer C
 \subsection{Datenstrukturen}
 
 Zum Einlesen der Kommandozeilenparameter und der HTML- bzw. CSS-Dateien wurden Datenstrukturen definiert. Diese sind in Listing \ref{datastructures_input_listing} dargestellt.
-Mit Hilfe der Strukturen ist es möglich den Ausgabetyp, Eingabetyp, Eingabedatei, sowie eine temporäre gemergte CSS-Datei zu halten.
+Mit Hilfe der Strukturen ist es möglich den Ausgabetyp, Eingabetyp, Eingabedatei, sowie eine temporär zusammengeführte CSS-Datei zu halten.
 
 \begin{lstlisting}[label=datastructures_input_listing,language=C, caption=Datenstrukturen]
 
@@ -68,8 +68,8 @@ struct css_data {
 
 \subsection{Grundaufbau des Kommandozeilenwerkzeugs}
 Das Kommandozeilenwerkzeug lässt sich in fünf Komponenten unterteilen. In der ersten Komponente werden die Kommandozeilenparameter eingelesen und für die spätere Nutzung in einer Struktur abgelegt.
-Die folgende Komponente ermittelt aus der übergebenen HTML-Datei alle genutzten CSS-Dateien und merged diese zu einer temporären CSS-Datei, welche später zur Optimierung verwendet wird.
-Nachdem nun eine einzelne CSS-Datei zum Optimieren bereit steht wird diese zunächst mittels eines durch Flex und Bison erzeugten Parsers in eine Baumstruktur überführt und so für die eigentiche Optimierung aufbereitet.
+Die folgende Komponente ermittelt aus der übergebenen HTML-Datei alle genutzten CSS-Dateien und führt diese zu einer temporären CSS-Datei zusammen, welche später zur Optimierung verwendet wird.
+Nachdem nun eine einzelne CSS-Datei zum Optimieren bereitsteht wird diese zunächst, mittels eines durch Flex und Bison erzeugten Parsers, in eine Baumstruktur überführt und so für die eigentiche Optimierung aufbereitet.
 Die hierzu genutzten Flex- und Bison-Quellen sind in den Listings \ref{css_lex} und \ref{css_bison} dargestellt. 
 Auf dem nun vorliegenden CSS-Baum werden nachfolgend einige Optimierungen durchgeführt, welche in Kapitel \ref{chap_optimization} detaillierter beschrieben werden.
 Abschließend wird der optimierte CSS-Baum in Textform als CSS-Datei ausgegeben. Die Ausgabe kann sowohl strukturiert (gut lesbar) als auch minifiziert erfolgen. Dies wird durch Kommandozeilenparameter eingestellt.

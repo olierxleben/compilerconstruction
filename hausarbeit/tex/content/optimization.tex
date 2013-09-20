@@ -1,7 +1,8 @@
 \section{Optimierung}\label{chap_optimization}
 Die Optimierung findet auf dem vom Parser erzeugten CSS-Baum statt. Listing \ref{optimize_main} zeigt die Grundidee der Optimierung. So werden nacheinander verschiedene Optimierungsmöglichkeiten auf den geparsten Baum angewendet.
 Zunächst werden dabei Regeln mit selbem Selektor zusammengefügt. Im Anschluss werden doppelte Deklarationen innerhalb einer Regel aufgelöst. Abschließend werden Regeln, welche die selbe Deklarationsliste besitzen zusammengfügt um die Redundanz zu verringern.
-Es wäre hier leicht möglich weitere Optimierungsmöglichkeiten einzufügen um so CSS-Datei weiter zu verbessern.
+
+Es wäre hier leicht möglich weitere Optimierungsmöglichkeiten einzufügen, sodass die CSS-Datei weiter verbessert werden kann.
 Innerhalb der einzelnen Optimierungsschritte werden zusätzlich einige Shorthand-Optimierung der CSS-Deklarationen vorgenommen.
 
 Die einzelnen Optimierungen werden nachfolgend detailliert besprochen. Der zugehörige Quellcode kann auf der Dokumentations-CD in der Datei \textit{optimizer.c} gefunden werden.
@@ -31,6 +32,6 @@ Zur Zusammenfassung von Regeln mit gleicher Deklarationsliste wird zunächst ein
 Dies wird für alle Regeln des CSS-Baums durchgeführt um so eine bestmögliche Zusammenfassung der Regeln zu erreichen.
 
 \subsection{CSS Shorthands}
-Zusätzlich zu den zuvor genannten Optimierungen wurden einige CSS-Shorthands implementiert. Zum einen die Abkürzung von hexadezimalen Farbcodes und zum anderen des auslassen von Mengeneinheiten bei 0-Werten.
+Zusätzlich zu den zuvor genannten Optimierungen wurden einige CSS-Shorthands implementiert. Zum Einen die Abkürzung von hexadezimalen Farbcodes und zum Anderen das Auslassen von Mengeneinheiten bei 0-Werten.
 Diese Shorthands werden auf alle im CSS-Baum vorhandenen Deklarationen angewendet um so einen möglichst minimalen CSS-Code zu erhalten.
 
