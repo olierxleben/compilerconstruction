@@ -1,21 +1,35 @@
 OptimCSS
 ========
 
-Based on the module of 'compilerconstruction', master-course at university of applied sciences Osnabrück, germany, a (f)lex and yacc/bison based css source to source compiler was written in plain C. This was a research project, its not recommended to use in production or productive environment.
+Based on the module of 'compilerconstruction', master-course at university of applied sciences Osnabrück, germany, a (f)lex and yacc/bison based css source to source compiler was written in plain C, Makefile included. This was a research project, its not recommended to use in production or productive environment.
 
 
 Authors
 =======
 
 Oliver Erxleben (oliver.erxleben@me.com, Maintainer, https://github.com/olivererxleben)
+
 Sergej Hert (sergej.hert@gmail.com, https://github.com/joernoo)
+
 Jörn Voßgröne (jornoo@gmail.com, https://github.com/S3RG3J)
 
 Usage
 =====
 
+./path/to/repocode/hausarbeit/app/optimCSS -f /path/to/www/
+
+Parameters:
+
+-f filename
+
+-m minifying 
+
+-s structured
+
 How it Works
 ============
+
+After input folder was checked for included css files, all css files are merged into one big file. Then a tree of each CSS-Rule will be produced. On this tree, finally, some optimizations will be made and the css file output.css will be written back to css. 
 
 Licence: GNU GENERAL PUBLIC LICENSE
 ===================================
