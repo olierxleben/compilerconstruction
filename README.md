@@ -9,9 +9,9 @@ Authors
 
 Oliver Erxleben (oliver.erxleben@me.com, https://github.com/olivererxleben, Maintainer)
 
-Sergej Hert (sergej.hert@gmail.com, https://github.com/joernoo)
+Sergej Hert (sergej.hert@gmail.com, https://github.com/S3RG3J)
 
-Jörn Voßgröne (jornoo@gmail.com, https://github.com/S3RG3J)
+Jörn Voßgröne (joernoo@gmail.com, https://github.com/joernoo)
 
 Usage
 =====
