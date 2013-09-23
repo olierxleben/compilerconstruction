@@ -7,7 +7,7 @@ Based on the module of 'compilerconstruction', master-course at university of ap
 Authors
 =======
 
-Oliver Erxleben (oliver.erxleben@me.com, Maintainer, https://github.com/olivererxleben)
+Oliver Erxleben (oliver.erxleben@me.com, https://github.com/olivererxleben, Maintainer)
 
 Sergej Hert (sergej.hert@gmail.com, https://github.com/joernoo)
 
@@ -31,8 +31,8 @@ How it Works
 
 After input folder was checked for included css files, all css files are merged into one big file. Then a tree of each CSS-Rule will be produced. On this tree, finally, some optimizations will be made and the css file output.css will be written back to css. 
 
-Licence: GNU GENERAL PUBLIC LICENSE
-===================================
+Licence
+=======
 
 OptimCSS
 Copyright (C) 2013  Oliver Erxleben, Sergej Hert, Jörn Voßgröne
