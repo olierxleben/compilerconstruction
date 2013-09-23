@@ -1,0 +1,11 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.toc
+.texpadtmp
+*.lol
+*.synctex.gz
+*.url
+tmp
+.project

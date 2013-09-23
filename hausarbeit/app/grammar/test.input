@@ -1,0 +1,18 @@
+
+a, div.b {
+		regel: wert;
+		regal: brett;
+}
+
+a, #b, c > d, div#b + x {
+	border: 12344;
+	background: url(joerny.png) #abdsq;
+	
+}
+
+a {
+	border: 4567;
+}
+
+
+

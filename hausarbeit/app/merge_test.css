@@ -1,0 +1,23 @@
+a, .b {
+	yolo: swag;
+	hansi: wurst;
+}
+
+.b, a, d {
+	peter: pan;
+	dieter: wurst;
+}
+
+a, d-asd {
+	border: 1px;
+	color: #332199;
+}
+
+.b, d {
+	margin: 0px;
+	color: #ffffff;
+}
+
+#yolo:active {
+	border: 0px;
+}

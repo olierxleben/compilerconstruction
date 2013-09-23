@@ -15,13 +15,15 @@
 *.exe
 *.out
 *.app
-hausarbeit/tex/.texpadtmp/main.aux
-hausarbeit/tex/.texpadtmp/main.lof
-hausarbeit/tex/.texpadtmp/main.log
-hausarbeit/tex/.texpadtmp/main.lol
-hausarbeit/tex/.texpadtmp/main.synctex.gz
-hausarbeit/tex/.texpadtmp/main.toc
-hausarbeit/tex/.texpadtmp/main.url
-src/chap4/test2
-src/chap4/test3
-src/chap4/test42
+
+
+# grammar and output files
+test.tab.c
+test.tab.h
+lex.yy.c
+parser
+optimCSS
+hausarbeit/app/merged.css
+hausarbeit/messdaten/www/merged.css
+hausarbeit/app/grammar/css.tab.c
+hausarbeit/app/grammar/css.tab.h

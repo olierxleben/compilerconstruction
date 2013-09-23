@@ -1,0 +1,78 @@
+\section{Kommandozeilenwerkzeug}
+Um Optimierungen durchzuführen wurde im Rahmen der Hausarbeit ein Kommandozeilenwerkeug erstellt, welches in den folgenden Teilabschnitten vorgestellt wird.
+
+\subsection{Makefile und Start des Programms}
+Zur Kompilierung und Bereitstellung wurde ein Makefile erstellt (Details siehe Listing \ref{makefile_listing}). Mit dem Makefile besteht ebenfalls die Möglichkeit Einzelteile des Projekts zu erstellen. Zum Beispiel kann mittels \textbf{make parser} nur der Parser erstellt werden.
+
+\begin{lstlisting}[label=makefile_listing,language=C, caption=Makefile]
+#include grammar/makefile.mk
+
+all: app
+	
+app: lex.yy.c css.tab.c css.tab.h grammar/css_types.h
+	cc grammar/css.tab.c grammar/lex.yy.c grammar/css_types.c main.c cli_parse.c css_merge.c optimizer.c output.c -o optimCSS
+	
+parser: lex.yy.c css.tab.c css.tab.h grammar/css_types.h
+	cc grammar/css.tab.c grammar/css_types.c grammar/lex.yy.c -g -o parser
+
+css.tab.c css.tab.h: grammar/css.y
+	bison -d grammar/css.y -o grammar/css.tab.c
+            
+lex.yy.c: grammar/css.l css.tab.h
+	flex -o grammar/lex.yy.c grammar/css.l
+
+clean: 
+	rm -f lex.yy.c grammar/css.tab.h grammar/css.tab.c grammar/parser optimCSS
+
+\end{lstlisting}
+
+Der Start des Programms geschieht über die Konsole unter Angabe von Parametern. Zur Verfügung stehen die folgenden Parameter:
+
+\begin{description}
+   \item[ -f dateiname] Angabe der Quelldatei. Dies muss eine HTML-Datei sein. Aus der angegebenen HTML-Datei werden die genutzten CSS-Dateien extrahiert und für die Optimierung zusammengeführt.
+   \item[ -m] Minifizierte Ausgabe.
+   \item[ -s] Strukturierte Ausgabe.
+\end{description}
+
+Zum Start des Programms ist der Parameter -f zwingend nötig um dem Optimierer CSS-Dateien zur Verfügung zu stellen. Ein Beispiel ist in Listing \ref{example_program_start} dargestetllt.
+
+\begin{lstlisting}[label=example_program_start,language=Bash, caption=Programmstart]
+
+./optimCSS -f index.html
+
+\end{lstlisting}
+
+\subsection{Datenstrukturen}
+
+Zum Einlesen der Kommandozeilenparameter und der HTML- bzw. CSS-Dateien wurden Datenstrukturen definiert. Diese sind in Listing \ref{datastructures_input_listing} dargestellt.
+Mit Hilfe der Strukturen ist es möglich den Ausgabetyp, Eingabetyp, Eingabedatei, sowie eine temporär zusammengeführte CSS-Datei zu halten.
+
+\begin{lstlisting}[label=datastructures_input_listing,language=C, caption=Datenstrukturen]
+
+enum output_type {STRUCTURED, MINIFIED};  // -s, -m
+enum input_type {FILE_INPUT, PATH_INPUT}; // -f, -p
+
+struct input_data {
+	int output_type;
+	int input_type;
+	char* src;
+};
+
+struct css_data {
+	char* src_html;
+	char* merged_css;
+};
+
+\end{lstlisting}
+
+
+\subsection{Grundaufbau des Kommandozeilenwerkzeugs}
+Das Kommandozeilenwerkzeug lässt sich in fünf Komponenten unterteilen. In der ersten Komponente werden die Kommandozeilenparameter eingelesen und für die spätere Nutzung in einer Struktur abgelegt.
+Die folgende Komponente ermittelt aus der übergebenen HTML-Datei alle genutzten CSS-Dateien und führt diese zu einer temporären CSS-Datei zusammen, welche später zur Optimierung verwendet wird.
+Nachdem nun eine einzelne CSS-Datei zum Optimieren bereitsteht wird diese zunächst, mittels eines durch Flex und Bison erzeugten Parsers, in eine Baumstruktur überführt und so für die eigentiche Optimierung aufbereitet.
+Die hierzu genutzten Flex- und Bison-Quellen sind in den Listings \ref{css_lex} und \ref{css_bison} dargestellt. 
+Auf dem nun vorliegenden CSS-Baum werden nachfolgend einige Optimierungen durchgeführt, welche in Kapitel \ref{chap_optimization} detaillierter beschrieben werden.
+Abschließend wird der optimierte CSS-Baum in Textform als CSS-Datei ausgegeben. Die Ausgabe kann sowohl strukturiert (gut lesbar) als auch minifiziert erfolgen. Dies wird durch Kommandozeilenparameter eingestellt.
+
+
+

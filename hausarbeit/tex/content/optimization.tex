@@ -1,0 +1,37 @@
+\section{Optimierung}\label{chap_optimization}
+Die Optimierung findet auf dem vom Parser erzeugten CSS-Baum statt. Listing \ref{optimize_main} zeigt die Grundidee der Optimierung. So werden nacheinander verschiedene Optimierungsmöglichkeiten auf den geparsten Baum angewendet.
+Zunächst werden dabei Regeln mit selbem Selektor zusammengefügt. Im Anschluss werden doppelte Deklarationen innerhalb einer Regel aufgelöst. Abschließend werden Regeln, welche die selbe Deklarationsliste besitzen zusammengfügt um die Redundanz zu verringern.
+
+Es wäre hier leicht möglich weitere Optimierungsmöglichkeiten einzufügen, sodass die CSS-Datei weiter verbessert werden kann.
+Innerhalb der einzelnen Optimierungsschritte werden zusätzlich einige Shorthand-Optimierung der CSS-Deklarationen vorgenommen.
+
+Die einzelnen Optimierungen werden nachfolgend detailliert besprochen. Der zugehörige Quellcode kann auf der Dokumentations-CD in der Datei \textit{optimizer.c} gefunden werden.
+
+\begin{lstlisting}[label=optimize_main,language=C, caption=Optimize-Funktion]
+
+css_RuleList optimize(css_RuleList list, char* filename) {
+	// merge nodes with same selector
+	list = mergeNodes(list);
+	list = removeDoubleDeclarations(list);
+	list = mergeDoubleDeclarations(list);
+	
+	return list;
+}
+
+\end{lstlisting}
+
+
+\subsection{Zusammenfassen von Regeln mit gleichem Selektor}
+Im ersten Schritt der Optimierung werden zunächst Regeln mit gleichem Selektor zusammengefasst. Hierzu wird jeweils ein Selektor aus dem Baum entnommen und der Rest des CSS-Baums nach diesem Selektor durchsucht. Dies wird für alle Selektoren des Baums durchgeführt.
+Wird bei der Suche nach einem Selektor eine Regel mit dem selben Selektor gefunden, so werden dei beiden zugehörigen CSS-Regeln zu einer neuen Regel zusammengefügt und die bisherigen Regeln aus dem Baum entfernt.
+
+Nachdem die Regeln zusammengefügt wurden, werden in einem weiteren Schritt doppelte Deklarationen innerhalb einer CSS-Regel aufgelöst. Hierbei wird die Kaskadierung von CSS-Dateien beachtet.
+
+\subsection{Zusammenfassen von Regeln mit gleicher Deklarationsliste}
+Zur Zusammenfassung von Regeln mit gleicher Deklarationsliste wird zunächst eine Regel aus der Liste entnommen. Daraufhin wird die Liste mit denen aller nachfolgenden Regeln verglichen. Werden übereinstimmende Deklarationsliste gefunden, so werden die zugehörigen Selektorlisten zusammengefügt und eine der beiden Regeln aus dem CSS-Baum entfernt.
+Dies wird für alle Regeln des CSS-Baums durchgeführt um so eine bestmögliche Zusammenfassung der Regeln zu erreichen.
+
+\subsection{CSS Shorthands}
+Zusätzlich zu den zuvor genannten Optimierungen wurden einige CSS-Shorthands implementiert. Zum Einen die Abkürzung von hexadezimalen Farbcodes und zum Anderen das Auslassen von Mengeneinheiten bei 0-Werten.
+Diese Shorthands werden auf alle im CSS-Baum vorhandenen Deklarationen angewendet um so einen möglichst minimalen CSS-Code zu erhalten.
+

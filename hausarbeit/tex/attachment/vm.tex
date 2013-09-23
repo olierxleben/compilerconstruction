@@ -1,0 +1,31 @@
+\thispagestyle{empty}
+\section*{Virtuelle Maschine}
+Zur Messung der Testdaten wird eine virtuelle Maschine erstellt. Diese liegt dem Datenträger als VirtualBox-Maschine dieser Hausarbeit bei. 
+
+\subsection*{Betriebssystem}
+Als Betriebssystem dient ein aktuelles Debian Linux mit einem virtuellen Kern, 256 MB Arbeitsspeicher und 8 GB Massenspeicher. Diese Hardwarespezifikation entspricht im wesentlichen eingebetteten Systemen oder Shared Webhosting. 
+
+\subsection*{Benutzer- und Logindaten}
+
+Für die VM wurde folgende Benutzer mit Passwort angelegt:
+\begin{itemize}
+    \item{cbh:compiler (Standardbenutzer)}
+    \item{root:r00t (Superuser)}
+\end{itemize}
+
+\subsection*{Dienste und Tools}
+
+Auf der virtuellen Maschine sind folgende Dienste und Werkzeuge installiert: 
+
+\begin{itemize}
+    \item{FTP}
+    \item{Ruby}
+    \item{SSH}
+    \item{Git}
+\end{itemize}
+
+Dem FTP- und SSH-Server ist der Standardbenutzer zugewiesen, sodass Dateien auf, bzw. von dem Server geladen werden können.
+
+\subsection*{Ordnerstruktur}
+Im Homeverzeichnes des Benutzers \textit{cbh} befindet sich das Git-Projekt \textit{compilerconstruction}.
+% TODO: Beenden
