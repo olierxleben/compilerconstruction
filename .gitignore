@@ -25,3 +25,5 @@ parser
 optimCSS
 hausarbeit/app/merged.css
 hausarbeit/messdaten/www/merged.css
+hausarbeit/app/grammar/css.tab.c
+hausarbeit/app/grammar/css.tab.h
